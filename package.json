@@ -2,7 +2,7 @@
   "author": "",
   "dependencies": {
     "@intentui/icons": "^1.11.0",
-    "@prisma/adapter-d1": "~6.8.2",
+    "@prisma/adapter-d1": "~6.11.0",
     "@prisma/client": "~6.11.0",
     "@simplewebauthn/browser": "^13.1.0",
     "@simplewebauthn/server": "^13.1.1",
@@ -18,16 +18,16 @@
   "description": "Build fast, server-driven webapps on Cloudflare with SSR, RSC, and realtime. ",
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
-    "@cloudflare/vite-plugin": "1.7.4",
-    "@cloudflare/workers-types": "^4.20250407.0",
-    "@types/node": "^22.14.0",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
+    "@cloudflare/vite-plugin": "1.8.0",
+    "@cloudflare/workers-types": "^4.20250701.0",
+    "@types/node": "^24.0.9",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "prisma": "~6.11.0",
     "typescript": "^5.8.3",
-    "vibe-rules": "^0.2.31",
-    "vite": "^6.2.6",
-    "wrangler": "^4.20.5"
+    "vibe-rules": "^0.3.50",
+    "vite": "^6.3.5",
+    "wrangler": "^4.22.0"
   },
   "keywords": [],
   "license": "MIT",
