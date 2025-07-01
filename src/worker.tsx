@@ -1,14 +1,15 @@
-import { Document } from "@/app/Document";
-import { setCommonHeaders } from "@/app/headers";
-import { Home } from "@/app/pages/Home";
-import { userRoutes } from "@/app/pages/user/routes";
-import { type User, db, setupDb } from "@/db";
 import { env } from "cloudflare:workers";
 import { prefix, render, route } from "rwsdk/router";
 import { defineApp, ErrorResponse } from "rwsdk/worker";
-import { Session } from "./session/durableObject";
+import { Document } from "@/app/document";
+import { setCommonHeaders } from "@/app/headers";
+import { Home } from "@/app/pages/home";
+import { userRoutes } from "@/app/pages/user/routes";
+import { db, setupDb, type User } from "@/db";
+import type { Session } from "./session/durable-object";
 import { sessions, setupSessionStore } from "./session/store";
-export { SessionDurableObject } from "./session/durableObject";
+
+export { SessionDurableObject } from "./session/durable-object";
 
 export type AppContext = {
   session: Session | null;
@@ -29,8 +30,8 @@ export default defineApp([
         headers.set("Location", "/user/login");
 
         return new Response(null, {
-          status: 302,
           headers,
+          status: 302,
         });
       }
 
@@ -47,15 +48,13 @@ export default defineApp([
   },
   render(Document, [
     route("/", () => new Response("Hello, World!")),
-    route("/ping", function () {
-      return <h1>Pong!</h1>;
-    }),
+    route("/ping", () => <h1>Pong!</h1>),
     route("/protected", [
       ({ ctx }) => {
         if (!ctx.user) {
           return new Response(null, {
-            status: 302,
             headers: { Location: "/user/login" },
+            status: 302,
           });
         }
       },

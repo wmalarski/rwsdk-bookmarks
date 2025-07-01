@@ -1,6 +1,6 @@
+import { env } from "cloudflare:workers";
 import { defineScript } from "rwsdk/worker";
 import { db, setupDb } from "@/db";
-import { env } from "cloudflare:workers";
 
 export default defineScript(async () => {
   await setupDb(env);

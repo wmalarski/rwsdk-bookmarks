@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import {
   startAuthentication,
   startRegistration,
 } from "@simplewebauthn/browser";
+import { useState, useTransition } from "react";
 import {
   finishPasskeyLogin,
   finishPasskeyRegistration,
@@ -62,16 +62,24 @@ export function Login() {
   return (
     <>
       <input
-        type="text"
-        value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
+        type="text"
+        value={username}
       />
-      <button onClick={handlePerformPasskeyLogin} disabled={isPending}>
-        {isPending ? <>...</> : "Login with passkey"}
+      <button
+        disabled={isPending}
+        onClick={handlePerformPasskeyLogin}
+        type="submit"
+      >
+        {isPending ? "..." : "Login with passkey"}
       </button>
-      <button onClick={handlePerformPasskeyRegister} disabled={isPending}>
-        {isPending ? <>...</> : "Register with passkey"}
+      <button
+        disabled={isPending}
+        onClick={handlePerformPasskeyRegister}
+        type="submit"
+      >
+        {isPending ? "..." : "Register with passkey"}
       </button>
       {result && <div>{result}</div>}
     </>

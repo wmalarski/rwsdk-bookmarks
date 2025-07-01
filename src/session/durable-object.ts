@@ -1,5 +1,5 @@
-import { MAX_SESSION_DURATION } from "rwsdk/auth";
 import { DurableObject } from "cloudflare:workers";
+import { MAX_SESSION_DURATION } from "rwsdk/auth";
 
 export interface Session {
   userId?: string | null;
@@ -22,9 +22,9 @@ export class SessionDurableObject extends DurableObject {
     challenge?: string | null;
   }): Promise<Session> {
     const session: Session = {
-      userId,
       challenge,
       createdAt: Date.now(),
+      userId,
     };
 
     await this.ctx.storage.put<Session>("session", session);
