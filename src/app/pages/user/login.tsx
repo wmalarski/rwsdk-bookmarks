@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   startAuthentication,
   startRegistration,
@@ -67,20 +68,20 @@ export function Login() {
         type="text"
         value={username}
       />
-      <button
-        disabled={isPending}
+      <Button
+        isDisabled={isPending}
         onClick={handlePerformPasskeyLogin}
         type="submit"
       >
         {isPending ? "..." : "Login with passkey"}
-      </button>
-      <button
-        disabled={isPending}
+      </Button>
+      <Button
+        isDisabled={isPending}
         onClick={handlePerformPasskeyRegister}
         type="submit"
       >
         {isPending ? "..." : "Register with passkey"}
-      </button>
+      </Button>
       {result && <div>{result}</div>}
     </>
   );

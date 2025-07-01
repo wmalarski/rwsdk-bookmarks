@@ -48,7 +48,11 @@ export default defineApp([
   },
   render(Document, [
     route("/", () => new Response("Hello, World!")),
-    route("/ping", () => <h1 className="bg-amber-950">Pong!</h1>),
+    route("/ping", () => (
+      <>
+        <h1 className="bg-amber-950">Pong!</h1>
+      </>
+    )),
     route("/protected", [
       ({ ctx }) => {
         if (!ctx.user) {
