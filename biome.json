@@ -20,7 +20,7 @@
   },
   "linter": {
     "domains": {
-      "solid": "all"
+      "react": "all"
     },
     "enabled": true,
     "rules": {

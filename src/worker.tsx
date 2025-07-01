@@ -1,11 +1,11 @@
-import { env } from "cloudflare:workers";
-import { prefix, render, route } from "rwsdk/router";
-import { defineApp, ErrorResponse } from "rwsdk/worker";
 import { Document } from "@/app/document";
 import { setCommonHeaders } from "@/app/headers";
 import { Home } from "@/app/pages/home";
 import { userRoutes } from "@/app/pages/user/routes";
 import { db, setupDb, type User } from "@/db";
+import { env } from "cloudflare:workers";
+import { prefix, render, route } from "rwsdk/router";
+import { defineApp, ErrorResponse } from "rwsdk/worker";
 import type { Session } from "./session/durable-object";
 import { sessions, setupSessionStore } from "./session/store";
 
@@ -48,7 +48,7 @@ export default defineApp([
   },
   render(Document, [
     route("/", () => new Response("Hello, World!")),
-    route("/ping", () => <h1>Pong!</h1>),
+    route("/ping", () => <h1 className="bg-amber-950">Pong!</h1>),
     route("/protected", [
       ({ ctx }) => {
         if (!ctx.user) {

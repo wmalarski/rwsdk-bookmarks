@@ -1,3 +1,5 @@
+import styles from "./styles.css?url";
+
 export const Document: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
@@ -7,6 +9,7 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
       <meta content="width=device-width, initial-scale=1" name="viewport" />
       <title>@redwoodjs/starter-standard</title>
       <link href="/src/client.tsx" rel="modulepreload" />
+      <link href={styles} rel="stylesheet" />
     </head>
     <body>
       <div id="root">{children}</div>
