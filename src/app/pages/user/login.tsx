@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/text-field";
 import { authClient } from "@/lib/auth-client";
 
 export function Login() {
@@ -56,20 +57,20 @@ export function Login() {
 
   return (
     <>
-      <input
-        onChange={(e) => setName(e.target.value)}
+      <TextField
+        onChange={setName}
         placeholder="Name (for sign-up)"
         type="text"
         value={name}
       />
-      <input
-        onChange={(e) => setEmail(e.target.value)}
+      <TextField
+        onChange={setEmail}
         placeholder="Email"
         type="email"
         value={email}
       />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
+      <TextField
+        onChange={setPassword}
         placeholder="Password"
         type="password"
         value={password}

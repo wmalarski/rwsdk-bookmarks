@@ -6,8 +6,9 @@ import { setCommonHeaders } from "@/app/headers";
 import { Home } from "@/app/pages/home";
 import { userRoutes } from "@/app/pages/user/routes";
 
-import type { User } from "./db";
-import { auth } from "./lib/auth";
+import { env } from "cloudflare:workers";
+import { setupDb, type User } from "./db";
+import { auth, setupAuth } from "./lib/auth";
 
 export type AppContext = {
   user: User | null;
@@ -16,6 +17,10 @@ export type AppContext = {
 export default defineApp([
   setCommonHeaders(),
   async ({ ctx, request }) => {
+    await setupDb(env);
+
+    setupAuth();
+
     try {
       const session = await auth.api.getSession({
         headers: request.headers,
@@ -29,7 +34,12 @@ export default defineApp([
       ctx.user = null;
     }
   },
-  route("/api/auth/*", ({ request }) => auth.handler(request)),
+  route("/api/auth/*", async ({ request, cf, ctx, headers, params, rw }) => {
+    console.log("[auth]", { cf, ctx, headers, params, request, rw });
+    const response = await auth.handler(request);
+    console.log("[auth]", response);
+    return response;
+  }),
   render(Document, [
     route("/", () => new Response("Hello, World!")),
     route("/protected", [
