@@ -1,87 +1,87 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  startAuthentication,
-  startRegistration,
-} from "@simplewebauthn/browser";
 import { useState, useTransition } from "react";
-import {
-  finishPasskeyLogin,
-  finishPasskeyRegistration,
-  startPasskeyLogin,
-  startPasskeyRegistration,
-} from "./functions";
+
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 
 export function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [result, setResult] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  const passkeyLogin = async () => {
-    // 1. Get a challenge from the worker
-    const options = await startPasskeyLogin();
-
-    // 2. Ask the browser to sign the challenge
-    const login = await startAuthentication({ optionsJSON: options });
-
-    // 3. Give the signed challenge to the worker to finish the login process
-    const success = await finishPasskeyLogin(login);
-
-    if (!success) {
-      setResult("Login failed");
-    } else {
-      setResult("Login successful!");
-    }
+  const handleSignUp = () => {
+    startTransition(() => {
+      authClient.signUp.email(
+        {
+          email,
+          name,
+          password,
+        },
+        {
+          onError: (ctx) => {
+            console.log("error", ctx.error);
+            setResult(`Error: ${ctx.error.message}`);
+          },
+          onRequest: () => setResult("Signing up..."),
+          onSuccess: () => {
+            setResult("Signup successful!");
+            window.location.href = "/protected";
+          },
+        },
+      );
+    });
   };
 
-  const passkeyRegister = async () => {
-    // 1. Get a challenge from the worker
-    const options = await startPasskeyRegistration(username);
-
-    // 2. Ask the browser to sign the challenge
-    const registration = await startRegistration({ optionsJSON: options });
-
-    // 3. Give the signed challenge to the worker to finish the registration process
-    const success = await finishPasskeyRegistration(username, registration);
-
-    if (!success) {
-      setResult("Registration failed");
-    } else {
-      setResult("Registration successful!");
-    }
-  };
-
-  const handlePerformPasskeyLogin = () => {
-    startTransition(() => void passkeyLogin());
-  };
-
-  const handlePerformPasskeyRegister = () => {
-    startTransition(() => void passkeyRegister());
+  const handleLogin = () => {
+    startTransition(() => {
+      authClient.signIn.email(
+        {
+          email,
+          password,
+        },
+        {
+          onError: (ctx) => setResult(`Error: ${ctx.error.message}`),
+          onRequest: () => setResult("Logging in..."),
+          onSuccess: () => {
+            setResult("Login successful!");
+            window.location.href = "/protected"; // redirect to protected page
+          },
+        },
+      );
+    });
   };
 
   return (
     <>
       <input
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name (for sign-up)"
         type="text"
-        value={username}
+        value={name}
       />
-      <Button
-        isDisabled={isPending}
-        onClick={handlePerformPasskeyLogin}
-        type="submit"
-      >
-        {isPending ? "..." : "Login with passkey"}
+      <input
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        type="email"
+        value={email}
+      />
+      <input
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+        type="password"
+        value={password}
+      />
+
+      <Button isDisabled={isPending} onClick={handleLogin}>
+        {isPending ? "Logging in..." : "Log In"}
       </Button>
-      <Button
-        isDisabled={isPending}
-        onClick={handlePerformPasskeyRegister}
-        type="submit"
-      >
-        {isPending ? "..." : "Register with passkey"}
+      <Button isDisabled={isPending} onClick={handleSignUp}>
+        {isPending ? "Signing up..." : "Sign Up"}
       </Button>
+
       {result && <div>{result}</div>}
     </>
   );

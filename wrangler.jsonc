@@ -8,8 +8,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_id": "6e90e7f9-51b9-4c6d-8b13-1b6d1c187df9",
-      "database_name": "my-project-db"
+      "database_id": "2242948c-09ca-4a01-9f82-ac3af8c235b7",
+      "database_name": "rwsdk-bookmarks"
     }
   ],
   "durable_objects": {

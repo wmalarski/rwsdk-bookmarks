@@ -1,10 +1,8 @@
-import { env } from "cloudflare:workers";
 import { defineScript } from "rwsdk/worker";
-import { db, setupDb } from "@/db";
+
+import { db } from "@/db";
 
 export default defineScript(async () => {
-  await setupDb(env);
-
   await db.$executeRawUnsafe(`\
     DELETE FROM User;
     DELETE FROM sqlite_sequence;
@@ -12,8 +10,13 @@ export default defineScript(async () => {
 
   await db.user.create({
     data: {
+      createdAt: new Date(),
+      email: "mj@test.com",
+      emailVerified: false,
       id: "1",
-      username: "testuser",
+      image: null,
+      name: "test",
+      updatedAt: new Date(),
     },
   });
 

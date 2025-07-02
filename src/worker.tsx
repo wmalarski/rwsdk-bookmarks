@@ -1,58 +1,36 @@
+import { prefix, render, route } from "rwsdk/router";
+import { defineApp } from "rwsdk/worker";
+
 import { Document } from "@/app/document";
 import { setCommonHeaders } from "@/app/headers";
 import { Home } from "@/app/pages/home";
 import { userRoutes } from "@/app/pages/user/routes";
-import { db, setupDb, type User } from "@/db";
-import { env } from "cloudflare:workers";
-import { prefix, render, route } from "rwsdk/router";
-import { defineApp, ErrorResponse } from "rwsdk/worker";
-import type { Session } from "./session/durable-object";
-import { sessions, setupSessionStore } from "./session/store";
-
-export { SessionDurableObject } from "./session/durable-object";
+import type { User } from "./db";
+import { auth } from "./lib/auth";
 
 export type AppContext = {
-  session: Session | null;
   user: User | null;
 };
 
 export default defineApp([
   setCommonHeaders(),
-  async ({ ctx, request, headers }) => {
-    await setupDb(env);
-    setupSessionStore(env);
-
+  async ({ ctx, request }) => {
     try {
-      ctx.session = await sessions.load(request);
-    } catch (error) {
-      if (error instanceof ErrorResponse && error.code === 401) {
-        await sessions.remove(request, headers);
-        headers.set("Location", "/user/login");
-
-        return new Response(null, {
-          headers,
-          status: 302,
-        });
-      }
-
-      throw error;
-    }
-
-    if (ctx.session?.userId) {
-      ctx.user = await db.user.findUnique({
-        where: {
-          id: ctx.session.userId,
-        },
+      const session = await auth.api.getSession({
+        headers: request.headers,
       });
+
+      ctx.user = session?.user
+        ? { ...session.user, image: session.user.image ?? null }
+        : null;
+    } catch (error) {
+      console.error("Session error:", error);
+      ctx.user = null;
     }
   },
+  route("/api/auth/*", ({ request }) => auth.handler(request)),
   render(Document, [
     route("/", () => new Response("Hello, World!")),
-    route("/ping", () => (
-      <>
-        <h1 className="bg-amber-950">Pong!</h1>
-      </>
-    )),
     route("/protected", [
       ({ ctx }) => {
         if (!ctx.user) {
