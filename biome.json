@@ -6,7 +6,13 @@
         "organizeImports": {
           "level": "on",
           "options": {
-            "groups": [":PACKAGE:", ":BLANK_LINE:", ["**", "@/**"]]
+            "groups": [
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              "@/**",
+              ":BLANK_LINE:",
+              "**"
+            ]
           }
         },
         "useSortedAttributes": "on",

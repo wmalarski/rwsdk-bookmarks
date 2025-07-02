@@ -5,6 +5,7 @@ import { Document } from "@/app/document";
 import { setCommonHeaders } from "@/app/headers";
 import { Home } from "@/app/pages/home";
 import { userRoutes } from "@/app/pages/user/routes";
+
 import type { User } from "./db";
 import { auth } from "./lib/auth";
 
