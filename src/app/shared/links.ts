@@ -1,3 +1,3 @@
 import { defineLinks } from "rwsdk/router";
 
-export const link = defineLinks(["/", "/user/login"]);
+export const link = defineLinks(["/", "/user/login", "/user/signup"]);
