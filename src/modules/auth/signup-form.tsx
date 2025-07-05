@@ -5,9 +5,11 @@ import { type ComponentProps, useState } from "react";
 import * as v from "valibot";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/components/ui/link";
 import { TextField } from "@/components/ui/text-field";
 import { authClient } from "@/lib/auth-client";
 import { formatValidationErrors } from "@/lib/formatters";
+import { link } from "@/lib/links";
 
 export const SignUpForm = () => {
   const [result, setResult] = useState("");
@@ -102,6 +104,8 @@ export const SignUpForm = () => {
           </Button>
         )}
       </form.Subscribe>
+
+      <Link href={link("/user/login")}>Login</Link>
 
       {result && <div>{result}</div>}
     </form>

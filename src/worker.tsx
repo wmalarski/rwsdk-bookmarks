@@ -9,6 +9,7 @@ import { userRoutes } from "@/app/pages/user/routes";
 import { env } from "cloudflare:workers";
 import { setupDb, type User } from "./db";
 import { auth, setupAuth } from "./lib/auth";
+import { link } from "./lib/links";
 
 export type AppContext = {
   user: User | null;
@@ -22,9 +23,7 @@ export default defineApp([
     setupAuth();
 
     try {
-      const session = await auth.api.getSession({
-        headers: request.headers,
-      });
+      const session = await auth.api.getSession({ headers: request.headers });
 
       ctx.user = session?.user
         ? { ...session.user, image: session.user.image ?? null }
@@ -34,19 +33,14 @@ export default defineApp([
       ctx.user = null;
     }
   },
-  route("/api/auth/*", async ({ request, cf, ctx, headers, params, rw }) => {
-    console.log("[auth]", { cf, ctx, headers, params, request, rw });
-    const response = await auth.handler(request);
-    console.log("[auth]", response);
-    return response;
-  }),
+  route("/api/auth/*", async ({ request }) => auth.handler(request)),
   render(Document, [
     route("/", () => new Response("Hello, World!")),
     route("/protected", [
       ({ ctx }) => {
         if (!ctx.user) {
           return new Response(null, {
-            headers: { Location: "/user/login" },
+            headers: { Location: link("/user/login") },
             status: 302,
           });
         }
