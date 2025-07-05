@@ -4,5 +4,9 @@ export const link = defineLinks([
   "/",
   "/user/login",
   "/user/signup",
-  "/bookmark/:id",
+  "/app/bookmark",
+  "/app/bookmark/:id",
+  "/app/bookmark/tags",
+  "/app/bookmark/share",
+  "/app/bookmark/history",
 ]);
