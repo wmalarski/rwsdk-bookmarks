@@ -1,5 +1,4 @@
 import { IconBookmark } from "@intentui/icons";
-import { useTranslation } from "react-i18next";
 
 import { Link } from "@/components/link";
 import {
@@ -19,8 +18,6 @@ import { SignOutButton } from "../auth/components/sign-out-button";
 import { useUser } from "../auth/user-context";
 
 export const TopNavbar = () => {
-  const { t } = useTranslation();
-
   const user = useUser();
 
   return (
@@ -33,26 +30,26 @@ export const TopNavbar = () => {
               href={link("/")}
             >
               <IconBookmark className="size-6 min-w-6" />
-              {t("info.title")}
+              Rwsdk Bookmarks
             </Link>
           </h1>
           <NavbarItem
             className="text-sm uppercase sm:text-md lg:text-xl"
             href={link("/app/bookmark/tags")}
           >
-            {t("tags.heading")}
+            Tags
           </NavbarItem>
           <NavbarItem
             className="text-sm uppercase sm:text-md lg:text-xl"
             href={link("/app/bookmark/share")}
           >
-            {t("bookmarks.share")}
+            Share
           </NavbarItem>
           <NavbarItem
             className="text-sm uppercase sm:text-md lg:text-xl"
             href={link("/app/bookmark/share")}
           >
-            {t("bookmarks.history")}
+            History
           </NavbarItem>
         </NavbarStart>
         <NavbarGap />
@@ -61,12 +58,8 @@ export const TopNavbar = () => {
             <SignOutButton />
           ) : (
             <>
-              <NavbarItem href={link("/user/signup")}>
-                {t("auth.signUp")}
-              </NavbarItem>
-              <NavbarItem href={link("/user/login")}>
-                {t("auth.signIn")}
-              </NavbarItem>
+              <NavbarItem href={link("/user/signup")}>Sign Up</NavbarItem>
+              <NavbarItem href={link("/user/login")}>Sign In</NavbarItem>
             </>
           )}
         </NavbarSection>
