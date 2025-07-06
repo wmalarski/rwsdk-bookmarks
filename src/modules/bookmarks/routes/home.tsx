@@ -12,7 +12,7 @@ export const Home = ({ ctx }: RequestInfo) => {
             ? `You are logged in as user email ${ctx.user.email}`
             : "You are not logged in"}
         </p>
-        <SignOutButton />
+        {ctx.user?.email ? <SignOutButton /> : null}
       </div>
     </UserProvider>
   );

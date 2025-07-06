@@ -5,6 +5,7 @@ import { type ComponentProps, useState } from "react";
 import * as v from "valibot";
 
 import { Button } from "@/components/button";
+import { Form, FormFooter, FormTitle } from "@/components/form";
 import { Link } from "@/components/link";
 import { TextField } from "@/components/text-field";
 import { formatValidationErrors } from "@/lib/formatters";
@@ -47,7 +48,8 @@ export const LoginForm = () => {
   };
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
+      <FormTitle>Login</FormTitle>
       <form.Field name="email">
         {(field) => (
           <TextField
@@ -87,9 +89,13 @@ export const LoginForm = () => {
         )}
       </form.Subscribe>
 
-      <Link href={link("/user/signup")}>Sign Up</Link>
+      <FormFooter>
+        <Link className="text-sm" href={link("/user/signup")}>
+          Sign Up
+        </Link>
+      </FormFooter>
 
       {result && <div>{result}</div>}
-    </form>
+    </Form>
   );
 };

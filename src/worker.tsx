@@ -24,7 +24,7 @@ export default defineApp([
   userMiddleware(),
   route("/api/auth/*", async ({ request }) => auth.handler(request)),
   render(Document, [
-    route("/", () => new Response("Hello, World!")),
+    route("/", Home),
     route("/protected", [protectedUserMiddleware(), Home]),
     prefix("/user", userRoutes),
   ]),

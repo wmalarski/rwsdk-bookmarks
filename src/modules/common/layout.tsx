@@ -28,10 +28,22 @@ export const PageFooter = () => {
 
 export const FormLayout = ({ children }: PropsWithChildren) => {
   return (
-    <main className="mx-auto flex flex-col items-center p-4">{children}</main>
+    <main className="mx-auto flex max-w-md flex-col items-center p-4">
+      {children}
+    </main>
   );
 };
 
 export const PageLayout = ({ children }: PropsWithChildren) => {
   return <main className="mx-auto flex flex-col items-center">{children}</main>;
+};
+
+export const FormsLayout = ({ children }: PropsWithChildren) => {
+  return (
+    <FormLayout>
+      <PageTitle />
+      {children}
+      <PageFooter />
+    </FormLayout>
+  );
 };
