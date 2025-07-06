@@ -8,7 +8,7 @@
     "utils": "@/lib/utils"
   },
   "iconLibrary": "lucide",
-  "rsc": false,
+  "rsc": true,
   "style": "new-york",
   "tailwind": {
     "baseColor": "neutral",

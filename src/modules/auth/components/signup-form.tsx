@@ -7,6 +7,7 @@ import * as v from "valibot";
 import { Button } from "@/components/button";
 import { Form, FormFooter, FormTitle } from "@/components/form";
 import { Link } from "@/components/link";
+import { Note } from "@/components/note";
 import { TextField } from "@/components/text-field";
 import { formatValidationErrors } from "@/lib/formatters";
 import { link } from "@/lib/links";
@@ -29,14 +30,11 @@ export const SignUpForm = () => {
       password: "",
     },
     onSubmit: async ({ value }) => {
-      authClient.signUp.email(value, {
+      await authClient.signUp.email(value, {
         onError: (ctx) => {
-          console.log("error", ctx.error);
           setResult(`Error: ${ctx.error.message}`);
         },
-        onRequest: () => setResult("Signing up..."),
         onSuccess: () => {
-          setResult("Signup successful!");
           window.location.href = "/protected";
         },
       });
@@ -55,6 +53,7 @@ export const SignUpForm = () => {
   return (
     <Form onSubmit={onSubmit}>
       <FormTitle>Sign Up</FormTitle>
+      {result.length > 0 ? <Note intent="danger">{result}</Note> : null}
       <form.Field name="name">
         {(field) => (
           <TextField
