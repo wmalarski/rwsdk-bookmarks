@@ -1,6 +1,6 @@
 import { IconBookmark } from "@intentui/icons";
 
-import { Link } from "@/components/ui/link";
+import { Link } from "@/components/link";
 import {
   Navbar,
   NavbarGap,
@@ -11,7 +11,7 @@ import {
   NavbarSpacer,
   NavbarStart,
   NavbarTrigger,
-} from "@/components/ui/navbar";
+} from "@/components/navbar";
 import { link } from "@/lib/links";
 
 import { SignOutButton } from "../auth/components/sign-out-button";

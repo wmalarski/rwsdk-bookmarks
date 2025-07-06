@@ -4,9 +4,9 @@ import { useForm } from "@tanstack/react-form";
 import { type ComponentProps, useState } from "react";
 import * as v from "valibot";
 
-import { Button } from "@/components/ui/button";
-import { Link } from "@/components/ui/link";
-import { TextField } from "@/components/ui/text-field";
+import { Button } from "@/components/button";
+import { Link } from "@/components/link";
+import { TextField } from "@/components/text-field";
 import { formatValidationErrors } from "@/lib/formatters";
 import { link } from "@/lib/links";
 
