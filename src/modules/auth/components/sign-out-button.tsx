@@ -2,7 +2,8 @@
 import { useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+
+import { authClient } from "../auth-client";
 
 export const SignOutButton = () => {
   const [isPending, startTransition] = useTransition();

@@ -1,6 +1,6 @@
 import type { RequestInfo } from "rwsdk/worker";
 
-import { SignOutButton } from "@/modules/auth/sign-out-button";
+import { SignOutButton } from "@/modules/auth/components/sign-out-button";
 import { UserProvider } from "@/modules/auth/user-context";
 
 export const Home = ({ ctx }: RequestInfo) => {

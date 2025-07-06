@@ -1,10 +1,10 @@
 import type { RouteMiddleware } from "rwsdk/router";
 
 import { setupDb } from "@/db";
-import { auth, setupAuth } from "@/lib/auth";
 import { link } from "@/lib/links";
 
 import { env } from "cloudflare:workers";
+import { auth, setupAuth } from "./auth";
 
 export const userMiddleware =
   (): RouteMiddleware =>

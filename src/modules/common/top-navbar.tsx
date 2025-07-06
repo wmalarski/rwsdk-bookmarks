@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/navbar";
 import { link } from "@/lib/links";
 
-import { SignOutButton } from "../auth/sign-out-button";
+import { SignOutButton } from "../auth/components/sign-out-button";
 import { useUser } from "../auth/user-context";
 import { useI18n } from "../contexts/i18n";
 

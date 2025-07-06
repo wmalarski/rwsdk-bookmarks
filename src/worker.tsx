@@ -4,14 +4,14 @@ import { defineApp } from "rwsdk/worker";
 import { Document } from "@/app/document";
 import { setCommonHeaders } from "@/app/headers";
 import { Home } from "@/app/pages/home";
-import { userRoutes } from "@/app/pages/user/routes";
+import { userRoutes } from "@/modules/auth/routes/routes";
 
 import type { User } from "./db";
-import { auth } from "./lib/auth";
+import { auth } from "./modules/auth/server/auth";
 import {
   protectedUserMiddleware,
   userMiddleware,
-} from "./modules/auth/middleware";
+} from "./modules/auth/server/middleware";
 
 export type AppContext = {
   user: User | null;

@@ -7,9 +7,10 @@ import * as v from "valibot";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import { TextField } from "@/components/ui/text-field";
-import { authClient } from "@/lib/auth-client";
 import { formatValidationErrors } from "@/lib/formatters";
 import { link } from "@/lib/links";
+
+import { authClient } from "../auth-client";
 
 export const SignUpForm = () => {
   const [result, setResult] = useState("");
