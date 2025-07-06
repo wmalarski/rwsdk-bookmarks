@@ -14,14 +14,14 @@ import {
 } from "@/components/ui/navbar";
 import { link } from "@/lib/links";
 
-import { useUserContext } from "~/modules/auth/contexts/user-context";
 import { SignOutButton } from "../auth/sign-out-button";
+import { useUser } from "../auth/user-context";
 import { useI18n } from "../contexts/i18n";
 
 export const TopNavbar = () => {
   const { t } = useI18n();
 
-  const user = useUserContext();
+  const user = useUser();
 
   return (
     <NavbarProvider>
@@ -57,7 +57,7 @@ export const TopNavbar = () => {
         </NavbarStart>
         <NavbarGap />
         <NavbarSection>
-          {user() ? (
+          {user ? (
             <SignOutButton />
           ) : (
             <>
