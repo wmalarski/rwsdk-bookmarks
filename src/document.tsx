@@ -1,3 +1,5 @@
+import "./modules/common/i18n";
+
 import styles from "./styles.css?url";
 
 export const Document: React.FC<{ children: React.ReactNode }> = ({

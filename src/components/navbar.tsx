@@ -1,3 +1,5 @@
+"use client";
+
 import { IconHamburger } from "@intentui/icons";
 import { createContext, use, useCallback, useMemo, useState } from "react";
 import type { LinkProps } from "react-aria-components";
@@ -350,23 +352,23 @@ const NavbarLabel = ({ className, ...props }: React.ComponentProps<"span">) => {
   );
 };
 
-export type {
-  NavbarProviderProps,
-  NavbarProps,
-  NavbarTriggerProps,
-  NavbarItemProps,
-};
 export {
-  NavbarProvider,
   Navbar,
-  NavbarMobile,
-  NavbarInset,
-  NavbarTrigger,
-  NavbarItem,
-  NavbarSection,
-  NavbarSpacer,
-  NavbarLabel,
-  NavbarSeparator,
-  NavbarStart,
   NavbarGap,
+  NavbarInset,
+  NavbarItem,
+  NavbarLabel,
+  NavbarMobile,
+  NavbarProvider,
+  NavbarSection,
+  NavbarSeparator,
+  NavbarSpacer,
+  NavbarStart,
+  NavbarTrigger,
+};
+export type {
+  NavbarItemProps,
+  NavbarProps,
+  NavbarProviderProps,
+  NavbarTriggerProps,
 };

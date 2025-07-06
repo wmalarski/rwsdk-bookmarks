@@ -1,4 +1,5 @@
 import { IconBookmark } from "@intentui/icons";
+import { useTranslation } from "react-i18next";
 
 import { Link } from "@/components/link";
 import {
@@ -16,10 +17,9 @@ import { link } from "@/lib/links";
 
 import { SignOutButton } from "../auth/components/sign-out-button";
 import { useUser } from "../auth/user-context";
-import { useI18n } from "../contexts/i18n";
 
 export const TopNavbar = () => {
-  const { t } = useI18n();
+  const { t } = useTranslation();
 
   const user = useUser();
 

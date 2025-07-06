@@ -1,12 +1,11 @@
 import type { PropsWithChildren } from "react";
 import { Link } from "react-aria-components";
+import { useTranslation } from "react-i18next";
 
 import { link } from "@/lib/links";
 
-import { useI18n } from "../contexts/i18n";
-
 export const PageTitle = () => {
-  const { t } = useI18n();
+  const { t } = useTranslation();
 
   return (
     <h1 className="my-16 flex items-center text-center text-4xl uppercase sm:text-6xl">
@@ -16,7 +15,7 @@ export const PageTitle = () => {
 };
 
 export const PageFooter = () => {
-  const { t } = useI18n();
+  const { t } = useTranslation();
 
   return (
     <footer className="p-4">
