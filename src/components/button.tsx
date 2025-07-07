@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button as ButtonPrimitive,
   type ButtonProps as ButtonPrimitiveProps,
@@ -123,5 +125,5 @@ const Button = ({
   );
 };
 
-export { Button, buttonStyles };
 export type { ButtonProps };
+export { Button, buttonStyles };

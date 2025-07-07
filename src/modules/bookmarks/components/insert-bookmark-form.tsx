@@ -1,11 +1,16 @@
 import { useSubmission } from "@solidjs/router";
 import type { Component } from "solid-js";
+
 import { useI18n } from "~/modules/common/contexts/i18n";
 import { Button } from "~/ui/button/button";
 import { formContainerRecipe } from "~/ui/form-container/form-container.recipe";
 import { PlusIcon } from "~/ui/icons/plus-icon";
 import { insertBookmarkServerAction } from "../server";
-import { BookmarkFields, type BookmarkFieldsData } from "./bookmark-fields";
+import {
+  BookmarkFields,
+  type BookmarkFieldsData,
+  useBookmarksForm,
+} from "./bookmark-fields";
 
 type InsertBookmarkFormProps = {
   initialData?: BookmarkFieldsData;
@@ -18,6 +23,12 @@ export const InsertBookmarkForm: Component<InsertBookmarkFormProps> = (
 
   const submission = useSubmission(insertBookmarkServerAction);
 
+  const form = useBookmarksForm({
+    onSubmit(data) {
+      //
+    },
+  });
+
   return (
     <form
       action={insertBookmarkServerAction}
@@ -25,6 +36,7 @@ export const InsertBookmarkForm: Component<InsertBookmarkFormProps> = (
       method="post"
     >
       <BookmarkFields
+        form={form}
         initialData={props.initialData}
         pending={submission.pending}
         result={submission.result}

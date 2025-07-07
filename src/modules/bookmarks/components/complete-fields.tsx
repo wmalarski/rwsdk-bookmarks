@@ -1,4 +1,5 @@
 import type { Component } from "solid-js";
+
 import { useI18n } from "~/modules/common/contexts/i18n";
 import type { RpcFailure } from "~/modules/common/server/helpers";
 import { Checkbox } from "~/ui/checkbox/checkbox";

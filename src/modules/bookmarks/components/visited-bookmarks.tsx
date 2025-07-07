@@ -1,5 +1,6 @@
 import { createAsync } from "@solidjs/router";
 import type { Component } from "solid-js";
+
 import { useBookmarksHistory } from "~/modules/bookmarks/contexts/bookmarks-history";
 import { RpcShow } from "~/modules/common/components/rpc-show";
 import { ClientOnly } from "~/ui/client-only/client-only";
