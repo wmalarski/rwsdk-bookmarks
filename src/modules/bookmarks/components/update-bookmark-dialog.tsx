@@ -1,9 +1,11 @@
+import { IconLoader } from "@intentui/icons";
 import { useSubmission } from "@solidjs/router";
-import { type Component, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
+
+import { Button } from "@/components/button";
 
 import { useI18n } from "~/modules/common/contexts/i18n";
 import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
-import { Button } from "~/ui/button/button";
 import {
   closeDialog,
   Dialog,
@@ -26,17 +28,17 @@ type UpdateBookmarkDialogProps = {
   bookmark: BookmarkWithTagsModel;
 };
 
-export const UpdateBookmarkDialog: Component<UpdateBookmarkDialogProps> = (
-  props,
-) => {
+export const UpdateBookmarkDialog = ({
+  bookmark,
+}: UpdateBookmarkDialogProps) => {
   const { t } = useI18n();
 
-  const dialogId = createMemo(() => `update-dialog-${props.bookmark.id}`);
-  const formId = createMemo(() => `update-form-${props.bookmark.id}`);
+  const dialogId = createMemo(() => `update-dialog-${bookmark.id}`);
+  const formId = createMemo(() => `update-form-${bookmark.id}`);
 
   const submission = useSubmission(
     updateBookmarkServerAction,
-    ([form]) => form.get("bookmarkId") === String(props.bookmark.id),
+    ([form]) => form.get("bookmarkId") === String(bookmark.id),
   );
 
   const onSubmit = useActionOnSubmit({
@@ -46,17 +48,15 @@ export const UpdateBookmarkDialog: Component<UpdateBookmarkDialogProps> = (
 
   const initialData = () => {
     return {
-      ...props.bookmark,
-      tags: props.bookmark.bookmarks_tags.map(
-        (bookmarkTag) => bookmarkTag.tags.id,
-      ),
+      ...bookmark,
+      tags: bookmark.bookmarks_tags.map((bookmarkTag) => bookmarkTag.tags.id),
     };
   };
 
   const history = useBookmarksHistory();
 
   const onClick = () => {
-    history().addToHistory(props.bookmark.id);
+    history().addToHistory(bookmark.id);
   };
 
   return (
@@ -67,14 +67,18 @@ export const UpdateBookmarkDialog: Component<UpdateBookmarkDialogProps> = (
         onClick={onClick}
         size="sm"
       >
-        <PencilIcon class="size-4" />
+        <PencilIcon className="size-4" />
         {t("common.update")}
       </DialogTrigger>
       <Dialog id={dialogId()}>
         <DialogBox>
           <DialogTitle>{t("common.update")}</DialogTitle>
-          <form class={formContainerRecipe()} id={formId()} onSubmit={onSubmit}>
-            <input name="bookmarkId" type="hidden" value={props.bookmark.id} />
+          <form
+            className={formContainerRecipe()}
+            id={formId()}
+            onSubmit={onSubmit}
+          >
+            <input name="bookmarkId" type="hidden" value={bookmark.id} />
             <BookmarkFields
               initialData={initialData()}
               pending={submission.pending}
@@ -85,12 +89,12 @@ export const UpdateBookmarkDialog: Component<UpdateBookmarkDialogProps> = (
           <DialogActions>
             <DialogClose />
             <Button
-              color="primary"
-              disabled={submission.pending}
               form={formId()}
-              isLoading={submission.pending}
+              intent="primary"
+              isDisabled={submission.pending}
               type="submit"
             >
+              {submission.pending && <IconLoader />}
               {t("common.save")}
             </Button>
           </DialogActions>

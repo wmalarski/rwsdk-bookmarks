@@ -1,5 +1,5 @@
 import { createAsync } from "@solidjs/router";
-import { type Component, createMemo, For, Suspense } from "solid-js";
+import { createMemo, Suspense } from "solid-js";
 
 import { RpcShow } from "~/modules/common/components/rpc-show";
 import { selectTagsServerQuery } from "~/modules/tags/server";
@@ -11,34 +11,35 @@ type BookmarkTagsFieldProps = {
   disabled?: boolean;
 };
 
-export const BookmarkTagsField: Component<BookmarkTagsFieldProps> = (props) => {
+export const BookmarkTagsField = ({
+  disabled,
+  initialTags,
+}: BookmarkTagsFieldProps) => {
   const tags = createAsync(() => selectTagsServerQuery({}));
 
   const initialTagIds = createMemo(() => {
-    return new Set(props.initialTags);
+    return new Set(initialTags);
   });
 
   return (
     <Suspense>
       <RpcShow result={tags()}>
         {(tags) => (
-          <ul class="flex flex-col gap-2 pt-4">
-            <For each={tags().data}>
-              {(tag) => (
-                <li>
-                  <FieldsetLabel>
-                    <Checkbox
-                      checked={initialTagIds().has(tag.id)}
-                      disabled={props.disabled}
-                      name="tags[]"
-                      type="checkbox"
-                      value={tag.id}
-                    />
-                    {tag.name}
-                  </FieldsetLabel>
-                </li>
-              )}
-            </For>
+          <ul className="flex flex-col gap-2 pt-4">
+            {tags().data.map((tag) => (
+              <li key={tag.id}>
+                <FieldsetLabel>
+                  <Checkbox
+                    checked={initialTagIds().has(tag.id)}
+                    disabled={disabled}
+                    name="tags[]"
+                    type="checkbox"
+                    value={tag.id}
+                  />
+                  {tag.name}
+                </FieldsetLabel>
+              </li>
+            ))}
           </ul>
         )}
       </RpcShow>

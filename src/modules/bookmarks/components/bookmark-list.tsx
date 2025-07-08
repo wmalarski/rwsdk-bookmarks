@@ -1,10 +1,12 @@
 import { createWritableMemo } from "@solid-primitives/memo";
 import { createAsync } from "@solidjs/router";
-import { type Component, For, type ParentProps, Suspense } from "solid-js";
+import type { PropsWithChildren } from "react";
+import { Suspense } from "solid-js";
+
+import { Button } from "@/components/button";
 
 import { RpcShow } from "~/modules/common/components/rpc-show";
 import { useI18n } from "~/modules/common/contexts/i18n";
-import { Button } from "~/ui/button/button";
 import { Skeleton } from "~/ui/skeleton/skeleton";
 import {
   type BookmarkWithTagsModel,
@@ -23,11 +25,15 @@ type BookmarkListProps = {
   count: number;
 };
 
-export const BookmarkList: Component<BookmarkListProps> = (props) => {
+export const BookmarkList = ({
+  filterSearchParams,
+  initialBookmarks,
+  queryArgs,
+}: BookmarkListProps) => {
   const { t } = useI18n();
 
   const [offsets, setOffsets] = createWritableMemo<number[]>(
-    () => props.filterSearchParams && [],
+    () => filterSearchParams && [],
   );
 
   const onLoadMoreClick = () => {
@@ -38,20 +44,18 @@ export const BookmarkList: Component<BookmarkListProps> = (props) => {
   };
 
   return (
-    <div class="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
-      <div class="flex w-full justify-between gap-2">
-        <h2 class="text-xl">{t("bookmarks.title")}</h2>
-        <BookmarkFilters params={props.filterSearchParams} />
+    <div className="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
+      <div className="flex w-full justify-between gap-2">
+        <h2 className="text-xl">{t("bookmarks.title")}</h2>
+        <BookmarkFilters params={filterSearchParams} />
       </div>
       <BookmarkListContainer>
-        <BookmarkListPart bookmarks={props.initialBookmarks} />
-        <For each={offsets()}>
-          {(offset) => (
-            <BookmarkLazy offset={offset} queryArgs={props.queryArgs} />
-          )}
-        </For>
+        <BookmarkListPart bookmarks={initialBookmarks} />
+        {offsets().map((offset) => (
+          <BookmarkLazy key={offset} offset={offset} queryArgs={queryArgs} />
+        ))}
       </BookmarkListContainer>
-      <Button color="secondary" onClick={onLoadMoreClick} size="sm">
+      <Button intent="secondary" onClick={onLoadMoreClick} size="sm">
         {t("bookmarks.loadMore")}
       </Button>
     </div>
@@ -63,9 +67,9 @@ type BookmarkLazyProps = {
   offset: number;
 };
 
-const BookmarkLazy: Component<BookmarkLazyProps> = (props) => {
+const BookmarkLazy = ({ offset, queryArgs }: BookmarkLazyProps) => {
   const bookmarks = createAsync(() =>
-    selectBookmarksServerQuery({ offset: props.offset, ...props.queryArgs }),
+    selectBookmarksServerQuery({ offset: offset, ...queryArgs }),
   );
 
   return (
@@ -81,40 +85,41 @@ type BookmarkListPartProps = {
   bookmarks: BookmarkWithTagsModel[];
 };
 
-export const BookmarkListPart: Component<BookmarkListPartProps> = (props) => {
+export const BookmarkListPart = ({ bookmarks }: BookmarkListPartProps) => {
   return (
-    <For each={props.bookmarks}>
-      {(bookmark) => (
-        <li>
+    <>
+      {bookmarks.map((bookmark) => (
+        <li key={bookmark.id}>
           <BookmarkListItem bookmark={bookmark} />
         </li>
-      )}
-    </For>
+      ))}
+    </>
   );
 };
 
-export const BookmarkListContainer: Component<ParentProps> = (props) => {
-  return <ul class="flex flex-col gap-4">{props.children}</ul>;
+export const BookmarkListContainer = ({ children }: PropsWithChildren) => {
+  return <ul className="flex flex-col gap-4">{children}</ul>;
 };
 
-export const BookmarkListPlaceholder: Component = () => {
+export const BookmarkListPlaceholder = () => {
   return (
-    <ul class="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
+    <ul className="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
       <BookmarkListLoadingPlaceholder />
     </ul>
   );
 };
 
-const BookmarkListLoadingPlaceholder: Component = () => {
+const BookmarkListLoadingPlaceholder = () => {
   const list = Array.from({ length: 3 });
 
   return (
-    <For each={list}>
-      {() => (
-        <li>
-          <Skeleton class="h-48 w-full" />
+    <>
+      {list.map((_, index) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: this is correct
+        <li key={index}>
+          <Skeleton className="h-48 w-full" />
         </li>
-      )}
-    </For>
+      ))}
+    </>
   );
 };

@@ -1,5 +1,3 @@
-import type { Component } from "solid-js";
-
 import { useI18n } from "~/modules/common/contexts/i18n";
 import type { RpcFailure } from "~/modules/common/server/helpers";
 import { Checkbox } from "~/ui/checkbox/checkbox";
@@ -16,30 +14,34 @@ type CompleteFieldsProps = {
   result?: RpcFailure;
 };
 
-export const CompleteFields: Component<CompleteFieldsProps> = (props) => {
+export const CompleteFields = ({
+  initialData,
+  pending,
+  result,
+}: CompleteFieldsProps) => {
   const { t } = useI18n();
 
   return (
     <Fieldset>
-      <FormError message={props.result?.error} />
+      <FormError message={result?.error} />
 
       <FieldsetLabel>
         <Checkbox
-          checked={props.initialData?.done}
-          disabled={props.pending}
+          checked={initialData?.done}
+          disabled={pending}
           name="done"
           {...getInvalidStateProps({
             errorMessageId: "title-error",
-            isInvalid: !!props.result?.errors?.done,
+            isInvalid: !!result?.errors?.done,
           })}
         />
         {t("bookmarks.complete.done")}
       </FieldsetLabel>
-      <FieldError id="done-error" message={props.result?.errors?.done} />
+      <FieldError id="done-error" message={result?.errors?.done} />
 
       <FieldsetLabel for="rate">{t("bookmarks.complete.rate")}</FieldsetLabel>
       <Input
-        disabled={props.pending}
+        disabled={pending}
         id="rate"
         max={10}
         min={0}
@@ -47,29 +49,29 @@ export const CompleteFields: Component<CompleteFieldsProps> = (props) => {
         placeholder={t("bookmarks.complete.rate")}
         step={0.1}
         type="number"
-        value={props.initialData?.rate ?? 5}
+        value={initialData?.rate ?? 5}
         width="full"
         {...getInvalidStateProps({
           errorMessageId: "rate-error",
-          isInvalid: !!props.result?.errors?.rate,
+          isInvalid: !!result?.errors?.rate,
         })}
       />
-      <FieldError id="text-error" message={props.result?.errors?.text} />
+      <FieldError id="text-error" message={result?.errors?.text} />
 
       <FieldsetLabel for="note">{t("bookmarks.complete.note")}</FieldsetLabel>
       <Input
-        disabled={props.pending}
+        disabled={pending}
         id="note"
         name="note"
         placeholder={t("bookmarks.complete.note")}
-        value={props.initialData?.note ?? ""}
+        value={initialData?.note ?? ""}
         width="full"
         {...getInvalidStateProps({
           errorMessageId: "note-error",
-          isInvalid: !!props.result?.errors?.note,
+          isInvalid: !!result?.errors?.note,
         })}
       />
-      <FieldError id="url-note" message={props.result?.errors?.note} />
+      <FieldError id="url-note" message={result?.errors?.note} />
     </Fieldset>
   );
 };

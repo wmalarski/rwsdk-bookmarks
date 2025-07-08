@@ -1,19 +1,12 @@
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
-import {
-  type Component,
-  type ComponentProps,
-  createMemo,
-  For,
-  type ParentProps,
-  Show,
-} from "solid-js";
+import type { PropsWithChildren } from "react";
+import { type ComponentProps, createMemo } from "solid-js";
 
 import { useI18n } from "~/modules/common/contexts/i18n";
 import { createIsLink } from "~/modules/common/utils/create-is-link";
 import { createDateFormatter } from "~/modules/common/utils/formatters";
 import { paths } from "~/modules/common/utils/paths";
 import { Badge } from "~/ui/badge/badge";
-import { LinkButton } from "~/ui/button/button";
 import { Card, CardActions, CardBody } from "~/ui/card/card";
 import {
   Carousel,
@@ -34,7 +27,7 @@ type BookmarkListItemProps = {
   bookmark: BookmarkWithTagsModel;
 };
 
-export const BookmarkListItem: Component<BookmarkListItemProps> = (props) => {
+export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
   const { t } = useI18n();
 
   const formatDate = createDateFormatter();
@@ -42,67 +35,67 @@ export const BookmarkListItem: Component<BookmarkListItemProps> = (props) => {
   const history = useBookmarksHistory();
 
   const onDetailsClick = () => {
-    history().addToHistory(props.bookmark.id);
+    history().addToHistory(bookmark.id);
   };
 
   return (
-    <Card class="w-full" size="sm" variant="bordered">
+    <Card className="w-full" size="sm" variant="bordered">
       <CardBody>
-        <BookmarkTagsList bookmark={props.bookmark} />
-        <BookmarkPreview bookmark={props.bookmark} />
-        <Show when={props.bookmark.title}>
-          <BookmarkLinks bookmark={props.bookmark} />
-        </Show>
+        <BookmarkTagsList bookmark={bookmark} />
+        <BookmarkPreview bookmark={bookmark} />
+        {bookmark.title && <BookmarkLinks bookmark={bookmark} />}
         <div
-          class="grid w-full gap-2 pb-4"
+          className="grid w-full gap-2 pb-4"
           style={{ "grid-template-columns": "minmax(0, 1fr) minmax(0, 3fr)" }}
         >
           <GridTitle>{t("bookmarks.item.title")}</GridTitle>
-          <GridText>{props.bookmark.title}</GridText>
+          <GridText>{bookmark.title}</GridText>
           <GridTitle>{t("bookmarks.item.text")}</GridTitle>
-          <GridLink bookmarkId={props.bookmark.id} href={props.bookmark.text} />
+          <GridLink bookmarkId={bookmark.id} href={bookmark.text} />
           <GridTitle>{t("bookmarks.item.url")}</GridTitle>
-          <GridLink bookmarkId={props.bookmark.id} href={props.bookmark.url} />
+          <GridLink bookmarkId={bookmark.id} href={bookmark.url} />
           <GridTitle>{t("bookmarks.item.createdAt")}</GridTitle>
-          <GridText>{formatDate(props.bookmark.created_at)}</GridText>
+          <GridText>{formatDate(bookmark.created_at)}</GridText>
           <GridTitle>{t("bookmarks.item.done")}</GridTitle>
-          <GridText>{String(props.bookmark.done)}</GridText>
-          <Show when={props.bookmark.done}>
-            <GridTitle>{t("bookmarks.item.doneAt")}</GridTitle>
-            <GridText>
-              {props.bookmark.done_at && formatDate(props.bookmark.done_at)}
-            </GridText>
-            <GridTitle>{t("bookmarks.item.rate")}</GridTitle>
-            <GridText>{props.bookmark.rate}</GridText>
-            <GridTitle>{t("bookmarks.item.note")}</GridTitle>
-            <GridText>{props.bookmark.note}</GridText>
-          </Show>
+          <GridText>{String(bookmark.done)}</GridText>
+          {bookmark.done && (
+            <>
+              <GridTitle>{t("bookmarks.item.doneAt")}</GridTitle>
+              <GridText>
+                {bookmark.done_at && formatDate(bookmark.done_at)}
+              </GridText>
+              <GridTitle>{t("bookmarks.item.rate")}</GridTitle>
+              <GridText>{bookmark.rate}</GridText>
+              <GridTitle>{t("bookmarks.item.note")}</GridTitle>
+              <GridText>{bookmark.note}</GridText>
+            </>
+          )}
         </div>
         <CardActions>
-          <DeleteBookmarkForm bookmark={props.bookmark} />
-          <CompleteDialog bookmark={props.bookmark} />
-          <UpdateBookmarkDialog bookmark={props.bookmark} />
-          <LinkButton
+          <DeleteBookmarkForm bookmark={bookmark} />
+          <CompleteDialog bookmark={bookmark} />
+          <UpdateBookmarkDialog bookmark={bookmark} />
+          <Link
             color="secondary"
-            href={paths.bookmark(props.bookmark.id)}
+            href={paths.bookmark(bookmark.id)}
             onClick={onDetailsClick}
             size="sm"
           >
-            <ChevronRightIcon class="size-4" />
+            <ChevronRightIcon className="size-4" />
             {t("bookmarks.item.details")}
-          </LinkButton>
+          </Link>
         </CardActions>
       </CardBody>
     </Card>
   );
 };
 
-const GridTitle: Component<ParentProps> = (props) => {
-  return <span class="font-semibold text-sm">{props.children}</span>;
+const GridTitle = ({ children }: PropsWithChildren) => {
+  return <span className="font-semibold text-sm">{children}</span>;
 };
 
-const GridText: Component<ParentProps> = (props) => {
-  return <span class="break-words">{props.children}</span>;
+const GridText = ({ children }: PropsWithChildren) => {
+  return <span className="break-words">{children}</span>;
 };
 
 type GridLinkProps = {
@@ -110,36 +103,33 @@ type GridLinkProps = {
   href: string;
 };
 
-const GridLink: Component<GridLinkProps> = (props) => {
-  const isLink = createIsLink(() => props.href);
+const GridLink = ({ bookmarkId, href }: GridLinkProps) => {
+  const isLink = createIsLink(() => href);
 
   const history = useBookmarksHistory();
 
   const onClick = () => {
-    history().addToHistory(props.bookmarkId);
+    history().addToHistory(bookmarkId);
   };
 
-  return (
-    <Show fallback={<GridText>{props.href}</GridText>} when={isLink()}>
-      <Link
-        class="break-words"
-        hover={true}
-        href={props.href}
-        onClick={onClick}
-      >
-        {props.href}
+  if (isLink()) {
+    return (
+      <Link className="break-words" hover={true} href={href} onClick={onClick}>
+        {href}
       </Link>
-    </Show>
-  );
+    );
+  }
+
+  return <GridText>{href}</GridText>;
 };
 
 type BookmarkPreviewProps = {
   bookmark: BookmarkWithTagsModel;
 };
 
-const BookmarkPreview: Component<BookmarkPreviewProps> = (props) => {
+const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
   const images = createMemo(() => {
-    const array = props.bookmark.preview
+    const array = bookmark.preview
       ?.split(";")
       .filter((image) => image.length > 0);
     const smallImages = array?.filter((path) => path.endsWith("-250.jpg"));
@@ -151,25 +141,26 @@ const BookmarkPreview: Component<BookmarkPreviewProps> = (props) => {
     return array ?? [];
   });
 
+  if (images().length <= 0) {
+    return null;
+  }
+
   return (
-    <Show when={images().length > 0}>
-      <div class="relative mx-auto my-4 w-64">
-        <Carousel>
-          <CarouselContent>
-            <For each={images()}>
-              {(image) => (
-                <BookmarkPreviewImage
-                  image={image}
-                  title={props.bookmark.title}
-                />
-              )}
-            </For>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
-      </div>
-    </Show>
+    <div className="relative mx-auto my-4 w-64">
+      <Carousel>
+        <CarouselContent>
+          {images().map((image) => (
+            <BookmarkPreviewImage
+              image={image}
+              key={image}
+              title={bookmark.title}
+            />
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
   );
 };
 
@@ -178,7 +169,7 @@ type BookmarkPreviewImageProps = {
   title: string;
 };
 
-const BookmarkPreviewImage: Component<BookmarkPreviewImageProps> = (props) => {
+const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
   const { t } = useI18n();
 
   let el: HTMLDivElement | undefined;
@@ -187,17 +178,17 @@ const BookmarkPreviewImage: Component<BookmarkPreviewImageProps> = (props) => {
   const shouldShow = createMemo<boolean>((previous) => previous || visible());
 
   return (
-    <CarouselItem class="min-h-72" ref={el}>
-      <Show when={shouldShow()}>
+    <CarouselItem className="min-h-72" ref={el}>
+      {shouldShow && (
         <img
-          alt={t("bookmarks.item.preview", { preview: props.title })}
-          class="h-64 text-base-300"
+          alt={t("bookmarks.item.preview", { preview: title })}
+          className="h-64 text-base-300"
           height={250}
           loading="lazy"
-          src={props.image}
+          src={image}
           width={250}
         />
-      </Show>
+      )}
     </CarouselItem>
   );
 };
@@ -206,16 +197,14 @@ type BookmarkTagsListProps = {
   bookmark: BookmarkWithTagsModel;
 };
 
-const BookmarkTagsList: Component<BookmarkTagsListProps> = (props) => {
+const BookmarkTagsList = ({ bookmark }: BookmarkTagsListProps) => {
   return (
-    <ul class="flex flex-row flex-wrap gap-2">
-      <For each={props.bookmark.bookmarks_tags}>
-        {(bookmarkTag) => (
-          <li>
-            <Badge color="accent">{bookmarkTag.tags.name}</Badge>
-          </li>
-        )}
-      </For>
+    <ul className="flex flex-row flex-wrap gap-2">
+      {bookmark.bookmarks_tags.map((bookmarkTag) => (
+        <li key={bookmarkTag.id}>
+          <Badge color="accent">{bookmarkTag.tags.name}</Badge>
+        </li>
+      ))}
     </ul>
   );
 };
@@ -224,16 +213,16 @@ type BookmarkLinksProps = {
   bookmark: BookmarkWithTagsModel;
 };
 
-const BookmarkLinks: Component<BookmarkLinksProps> = (props) => {
+const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
   const { t } = useI18n();
 
   const history = useBookmarksHistory();
 
   const onClick = () => {
-    history().addToHistory(props.bookmark.id);
+    history().addToHistory(bookmark.id);
   };
 
-  const commonProps: Partial<ComponentProps<typeof LinkButton>> = {
+  const commonProps: Partial<ComponentProps<typeof Link>> = {
     color: "secondary",
     onClick,
     rel: "noopener noreferrer",
@@ -242,30 +231,30 @@ const BookmarkLinks: Component<BookmarkLinksProps> = (props) => {
   };
 
   return (
-    <ul class="flex flex-row flex-wrap gap-2">
+    <ul className="flex flex-row flex-wrap gap-2">
       <li>
-        <LinkButton
+        <Link
           {...commonProps}
-          href={`https://www.youtube.com/results?${new URLSearchParams({ search_query: props.bookmark.title })}`}
+          href={`https://www.youtube.com/results?${new URLSearchParams({ search_query: bookmark.title })}`}
         >
           {t("bookmarks.item.youtube")}
-        </LinkButton>
+        </Link>
       </li>
       <li>
-        <LinkButton
+        <Link
           {...commonProps}
-          href={`https://www.youtube.com/results?${new URLSearchParams({ q: props.bookmark.title })}`}
+          href={`https://www.youtube.com/results?${new URLSearchParams({ q: bookmark.title })}`}
         >
           {t("bookmarks.item.google")}
-        </LinkButton>
+        </Link>
       </li>
       <li>
-        <LinkButton
+        <Link
           {...commonProps}
-          href={`https://open.spotify.com/search/${props.bookmark.title}`}
+          href={`https://open.spotify.com/search/${bookmark.title}`}
         >
           {t("bookmarks.item.spotify")}
-        </LinkButton>
+        </Link>
       </li>
     </ul>
   );

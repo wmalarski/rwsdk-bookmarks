@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { type Component, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 
 import { useI18n } from "~/modules/common/contexts/i18n";
 import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
@@ -15,16 +15,14 @@ type DeleteBookmarkFormProps = {
   bookmark: BookmarkWithTagsModel;
 };
 
-export const DeleteBookmarkForm: Component<DeleteBookmarkFormProps> = (
-  props,
-) => {
+export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
   const { t } = useI18n();
 
-  const dialogId = createMemo(() => `delete-dialog-${props.bookmark.id}`);
+  const dialogId = createMemo(() => `delete-dialog-${bookmark.id}`);
 
   const submission = useSubmission(
     deleteBookmarkServerAction,
-    ([form]) => form.get("bookmarkId") === String(props.bookmark.id),
+    ([form]) => form.get("bookmarkId") === String(bookmark.id),
   );
 
   const onSubmit = useActionOnSubmit({
@@ -34,9 +32,9 @@ export const DeleteBookmarkForm: Component<DeleteBookmarkFormProps> = (
 
   return (
     <form onSubmit={onSubmit}>
-      <input name="bookmarkId" type="hidden" value={props.bookmark.id} />
+      <input name="bookmarkId" type="hidden" value={bookmark.id} />
       <DialogTrigger color="error" for={dialogId()} size="sm">
-        <TrashIcon class="size-4" />
+        <TrashIcon className="size-4" />
         {t("common.delete")}
       </DialogTrigger>
       <AlertDialog

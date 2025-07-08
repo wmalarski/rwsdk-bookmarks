@@ -1,9 +1,11 @@
+import { IconLoader } from "@intentui/icons";
 import { useSubmission } from "@solidjs/router";
-import { type Component, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
+
+import { Button } from "@/components/button";
 
 import { useI18n } from "~/modules/common/contexts/i18n";
 import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
-import { Button } from "~/ui/button/button";
 import {
   closeDialog,
   Dialog,
@@ -25,21 +27,21 @@ type CompleteDialogProps = {
   bookmark: BookmarkWithTagsModel;
 };
 
-export const CompleteDialog: Component<CompleteDialogProps> = (props) => {
+export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
   const { t } = useI18n();
 
-  const dialogId = createMemo(() => `complete-dialog-${props.bookmark.id}`);
-  const formId = createMemo(() => `complete-form-${props.bookmark.id}`);
+  const dialogId = createMemo(() => `complete-dialog-${bookmark.id}`);
+  const formId = createMemo(() => `complete-form-${bookmark.id}`);
 
   const submission = useSubmission(
     completeBookmarkServerAction,
-    ([form]) => form.get("bookmarkId") === String(props.bookmark.id),
+    ([form]) => form.get("bookmarkId") === String(bookmark.id),
   );
 
   const history = useBookmarksHistory();
 
   const onClick = () => {
-    history().addToHistory(props.bookmark.id);
+    history().addToHistory(bookmark.id);
   };
 
   const onSubmit = useActionOnSubmit({
@@ -57,16 +59,16 @@ export const CompleteDialog: Component<CompleteDialogProps> = (props) => {
         onClick={onClick}
         size="sm"
       >
-        <CheckIcon class="size-4" />
+        <CheckIcon className="size-4" />
         {t("bookmarks.complete.complete")}
       </DialogTrigger>
       <Dialog id={dialogId()}>
         <DialogBox>
           <DialogTitle>{t("bookmarks.complete.complete")}</DialogTitle>
           <form id={formId()} onSubmit={onSubmit}>
-            <input name="bookmarkId" type="hidden" value={props.bookmark.id} />
+            <input name="bookmarkId" type="hidden" value={bookmark.id} />
             <CompleteFields
-              initialData={props.bookmark}
+              initialData={bookmark}
               pending={submission.pending}
               result={submission.result}
             />
@@ -74,12 +76,12 @@ export const CompleteDialog: Component<CompleteDialogProps> = (props) => {
           <DialogActions>
             <DialogClose />
             <Button
-              color="primary"
-              disabled={submission.pending}
               form={formId()}
-              isLoading={submission.pending}
+              intent="primary"
+              isDisabled={submission.pending}
               type="submit"
             >
+              {submission.pending && <IconLoader />}
               {t("bookmarks.complete.complete")}
             </Button>
           </DialogActions>

@@ -1,5 +1,4 @@
 import { createAsync } from "@solidjs/router";
-import type { Component } from "solid-js";
 
 import { useBookmarksHistory } from "~/modules/bookmarks/contexts/bookmarks-history";
 import { RpcShow } from "~/modules/common/components/rpc-show";
@@ -7,7 +6,7 @@ import { ClientOnly } from "~/ui/client-only/client-only";
 import { selectBookmarksByIdsServerQuery } from "../server";
 import { BookmarkListContainer, BookmarkListPart } from "./bookmark-list";
 
-export const VisitedBookmarks: Component = () => {
+export const VisitedBookmarks = () => {
   return (
     <ClientOnly>
       <ClientVisitedBookmarks />
@@ -15,7 +14,7 @@ export const VisitedBookmarks: Component = () => {
   );
 };
 
-const ClientVisitedBookmarks: Component = () => {
+const ClientVisitedBookmarks = () => {
   const history = useBookmarksHistory();
 
   const bookmarks = createAsync(() =>
