@@ -1,77 +1,109 @@
-import { useI18n } from "~/modules/common/contexts/i18n";
-import type { RpcFailure } from "~/modules/common/server/helpers";
-import { Checkbox } from "~/ui/checkbox/checkbox";
-import { FieldError } from "~/ui/field-error/field-error";
-import { Fieldset, FieldsetLabel } from "~/ui/fieldset/fieldset";
-import { FormError } from "~/ui/form-error/form-error";
-import { Input } from "~/ui/input/input";
-import { getInvalidStateProps } from "~/ui/utils/get-invalid-state-props";
-import type { BookmarkWithTagsModel } from "../server";
+"use client";
 
-type CompleteFieldsProps = {
-  initialData?: BookmarkWithTagsModel;
-  pending?: boolean;
-  result?: RpcFailure;
+import { useForm } from "@tanstack/react-form";
+import * as v from "valibot";
+
+import { Checkbox } from "@/components/checkbox";
+import { Form } from "@/components/form";
+import { Note } from "@/components/note";
+import { NumberField } from "@/components/number-field";
+import { TextField } from "@/components/text-field";
+import { formatValidationErrors } from "@/lib/formatters";
+
+const completeFieldsSchema = () => {
+  return v.object({
+    done: v.optional(v.boolean()),
+    note: v.optional(v.string()),
+    rate: v.optional(v.number()),
+  });
 };
 
-export const CompleteFields = ({
+export type CompleteFieldsData = v.InferOutput<
+  ReturnType<typeof completeFieldsSchema>
+>;
+
+type UseCompleteFormArgs = {
+  onSubmit: (data: CompleteFieldsData) => void;
+  initialData?: CompleteFieldsData;
+};
+
+export const useCompleteForm = ({
   initialData,
-  pending,
-  result,
-}: CompleteFieldsProps) => {
-  const { t } = useI18n();
+  onSubmit,
+}: UseCompleteFormArgs) => {
+  return useForm({
+    defaultValues: {
+      done: false,
+      note: "",
+      rate: 5,
+      ...initialData,
+    } as CompleteFieldsData,
+    onSubmit: async ({ value }) => {
+      onSubmit(value);
+    },
+    validators: {
+      onChange: completeFieldsSchema(),
+    },
+  });
+};
 
+type CompleteFieldsProps = {
+  form: ReturnType<typeof useCompleteForm>;
+  result?: string;
+};
+
+export const CompleteFields = ({ form, result }: CompleteFieldsProps) => {
   return (
-    <Fieldset>
-      <FormError message={result?.error} />
+    <Form>
+      {result && result.length > 0 ? (
+        <Note intent="danger">{result}</Note>
+      ) : null}
 
-      <FieldsetLabel>
-        <Checkbox
-          checked={initialData?.done}
-          disabled={pending}
-          name="done"
-          {...getInvalidStateProps({
-            errorMessageId: "title-error",
-            isInvalid: !!result?.errors?.done,
-          })}
-        />
-        {t("bookmarks.complete.done")}
-      </FieldsetLabel>
-      <FieldError id="done-error" message={result?.errors?.done} />
+      <form.Field name="done">
+        {(field) => (
+          <Checkbox
+            id={field.name}
+            isSelected={field.state.value}
+            name={field.name}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+          >
+            Done
+          </Checkbox>
+        )}
+      </form.Field>
 
-      <FieldsetLabel for="rate">{t("bookmarks.complete.rate")}</FieldsetLabel>
-      <Input
-        disabled={pending}
-        id="rate"
-        max={10}
-        min={0}
-        name="rate"
-        placeholder={t("bookmarks.complete.rate")}
-        step={0.1}
-        type="number"
-        value={initialData?.rate ?? 5}
-        width="full"
-        {...getInvalidStateProps({
-          errorMessageId: "rate-error",
-          isInvalid: !!result?.errors?.rate,
-        })}
-      />
-      <FieldError id="text-error" message={result?.errors?.text} />
+      <form.Field name="rate">
+        {(field) => (
+          <NumberField
+            errorMessage={formatValidationErrors(field.state.meta.errors)}
+            id={field.name}
+            label="Rate"
+            maxValue={10}
+            minValue={0}
+            name={field.name}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            step={0.1}
+            value={field.state.value}
+          />
+        )}
+      </form.Field>
 
-      <FieldsetLabel for="note">{t("bookmarks.complete.note")}</FieldsetLabel>
-      <Input
-        disabled={pending}
-        id="note"
-        name="note"
-        placeholder={t("bookmarks.complete.note")}
-        value={initialData?.note ?? ""}
-        width="full"
-        {...getInvalidStateProps({
-          errorMessageId: "note-error",
-          isInvalid: !!result?.errors?.note,
-        })}
-      />
-      <FieldError id="url-note" message={result?.errors?.note} />
-    </Fieldset>
+      <form.Field name="note">
+        {(field) => (
+          <TextField
+            errorMessage={formatValidationErrors(field.state.meta.errors)}
+            id={field.name}
+            label="Note"
+            name={field.name}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            placeholder="Note"
+            value={field.state.value}
+          />
+        )}
+      </form.Field>
+    </Form>
   );
 };

@@ -2,6 +2,8 @@ import { createVisibilityObserver } from "@solid-primitives/intersection-observe
 import type { PropsWithChildren } from "react";
 import { type ComponentProps, createMemo } from "solid-js";
 
+import { Link } from "@/components/link";
+
 import { useI18n } from "~/modules/common/contexts/i18n";
 import { createIsLink } from "~/modules/common/utils/create-is-link";
 import { createDateFormatter } from "~/modules/common/utils/formatters";
@@ -16,7 +18,6 @@ import {
   CarouselPrevious,
 } from "~/ui/carousel/carousel";
 import { ChevronRightIcon } from "~/ui/icons/chevron-right-icon";
-import { Link } from "~/ui/link/link";
 import { useBookmarksHistory } from "../contexts/bookmarks-history";
 import type { BookmarkWithTagsModel } from "../server";
 import { CompleteDialog } from "./complete-dialog";
@@ -75,12 +76,7 @@ export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
           <DeleteBookmarkForm bookmark={bookmark} />
           <CompleteDialog bookmark={bookmark} />
           <UpdateBookmarkDialog bookmark={bookmark} />
-          <Link
-            color="secondary"
-            href={paths.bookmark(bookmark.id)}
-            onClick={onDetailsClick}
-            size="sm"
-          >
+          <Link href={paths.bookmark(bookmark.id)} onClick={onDetailsClick}>
             <ChevronRightIcon className="size-4" />
             {t("bookmarks.item.details")}
           </Link>
@@ -114,7 +110,7 @@ const GridLink = ({ bookmarkId, href }: GridLinkProps) => {
 
   if (isLink()) {
     return (
-      <Link className="break-words" hover={true} href={href} onClick={onClick}>
+      <Link className="break-words" href={href} onClick={onClick}>
         {href}
       </Link>
     );
