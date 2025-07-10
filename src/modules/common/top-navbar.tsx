@@ -35,19 +35,19 @@ export const TopNavbar = () => {
           </h1>
           <NavbarItem
             className="text-sm uppercase sm:text-md lg:text-xl"
-            href={link("/app/bookmark/tags")}
+            href={link("/app/tags")}
           >
             Tags
           </NavbarItem>
           <NavbarItem
             className="text-sm uppercase sm:text-md lg:text-xl"
-            href={link("/app/bookmark/share")}
+            href={link("/app/share")}
           >
             Share
           </NavbarItem>
           <NavbarItem
             className="text-sm uppercase sm:text-md lg:text-xl"
-            href={link("/app/bookmark/share")}
+            href={link("/app/share")}
           >
             History
           </NavbarItem>

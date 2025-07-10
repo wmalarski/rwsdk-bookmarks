@@ -12,6 +12,7 @@ import {
   protectedUserMiddleware,
   userMiddleware,
 } from "./modules/auth/server/middleware";
+import { bookmarkRoutes } from "./modules/bookmarks/routes/routes";
 import { dbMiddleware } from "./modules/common/db-middleware";
 
 export type AppContext = {
@@ -25,7 +26,7 @@ export default defineApp([
   route("/api/auth/*", async ({ request }) => auth.handler(request)),
   render(Document, [
     route("/", Home),
-    route("/protected", [protectedUserMiddleware(), Home]),
+    prefix("/app", [protectedUserMiddleware(), bookmarkRoutes]),
     prefix("/user", userRoutes),
   ]),
 ]);
