@@ -1,3 +1,5 @@
+"use client";
+
 import { IconBookmark } from "@intentui/icons";
 
 import { Link } from "@/components/link";
@@ -23,36 +25,24 @@ export const TopNavbar = () => {
   return (
     <NavbarProvider>
       <Navbar>
-        <NavbarStart className="gap-2">
+        <NavbarStart>
           <h1>
             <Link
-              className="flex items-center gap-1 text-md uppercase sm:text-xl lg:text-3xl"
+              className="flex items-center gap-1 text-fg text-md uppercase sm:text-xl lg:text-3xl"
               href={link("/")}
             >
               <IconBookmark className="size-6 min-w-6" />
               Rwsdk Bookmarks
             </Link>
           </h1>
-          <NavbarItem
-            className="text-sm uppercase sm:text-md lg:text-xl"
-            href={link("/app/tags")}
-          >
-            Tags
-          </NavbarItem>
-          <NavbarItem
-            className="text-sm uppercase sm:text-md lg:text-xl"
-            href={link("/app/share")}
-          >
-            Share
-          </NavbarItem>
-          <NavbarItem
-            className="text-sm uppercase sm:text-md lg:text-xl"
-            href={link("/app/share")}
-          >
-            History
-          </NavbarItem>
         </NavbarStart>
         <NavbarGap />
+        <NavbarSection>
+          <NavbarItem href={link("/app/tags")}>Tags</NavbarItem>
+          <NavbarItem href={link("/app/share")}>Share</NavbarItem>
+          <NavbarItem href={link("/app/share")}>History</NavbarItem>
+        </NavbarSection>
+        <NavbarGap className="flex-grow" />
         <NavbarSection>
           {user ? (
             <SignOutButton />

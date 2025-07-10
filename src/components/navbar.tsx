@@ -187,7 +187,7 @@ const NavbarItem = ({ className, isCurrent, ...props }: NavbarItemProps) => {
       aria-current={isCurrent ? "page" : undefined}
       className={composeTailwindRenderProps(className, [
         "href" in props ? "cursor-pointer" : "cursor-default",
-        "group/sidebar-item hover:bg-secondary",
+        "group/sidebar-item text-fg hover:bg-secondary",
         "aria-[current=page]:text-fg aria-[current=page]*:data-[slot=icon]:text-fg",
         "col-span-full grid grid-cols-[auto_1fr_1.5rem_0.5rem_auto] supports-[grid-template-columns:subgrid]:grid-cols-subgrid md:supports-[grid-template-columns:subgrid]:grid-cols-none",
         "relative min-w-0 items-center gap-x-3 rounded-lg p-2 text-left font-medium text-base/6 sm:text-sm/5 md:gap-x-2.5",
