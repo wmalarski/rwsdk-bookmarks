@@ -9,7 +9,7 @@ import { ShareBookmarkRoute } from "./share-bookmark-route";
 import { TagsListRoute } from "./tags-list-route";
 
 export const bookmarkRoutes = layout(PageLayout, [
-  route("/", [BookmarkListRoute]),
+  route("/", [(args) => {}, BookmarkListRoute]),
   route("/tags", [TagsListRoute]),
   route("/share", [ShareBookmarkRoute]),
   route("/history", [BookmarkHistoryRoute]),

@@ -29,7 +29,7 @@ export const TopNavbar = () => {
           <h1>
             <Link
               className="flex items-center gap-1 text-fg text-md uppercase sm:text-xl lg:text-3xl"
-              href={link("/")}
+              href={link("/app")}
             >
               <IconBookmark className="size-6 min-w-6" />
               Rwsdk Bookmarks

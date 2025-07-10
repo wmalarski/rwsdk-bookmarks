@@ -25,9 +25,13 @@ export const protectedUserMiddleware =
   (): RouteMiddleware =>
   async ({ ctx }) => {
     if (!ctx.user) {
-      return new Response(null, {
-        headers: { Location: link("/user/login") },
-        status: 302,
-      });
+      return redirectToLoginResponse();
     }
   };
+
+export const redirectToLoginResponse = () => {
+  return new Response(null, {
+    headers: { Location: link("/user/login") },
+    status: 302,
+  });
+};
