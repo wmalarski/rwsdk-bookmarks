@@ -1,6 +1,4 @@
 import { IconLoader } from "@intentui/icons";
-import { useSubmission } from "@solidjs/router";
-import { createMemo } from "solid-js";
 
 import { Button } from "@/components/button";
 
@@ -33,8 +31,8 @@ export const UpdateBookmarkDialog = ({
 }: UpdateBookmarkDialogProps) => {
   const { t } = useI18n();
 
-  const dialogId = createMemo(() => `update-dialog-${bookmark.id}`);
-  const formId = createMemo(() => `update-form-${bookmark.id}`);
+  const dialogId = `update-dialog-${bookmark.id}`;
+  const formId = `update-form-${bookmark.id}`;
 
   const submission = useSubmission(
     updateBookmarkServerAction,

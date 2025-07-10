@@ -1,6 +1,4 @@
-import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
-import type { PropsWithChildren } from "react";
-import { type ComponentProps, createMemo } from "solid-js";
+import { type ComponentProps, type PropsWithChildren, useMemo } from "react";
 
 import { Link } from "@/components/link";
 
@@ -47,7 +45,7 @@ export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
         {bookmark.title && <BookmarkLinks bookmark={bookmark} />}
         <div
           className="grid w-full gap-2 pb-4"
-          style={{ "grid-template-columns": "minmax(0, 1fr) minmax(0, 3fr)" }}
+          style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(0, 3fr)" }}
         >
           <GridTitle>{t("bookmarks.item.title")}</GridTitle>
           <GridText>{bookmark.title}</GridText>
@@ -124,7 +122,7 @@ type BookmarkPreviewProps = {
 };
 
 const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
-  const images = createMemo(() => {
+  const images = useMemo(() => {
     const array = bookmark.preview
       ?.split(";")
       .filter((image) => image.length > 0);
@@ -135,7 +133,7 @@ const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
     }
 
     return array ?? [];
-  });
+  }, [bookmark.preview?.split]);
 
   if (images().length <= 0) {
     return null;
@@ -171,7 +169,8 @@ const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
   let el: HTMLDivElement | undefined;
   const useVisibilityObserver = createVisibilityObserver({ threshold: 0.1 });
   const visible = useVisibilityObserver(() => el);
-  const shouldShow = createMemo<boolean>((previous) => previous || visible());
+  const shouldShow = visible;
+  // const shouldShow = createMemo<boolean>((previous) => previous || visible());
 
   return (
     <CarouselItem className="min-h-72" ref={el}>
@@ -219,10 +218,10 @@ const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
   };
 
   const commonProps: Partial<ComponentProps<typeof Link>> = {
-    color: "secondary",
+    // color: "secondary",
     onClick,
     rel: "noopener noreferrer",
-    size: "xs",
+    // size: "xs",
     target: "_blank",
   };
 

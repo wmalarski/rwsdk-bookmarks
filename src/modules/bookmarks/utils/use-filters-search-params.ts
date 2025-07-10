@@ -1,7 +1,7 @@
-import { useSearchParams } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { createMemo } from "solid-js";
 import * as v from "valibot";
+
+import { useSearchParams } from "@/lib/use-search-params";
 
 export const createDoneSchema = () => {
   return v.optional(
@@ -66,7 +66,7 @@ export const parseFiltersSearchParams = (params: SearchParams) => {
 
 export const useFiltersSearchParams = () => {
   const [params] = useSearchParams();
-  return createMemo(() => parseFiltersSearchParams(params));
+  return parseFiltersSearchParams(params);
 };
 
 export const useSetFiltersSearchParams = () => {

@@ -1,6 +1,4 @@
 import { IconLoader } from "@intentui/icons";
-import { useSubmission } from "@solidjs/router";
-import { createMemo } from "solid-js";
 
 import { Button } from "@/components/button";
 
@@ -30,8 +28,8 @@ type CompleteDialogProps = {
 export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
   const { t } = useI18n();
 
-  const dialogId = createMemo(() => `complete-dialog-${bookmark.id}`);
-  const formId = createMemo(() => `complete-form-${bookmark.id}`);
+  const dialogId = `complete-dialog-${bookmark.id}`;
+  const formId = `complete-form-${bookmark.id}`;
 
   const submission = useSubmission(
     completeBookmarkServerAction,

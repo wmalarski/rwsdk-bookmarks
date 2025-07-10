@@ -1,5 +1,4 @@
-import { createAsync } from "@solidjs/router";
-import { createMemo, Suspense } from "solid-js";
+import { Suspense } from "react";
 
 import { RpcShow } from "~/modules/common/components/rpc-show";
 import { selectTagsServerQuery } from "~/modules/tags/server";
@@ -17,9 +16,7 @@ export const BookmarkTagsField = ({
 }: BookmarkTagsFieldProps) => {
   const tags = createAsync(() => selectTagsServerQuery({}));
 
-  const initialTagIds = createMemo(() => {
-    return new Set(initialTags);
-  });
+  const initialTagIds = new Set(initialTags);
 
   return (
     <Suspense>

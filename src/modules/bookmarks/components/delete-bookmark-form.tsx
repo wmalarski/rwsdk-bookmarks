@@ -1,6 +1,3 @@
-import { useSubmission } from "@solidjs/router";
-import { createMemo } from "solid-js";
-
 import { useI18n } from "~/modules/common/contexts/i18n";
 import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
 import { AlertDialog } from "~/ui/alert-dialog/alert-dialog";
@@ -18,7 +15,7 @@ type DeleteBookmarkFormProps = {
 export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
   const { t } = useI18n();
 
-  const dialogId = createMemo(() => `delete-dialog-${bookmark.id}`);
+  const dialogId = `delete-dialog-${bookmark.id}`;
 
   const submission = useSubmission(
     deleteBookmarkServerAction,

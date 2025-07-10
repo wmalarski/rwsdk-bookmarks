@@ -26,6 +26,9 @@ importers:
       better-auth:
         specifier: ^1.2.12
         version: 1.2.12
+      decode-formdata:
+        specifier: ^0.9.0
+        version: 0.9.0
       react-aria-components:
         specifier: ^1.10.1
         version: 1.10.1(react-dom@19.2.0-canary-39cad7af-20250411(react@19.2.0-canary-39cad7af-20250411))(react@19.2.0-canary-39cad7af-20250411)

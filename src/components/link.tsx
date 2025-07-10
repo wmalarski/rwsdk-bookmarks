@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Link as LinkPrimitive,
   type LinkProps as LinkPrimitiveProps,
@@ -38,5 +40,5 @@ const Link = ({ className, ref, intent = "unstyled", ...props }: LinkProps) => {
   );
 };
 
-export type { LinkProps };
 export { Link };
+export type { LinkProps };

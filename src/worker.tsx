@@ -26,7 +26,7 @@ export default defineApp([
   route("/api/auth/*", async ({ request }) => auth.handler(request)),
   render(Document, [
     route("/", Home),
-    prefix("/app", [protectedUserMiddleware(), bookmarkRoutes]),
     prefix("/user", userRoutes),
+    prefix("/app", [protectedUserMiddleware(), bookmarkRoutes]),
   ]),
 ]);

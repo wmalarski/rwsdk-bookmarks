@@ -31,7 +31,7 @@ export const LoginForm = () => {
       await authClient.signIn.email(value, {
         onError: (ctx) => setResult(`Error: ${ctx.error.message}`),
         onSuccess: () => {
-          window.location.href = "/protected";
+          window.location.href = link("/app");
         },
       });
     },

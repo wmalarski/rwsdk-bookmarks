@@ -1,5 +1,4 @@
 import { IconLoader } from "@intentui/icons";
-import { useSubmission } from "@solidjs/router";
 
 import { Button } from "@/components/button";
 

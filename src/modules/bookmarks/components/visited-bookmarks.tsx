@@ -1,4 +1,4 @@
-import { createAsync } from "@solidjs/router";
+import { use } from "react";
 
 import { useBookmarksHistory } from "~/modules/bookmarks/contexts/bookmarks-history";
 import { RpcShow } from "~/modules/common/components/rpc-show";
@@ -17,7 +17,7 @@ export const VisitedBookmarks = () => {
 const ClientVisitedBookmarks = () => {
   const history = useBookmarksHistory();
 
-  const bookmarks = createAsync(() =>
+  const bookmarks = use(async () =>
     selectBookmarksByIdsServerQuery({
       bookmarkIds: history().ids,
     }),
