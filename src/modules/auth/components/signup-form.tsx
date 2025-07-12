@@ -35,7 +35,7 @@ export const SignUpForm = () => {
           setResult(`Error: ${ctx.error.message}`);
         },
         onSuccess: () => {
-          window.location.href = link("/app/bookmark");
+          window.location.href = link("/bookmarks");
         },
       });
     },

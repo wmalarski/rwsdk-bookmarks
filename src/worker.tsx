@@ -1,10 +1,10 @@
-import { prefix, render, route } from "rwsdk/router";
+import { layout, prefix, render, route } from "rwsdk/router";
 import { defineApp } from "rwsdk/worker";
 
 import { Document } from "@/document";
 import { userRoutes } from "@/modules/auth/routes/routes";
-import { Home } from "@/modules/bookmarks/routes/home";
 import { setCommonHeaders } from "@/modules/common/headers";
+import { Home } from "@/modules/home/home-route";
 
 import type { User } from "./db";
 import { auth } from "./modules/auth/server/auth";
@@ -14,6 +14,8 @@ import {
 } from "./modules/auth/server/middleware";
 import { bookmarkRoutes } from "./modules/bookmarks/routes/routes";
 import { dbMiddleware } from "./modules/common/db-middleware";
+import { PageLayout } from "./modules/common/layout";
+import { tagsRoutes } from "./modules/tags/routes/routes";
 
 export type AppContext = {
   user: User | null;
@@ -27,6 +29,10 @@ export default defineApp([
   render(Document, [
     route("/", Home),
     prefix("/user", userRoutes),
-    prefix("/app", [protectedUserMiddleware(), bookmarkRoutes]),
+    layout(PageLayout, [
+      protectedUserMiddleware(),
+      prefix("/bookmarks", bookmarkRoutes),
+      prefix("/tags", tagsRoutes),
+    ]),
   ]),
 ]);

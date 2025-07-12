@@ -29,7 +29,7 @@ export const TopNavbar = () => {
           <h1>
             <Link
               className="flex items-center gap-1 text-fg text-md uppercase sm:text-xl lg:text-3xl"
-              href={link("/app")}
+              href={link("/bookmarks")}
             >
               <IconBookmark className="size-6 min-w-6" />
               Rwsdk Bookmarks
@@ -38,9 +38,9 @@ export const TopNavbar = () => {
         </NavbarStart>
         <NavbarGap />
         <NavbarSection>
-          <NavbarItem href={link("/app/tags")}>Tags</NavbarItem>
-          <NavbarItem href={link("/app/share")}>Share</NavbarItem>
-          <NavbarItem href={link("/app/share")}>History</NavbarItem>
+          <NavbarItem href={link("/tags")}>Tags</NavbarItem>
+          <NavbarItem href={link("/bookmarks/share")}>Share</NavbarItem>
+          <NavbarItem href={link("/bookmarks/history")}>History</NavbarItem>
         </NavbarSection>
         <NavbarGap className="flex-grow" />
         <NavbarSection>
