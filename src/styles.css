@@ -134,8 +134,8 @@
     border-color: var(--border, currentColor);
   }
   * {
-    scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+    scrollbar-width: thin;
   }
   html {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -147,8 +147,8 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    background-color: var(--bg);
     color: var(--fg);
+    background-color: var(--bg);
   }
   ::-webkit-scrollbar {
     width: 4px;

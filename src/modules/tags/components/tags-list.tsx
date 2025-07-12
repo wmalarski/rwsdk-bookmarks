@@ -1,9 +1,22 @@
-"use client";
+import { type Component, For } from "solid-js";
 
-import { useUser } from "@/modules/auth/user-context";
+import type { TagModel } from "../server";
+import { TagsListItem } from "./tag-list-item";
 
-export const TagsList = () => {
-  const user = useUser();
+type TagsListProps = {
+  tags: TagModel[];
+};
 
-  return <pre>{JSON.stringify(user, null, 2)}</pre>;
+export const TagsList: Component<TagsListProps> = (props) => {
+  return (
+    <ul class="flex flex-col gap-2">
+      <For each={props.tags}>
+        {(tag) => (
+          <li>
+            <TagsListItem tag={tag} />
+          </li>
+        )}
+      </For>
+    </ul>
+  );
 };
