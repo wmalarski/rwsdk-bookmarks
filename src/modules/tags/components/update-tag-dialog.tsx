@@ -1,76 +1,80 @@
-import { useSubmission } from "@solidjs/router";
-import { type Component, createMemo } from "solid-js";
+import { IconPencilBox } from "@intentui/icons";
+import type { ComponentProps } from "react";
 
-import { useI18n } from "~/modules/common/contexts/i18n";
-import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
-import { Button } from "~/ui/button/button";
-import {
-  closeDialog,
-  Dialog,
-  DialogActions,
-  DialogBackdrop,
-  DialogBox,
-  DialogClose,
-  DialogTitle,
-  DialogTrigger,
-} from "~/ui/dialog/dialog";
-import { PencilIcon } from "~/ui/icons/pencil-icon";
-import { type TagModel, updateTagServerAction } from "../server";
-import { TagFields } from "./tag-fields";
+import { Button } from "@/components/button";
+import { Modal } from "@/components/modal";
+import type { Tag } from "@/db";
+
+import { TagFields, useTagForm } from "./tag-fields";
 
 type UpdateTagDialogProps = {
-  tag: TagModel;
+  tag: Tag;
 };
 
-export const UpdateTagDialog: Component<UpdateTagDialogProps> = (props) => {
-  const { t } = useI18n();
+export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
+  // const dialogId = createMemo(() => `update-dialog-${tag.id}`);
+  const formId = `update-form-${tag.id}`;
 
-  const dialogId = createMemo(() => `update-dialog-${props.tag.id}`);
-  const formId = createMemo(() => `update-form-${props.tag.id}`);
+  // const submission = useSubmission(
+  //   updateTagServerAction,
+  //   ([form]) => form.get("tagId") === String(tag.id),
+  // );
 
-  const submission = useSubmission(
-    updateTagServerAction,
-    ([form]) => form.get("tagId") === String(props.tag.id),
-  );
+  // const onSubmit = useActionOnSubmit({
+  //   action: updateTagServerAction,
+  //   onSuccess: () => closeDialog(dialogId()),
+  // });
 
-  const onSubmit = useActionOnSubmit({
-    action: updateTagServerAction,
-    onSuccess: () => closeDialog(dialogId()),
+  const form = useTagForm({
+    initialData: tag,
+    onSubmit: () => {
+      //
+    },
   });
 
+  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+    event.preventDefault();
+    form.handleSubmit();
+  };
+
   return (
-    <>
-      <DialogTrigger color="secondary" for={dialogId()} size="sm">
-        <PencilIcon class="size-4" />
-        {t("common.update")}
-      </DialogTrigger>
-      <Dialog id={dialogId()}>
-        <DialogBox>
-          <DialogTitle>{t("common.update")}</DialogTitle>
-          <form id={formId()} onSubmit={onSubmit}>
-            <input name="tagId" type="hidden" value={props.tag.id} />
-            <TagFields
-              pending={submission.pending}
-              result={
-                submission.result?.success ? undefined : submission.result
-              }
-            />
-          </form>
-          <DialogActions>
-            <DialogClose />
-            <Button
-              color="primary"
-              disabled={submission.pending}
-              form={formId()}
-              isLoading={submission.pending}
-              type="submit"
-            >
-              {t("common.save")}
-            </Button>
-          </DialogActions>
-        </DialogBox>
-        <DialogBackdrop />
-      </Dialog>
-    </>
+    <Modal>
+      <Button intent="secondary" size="sm">
+        <IconPencilBox className="size-4" />
+        Update
+      </Button>
+      <Modal.Content>
+        {() => (
+          <>
+            <Modal.Header>Update</Modal.Header>
+            <Modal.Body>
+              <form id={formId} onSubmit={onSubmit}>
+                <input name="tagId" type="hidden" value={tag.id} />
+                <TagFields
+                  form={form}
+                  title="Update"
+                  // pending={submission.pending}
+                  // result={
+                  //   submission.result?.success ? undefined : submission.result
+                  // }
+                />
+              </form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Modal.Close />
+              <Button
+                form={formId}
+                intent="primary"
+                isDisabled={form.state.isSubmitting}
+                isPending={form.state.isSubmitting}
+                type="submit"
+              >
+                Save
+              </Button>
+            </Modal.Footer>
+          </>
+        )}
+      </Modal.Content>
+    </Modal>
   );
 };

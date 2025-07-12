@@ -1,30 +1,29 @@
-import type { Component } from "solid-js";
+import { Card } from "@/components/card";
+import type { Tag } from "@/db";
+import { useDateFormatter } from "@/lib/formatters";
 
-import { createDateFormatter } from "~/modules/common/utils/formatters";
-import { Card, CardActions, CardBody } from "~/ui/card/card";
-import type { TagModel } from "../server";
 import { DeleteTagForm } from "./delete-tag-form";
 import { UpdateTagDialog } from "./update-tag-dialog";
 
 type TagsListItemProps = {
-  tag: TagModel;
+  tag: Tag;
 };
 
-export const TagsListItem: Component<TagsListItemProps> = (props) => {
-  const formatDate = createDateFormatter();
+export const TagsListItem = ({ tag }: TagsListItemProps) => {
+  const formatDate = useDateFormatter();
 
   return (
-    <Card size="sm" variant="bordered">
-      <CardBody class="flex flex-col gap-2">
-        <div class="flex grow flex-col gap-2 pr-6">
-          <span class="text-lg">{props.tag.name}</span>
-          <span>{formatDate(props.tag.created_at)}</span>
+    <Card>
+      <Card.Content className="flex flex-col gap-2">
+        <div className="flex grow flex-col gap-2 pr-6">
+          <span className="text-lg">{tag.name}</span>
+          {tag.createdAt ? <span>{formatDate(tag.createdAt)}</span> : null}
         </div>
-        <CardActions>
-          <UpdateTagDialog tag={props.tag} />
-          <DeleteTagForm tag={props.tag} />
-        </CardActions>
-      </CardBody>
+      </Card.Content>
+      <Card.Footer>
+        <UpdateTagDialog tag={tag} />
+        <DeleteTagForm tag={tag} />
+      </Card.Footer>
     </Card>
   );
 };

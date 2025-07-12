@@ -1,48 +1,40 @@
-import { useSubmission } from "@solidjs/router";
-import { type Component, createMemo } from "solid-js";
+import { IconTrash } from "@intentui/icons";
 
-import { useI18n } from "~/modules/common/contexts/i18n";
-import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
-import { AlertDialog } from "~/ui/alert-dialog/alert-dialog";
-import { closeDialog, DialogTrigger } from "~/ui/dialog/dialog";
-import { TrashIcon } from "~/ui/icons/trash-icon";
-import { deleteTagServerAction, type TagModel } from "../server";
+import { AlertDialog } from "@/components/alert-dialog";
+import { Button } from "@/components/button";
+import type { Tag } from "@/db";
 
 type DeleteTagFormProps = {
-  tag: TagModel;
+  tag: Tag;
 };
 
-export const DeleteTagForm: Component<DeleteTagFormProps> = (props) => {
-  const { t } = useI18n();
+export const DeleteTagForm = ({ tag }: DeleteTagFormProps) => {
+  // const submission = useSubmission(
+  //   deleteTagServerAction,
+  //   ([form]) => form.get("tagId") === String(props.tag.id),
+  // );
 
-  const dialogId = createMemo(() => `delete-dialog-${props.tag.id}`);
+  // const onSubmit = useActionOnSubmit({
+  //   action: deleteTagServerAction,
+  //   onSuccess: () => closeDialog(dialogId()),
+  // });
 
-  const submission = useSubmission(
-    deleteTagServerAction,
-    ([form]) => form.get("tagId") === String(props.tag.id),
-  );
-
-  const onSubmit = useActionOnSubmit({
-    action: deleteTagServerAction,
-    onSuccess: () => closeDialog(dialogId()),
-  });
+  const onSubmit = () => {
+    //
+  };
 
   return (
     <form onSubmit={onSubmit}>
-      <input name="tagId" type="hidden" value={props.tag.id} />
-      <DialogTrigger color="error" for={dialogId()} size="sm">
-        <TrashIcon class="size-4" />
-        {t("common.delete")}
-      </DialogTrigger>
+      <input name="tagId" type="hidden" value={tag.id} />
+      <Button intent="danger" size="sm">
+        <IconTrash className="size-4" />
+        Delete
+      </Button>
       <AlertDialog
-        confirm={t("common.delete")}
-        confirmColor="error"
-        errorMessage={
-          submission.result?.success ? undefined : submission.result?.error
-        }
-        id={dialogId()}
-        pending={submission.pending}
-        title={t("common.delete")}
+        confirm="Delete"
+        confirmIntent="danger"
+        pending={false}
+        title="Delete"
       />
     </form>
   );
