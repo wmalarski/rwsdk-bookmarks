@@ -6,7 +6,7 @@ import { BookmarkListRoute } from "./bookmarks-list-route";
 import { ShareBookmarkRoute } from "./share-bookmark-route";
 
 export const bookmarkRoutes = [
-  route("/", BookmarkListRoute),
+  route("/", [BookmarkListRoute]),
   route("/share", ShareBookmarkRoute),
   route("/history", BookmarkHistoryRoute),
   route("/bookmark/:id", BookmarkDetailsRoute),

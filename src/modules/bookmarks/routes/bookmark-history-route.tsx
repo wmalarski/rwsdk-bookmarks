@@ -1,5 +1,5 @@
-import { withUserProvider } from "@/modules/auth/with-user-provider";
+import type { ProtectedRequestInfo } from "@/modules/auth/protected-app-context";
 
-export const BookmarkHistoryRoute = withUserProvider(() => {
+export const BookmarkHistoryRoute = (_request: ProtectedRequestInfo) => {
   return <span>BookmarkHistoryRoute</span>;
-});
+};

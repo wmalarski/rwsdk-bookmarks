@@ -1,13 +1,13 @@
+import type { ProtectedRequestInfo } from "@/modules/auth/protected-app-context";
 import { UserProvider } from "@/modules/auth/user-context";
-import { withUserProvider } from "@/modules/auth/with-user-provider";
 
 import { TagsList } from "../components/tags-list";
 
-export const TagsListRoute = withUserProvider((_request, user) => {
+export const TagsListRoute = (request: ProtectedRequestInfo) => {
   return (
-    <UserProvider user={user}>
+    <UserProvider user={request.ctx.user}>
       <span>TagsListRoute</span>
       <TagsList />
     </UserProvider>
   );
-});
+};

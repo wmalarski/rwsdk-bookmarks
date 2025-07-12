@@ -1,12 +1,12 @@
-import { withUserProvider } from "@/modules/auth/with-user-provider";
+import type { ProtectedRequestInfo } from "@/modules/auth/protected-app-context";
 
 import { selectBookmarks } from "../server/db";
 
-export const BookmarkListRoute = withUserProvider(async (_request, user) => {
+export const BookmarkListRoute = async ({ ctx }: ProtectedRequestInfo) => {
   const bookmarks = await selectBookmarks({
     page: 0,
-    userId: user.id,
+    userId: ctx.user.id,
   });
 
-  return <pre>{JSON.stringify({ bookmarks, user }, null, 2)}</pre>;
-});
+  return <pre>{JSON.stringify({ bookmarks, user: ctx.user }, null, 2)}</pre>;
+};
