@@ -14,6 +14,7 @@ export const Home = ({ ctx }: RequestInfo) => {
       </p>
       {ctx.user?.email ? <SignOutButton /> : null}
       <Link href={link("/user/login")}>Login</Link>
+      <Link href={link("/bookmarks")}>Bookmarks</Link>
     </div>
   );
 };

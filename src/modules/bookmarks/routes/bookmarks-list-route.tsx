@@ -1,23 +1,12 @@
-import type { RequestInfo } from "rwsdk/worker";
-
-import { redirectToLoginResponse } from "@/modules/auth/server/middleware";
-import { UserProvider } from "@/modules/auth/user-context";
+import { withUserProvider } from "@/modules/auth/with-user-provider";
 
 import { selectBookmarks } from "../server/db";
 
-export const BookmarkListRoute = async ({ ctx }: RequestInfo) => {
-  if (!ctx.user) {
-    return redirectToLoginResponse();
-  }
-
+export const BookmarkListRoute = withUserProvider(async (_request, user) => {
   const bookmarks = await selectBookmarks({
     page: 0,
-    userId: ctx.user.id,
+    userId: user.id,
   });
 
-  return (
-    <UserProvider user={ctx.user}>
-      <pre>{JSON.stringify(bookmarks, null, 2)}</pre>
-    </UserProvider>
-  );
-};
+  return <pre>{JSON.stringify({ bookmarks, user }, null, 2)}</pre>;
+});

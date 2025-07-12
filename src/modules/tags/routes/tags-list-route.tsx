@@ -1,16 +1,13 @@
-import type { RequestInfo } from "rwsdk/worker";
-
-import { redirectToLoginResponse } from "@/modules/auth/server/middleware";
 import { UserProvider } from "@/modules/auth/user-context";
+import { withUserProvider } from "@/modules/auth/with-user-provider";
 
-export const TagsListRoute = ({ ctx }: RequestInfo) => {
-  if (!ctx.user) {
-    return redirectToLoginResponse();
-  }
+import { TagsList } from "../components/tags-list";
 
+export const TagsListRoute = withUserProvider((_request, user) => {
   return (
-    <UserProvider user={ctx.user}>
+    <UserProvider user={user}>
       <span>TagsListRoute</span>
+      <TagsList />
     </UserProvider>
   );
-};
+});
