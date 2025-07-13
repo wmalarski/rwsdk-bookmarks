@@ -5,11 +5,11 @@ import { Button } from "@/components/button";
 import { RpcShow } from "~/modules/common/components/rpc-show";
 import { Skeleton } from "~/ui/skeleton/skeleton";
 import {
-  type BookmarkWithTagsModel,
   SELECT_BOOKMARKS_DEFAULT_LIMIT,
   type SelectBookmarksArgs,
   selectBookmarksServerQuery,
 } from "../server";
+import type { BookmarkWithTags } from "../server/db";
 import type { FiltersSearchParams } from "../utils/use-filters-search-params";
 import { BookmarkFilters } from "./bookmark-filters";
 import { BookmarkListItem } from "./bookmark-list-item";
@@ -17,7 +17,7 @@ import { BookmarkListItem } from "./bookmark-list-item";
 type BookmarkListProps = {
   queryArgs: SelectBookmarksArgs;
   filterSearchParams: FiltersSearchParams;
-  initialBookmarks: BookmarkWithTagsModel[];
+  initialBookmarks: BookmarkWithTags[];
   count: number;
 };
 
@@ -76,7 +76,7 @@ const BookmarkLazy = ({ offset, queryArgs }: BookmarkLazyProps) => {
 };
 
 type BookmarkListPartProps = {
-  bookmarks: BookmarkWithTagsModel[];
+  bookmarks: BookmarkWithTags[];
 };
 
 export const BookmarkListPart = ({ bookmarks }: BookmarkListPartProps) => {

@@ -1,10 +1,8 @@
-import { IconLoader } from "@intentui/icons";
+import { IconLoader, IconPlus } from "@intentui/icons";
+import type { ComponentProps } from "react";
 
 import { Button } from "@/components/button";
 
-import { formContainerRecipe } from "~/ui/form-container/form-container.recipe";
-import { PlusIcon } from "~/ui/icons/plus-icon";
-import { insertBookmarkServerAction } from "../server";
 import {
   BookmarkFields,
   type BookmarkFieldsData,
@@ -21,32 +19,32 @@ export const InsertBookmarkForm = ({
   // const submission = useSubmission(insertBookmarkServerAction);
 
   const form = useBookmarksForm({
-    onSubmit(data) {
+    onSubmit(_data) {
       //
     },
   });
 
+  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <form
-      action={insertBookmarkServerAction}
-      className={formContainerRecipe({ class: "px-4" })}
-      method="post"
-    >
+    <form method="post" onSubmit={onSubmit}>
       <BookmarkFields
         form={form}
         initialData={initialData}
-        pending={submission.pending}
-        result={submission.result}
+        pending={form.state.isSubmitting}
+        // result={submission.result}
         title="Share"
       />
       <Button
         intent="primary"
-        isDisabled={submission.pending}
+        isDisabled={form.state.isSubmitting}
         size="sm"
         type="submit"
       >
-        {submission.pending && <IconLoader />}
-        <PlusIcon className="size-4" />
+        {form.state.isSubmitting && <IconLoader />}
+        <IconPlus className="size-4" />
         Save
       </Button>
     </form>

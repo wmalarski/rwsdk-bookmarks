@@ -16,13 +16,13 @@ import {
   CarouselPrevious,
 } from "~/ui/carousel/carousel";
 import { useBookmarksHistory } from "../contexts/bookmarks-history";
-import type { BookmarkWithTagsModel } from "../server";
+import type { BookmarkWithTags } from "../server/db";
 import { CompleteDialog } from "./complete-dialog";
 import { DeleteBookmarkForm } from "./delete-bookmark-form";
 import { UpdateBookmarkDialog } from "./update-bookmark-dialog";
 
 type BookmarkListItemProps = {
-  bookmark: BookmarkWithTagsModel;
+  bookmark: BookmarkWithTags;
 };
 
 export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
@@ -51,7 +51,7 @@ export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
           <GridTitle>Url</GridTitle>
           <GridLink bookmarkId={bookmark.id} href={bookmark.url} />
           <GridTitle>Created at</GridTitle>
-          <GridText>{formatDate(bookmark.created_at)}</GridText>
+          <GridText>{formatDate(bookmark.createdAt)}</GridText>
           <GridTitle>Done</GridTitle>
           <GridText>{String(bookmark.done)}</GridText>
           {bookmark.done && (
@@ -90,8 +90,8 @@ const GridText = ({ children }: PropsWithChildren) => {
 };
 
 type GridLinkProps = {
-  bookmarkId: number;
-  href: string;
+  bookmarkId: string;
+  href: string | null;
 };
 
 const GridLink = ({ bookmarkId, href }: GridLinkProps) => {
@@ -115,7 +115,7 @@ const GridLink = ({ bookmarkId, href }: GridLinkProps) => {
 };
 
 type BookmarkPreviewProps = {
-  bookmark: BookmarkWithTagsModel;
+  bookmark: BookmarkWithTags;
 };
 
 const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
@@ -184,7 +184,7 @@ const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
 };
 
 type BookmarkTagsListProps = {
-  bookmark: BookmarkWithTagsModel;
+  bookmark: BookmarkWithTags;
 };
 
 const BookmarkTagsList = ({ bookmark }: BookmarkTagsListProps) => {
@@ -200,7 +200,7 @@ const BookmarkTagsList = ({ bookmark }: BookmarkTagsListProps) => {
 };
 
 type BookmarkLinksProps = {
-  bookmark: BookmarkWithTagsModel;
+  bookmark: BookmarkWithTags;
 };
 
 const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {

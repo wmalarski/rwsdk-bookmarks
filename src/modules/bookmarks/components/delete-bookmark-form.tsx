@@ -1,44 +1,44 @@
-import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
-import { AlertDialog } from "~/ui/alert-dialog/alert-dialog";
-import { closeDialog, DialogTrigger } from "~/ui/dialog/dialog";
-import { TrashIcon } from "~/ui/icons/trash-icon";
-import {
-  type BookmarkWithTagsModel,
-  deleteBookmarkServerAction,
-} from "../server";
+import { IconTrash } from "@intentui/icons";
+import type { ComponentProps } from "react";
+
+import { AlertDialog } from "@/components/alert-dialog";
+import { Button } from "@/components/button";
+
+import type { BookmarkWithTags } from "../server/db";
 
 type DeleteBookmarkFormProps = {
-  bookmark: BookmarkWithTagsModel;
+  bookmark: BookmarkWithTags;
 };
 
 export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
-  const dialogId = `delete-dialog-${bookmark.id}`;
-
   // const submission = useSubmission(
   //   deleteBookmarkServerAction,
   //   ([form]) => form.get("bookmarkId") === String(bookmark.id),
   // );
 
-  const onSubmit = useActionOnSubmit({
-    action: deleteBookmarkServerAction,
-    onSuccess: () => closeDialog(dialogId()),
-  });
+  // const onSubmit = useActionOnSubmit({
+  //   action: deleteBookmarkServerAction,
+  //   onSuccess: () => closeDialog(dialogId()),
+  // });
+
+  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <form onSubmit={onSubmit}>
       <input name="bookmarkId" type="hidden" value={bookmark.id} />
-      <DialogTrigger color="error" for={dialogId()} size="sm">
-        <TrashIcon className="size-4" />
+      <Button intent="danger" size="sm">
+        <IconTrash className="size-4" />
         Delete
-      </DialogTrigger>
+      </Button>
       <AlertDialog
         confirm="Delete"
-        confirmColor="error"
-        errorMessage={
-          submission.result?.success ? undefined : submission.result?.error
-        }
-        id={dialogId()}
-        pending={submission.pending}
+        confirmIntent="danger"
+        // errorMessage={
+        //   submission.result?.success ? undefined : submission.result?.error
+        // }
+        pending={false}
         title="Delete"
       />
     </form>

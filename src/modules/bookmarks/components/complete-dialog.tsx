@@ -1,31 +1,17 @@
-import { IconLoader } from "@intentui/icons";
+import { IconCheck } from "@intentui/icons";
+import type { ComponentProps } from "react";
 
 import { Button } from "@/components/button";
+import { Modal } from "@/components/modal";
 
-import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
-import {
-  closeDialog,
-  Dialog,
-  DialogActions,
-  DialogBox,
-  DialogClose,
-  DialogTitle,
-  DialogTrigger,
-} from "~/ui/dialog/dialog";
-import { CheckIcon } from "~/ui/icons/check-icon";
-import { useBookmarksHistory } from "../contexts/bookmarks-history";
-import {
-  type BookmarkWithTagsModel,
-  completeBookmarkServerAction,
-} from "../server";
-import { CompleteFields } from "./complete-fields";
+import type { BookmarkWithTags } from "../server/db";
+import { CompleteFields, useCompleteForm } from "./complete-fields";
 
 type CompleteDialogProps = {
-  bookmark: BookmarkWithTagsModel;
+  bookmark: BookmarkWithTags;
 };
 
 export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
-  const dialogId = `complete-dialog-${bookmark.id}`;
   const formId = `complete-form-${bookmark.id}`;
 
   // const submission = useSubmission(
@@ -33,55 +19,62 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
   //   ([form]) => form.get("bookmarkId") === String(bookmark.id),
   // );
 
-  const history = useBookmarksHistory();
-
-  const onClick = () => {
-    history().addToHistory(bookmark.id);
-  };
-
-  const onSubmit = useActionOnSubmit({
-    action: completeBookmarkServerAction,
-    onSuccess: () => {
-      closeDialog(dialogId());
+  // const history = useBookmarksHistory();
+  const form = useCompleteForm({
+    onSubmit() {
+      //
     },
   });
 
+  const onClick = () => {
+    // history().addToHistory(bookmark.id);
+  };
+
+  // const onSubmit = useActionOnSubmit({
+  //   action: completeBookmarkServerAction,
+  //   onSuccess: () => {
+  //     closeDialog(dialogId());
+  //   },
+  // });
+
+  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <>
-      <DialogTrigger
-        color="primary"
-        for={dialogId()}
-        onClick={onClick}
-        size="sm"
-      >
-        <CheckIcon className="size-4" />
+    <Modal>
+      <Button intent="primary" onClick={onClick} size="sm">
+        <IconCheck className="size-4" />
         Complete
-      </DialogTrigger>
-      <Dialog id={dialogId()}>
-        <DialogBox>
-          <DialogTitle>Complete</DialogTitle>
-          <form id={formId()} onSubmit={onSubmit}>
-            <input name="bookmarkId" type="hidden" value={bookmark.id} />
-            <CompleteFields
-              initialData={bookmark}
-              pending={submission.pending}
-              result={submission.result}
-            />
-          </form>
-          <DialogActions>
-            <DialogClose />
-            <Button
-              form={formId()}
-              intent="primary"
-              isDisabled={submission.pending}
-              type="submit"
-            >
-              {submission.pending && <IconLoader />}
-              Complete
-            </Button>
-          </DialogActions>
-        </DialogBox>
-      </Dialog>
-    </>
+      </Button>
+      <Modal.Content>
+        {() => (
+          <>
+            <Modal.Header>Complete</Modal.Header>
+            <form id={formId} onSubmit={onSubmit}>
+              <input name="bookmarkId" type="hidden" value={bookmark.id} />
+              <CompleteFields
+                form={form}
+                // initialData={bookmark}
+                // pending={form.state.isSubmitting}
+                // result={submission.result}
+              />
+            </form>
+            <Modal.Footer>
+              <Modal.Close />
+              <Button
+                form={formId}
+                intent="primary"
+                isDisabled={form.state.isSubmitting}
+                isPending={form.state.isSubmitting}
+                type="submit"
+              >
+                Complete
+              </Button>
+            </Modal.Footer>
+          </>
+        )}
+      </Modal.Content>
+    </Modal>
   );
 };
