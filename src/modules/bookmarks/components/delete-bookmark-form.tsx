@@ -1,4 +1,3 @@
-import { useI18n } from "~/modules/common/contexts/i18n";
 import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
 import { AlertDialog } from "~/ui/alert-dialog/alert-dialog";
 import { closeDialog, DialogTrigger } from "~/ui/dialog/dialog";
@@ -13,14 +12,12 @@ type DeleteBookmarkFormProps = {
 };
 
 export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
-  const { t } = useI18n();
-
   const dialogId = `delete-dialog-${bookmark.id}`;
 
-  const submission = useSubmission(
-    deleteBookmarkServerAction,
-    ([form]) => form.get("bookmarkId") === String(bookmark.id),
-  );
+  // const submission = useSubmission(
+  //   deleteBookmarkServerAction,
+  //   ([form]) => form.get("bookmarkId") === String(bookmark.id),
+  // );
 
   const onSubmit = useActionOnSubmit({
     action: deleteBookmarkServerAction,
@@ -32,17 +29,17 @@ export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
       <input name="bookmarkId" type="hidden" value={bookmark.id} />
       <DialogTrigger color="error" for={dialogId()} size="sm">
         <TrashIcon className="size-4" />
-        {t("common.delete")}
+        Delete
       </DialogTrigger>
       <AlertDialog
-        confirm={t("common.delete")}
+        confirm="Delete"
         confirmColor="error"
         errorMessage={
           submission.result?.success ? undefined : submission.result?.error
         }
         id={dialogId()}
         pending={submission.pending}
-        title={t("common.delete")}
+        title="Delete"
       />
     </form>
   );

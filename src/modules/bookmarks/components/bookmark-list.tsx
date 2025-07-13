@@ -3,7 +3,6 @@ import { type PropsWithChildren, Suspense } from "react";
 import { Button } from "@/components/button";
 
 import { RpcShow } from "~/modules/common/components/rpc-show";
-import { useI18n } from "~/modules/common/contexts/i18n";
 import { Skeleton } from "~/ui/skeleton/skeleton";
 import {
   type BookmarkWithTagsModel,
@@ -27,8 +26,6 @@ export const BookmarkList = ({
   initialBookmarks,
   queryArgs,
 }: BookmarkListProps) => {
-  const { t } = useI18n();
-
   const [offsets, setOffsets] = createWritableMemo<number[]>(
     () => filterSearchParams && [],
   );
@@ -43,7 +40,7 @@ export const BookmarkList = ({
   return (
     <div className="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
       <div className="flex w-full justify-between gap-2">
-        <h2 className="text-xl">{t("bookmarks.title")}</h2>
+        <h2 className="text-xl">Bookmarks</h2>
         <BookmarkFilters params={filterSearchParams} />
       </div>
       <BookmarkListContainer>
@@ -53,7 +50,7 @@ export const BookmarkList = ({
         ))}
       </BookmarkListContainer>
       <Button intent="secondary" onClick={onLoadMoreClick} size="sm">
-        {t("bookmarks.loadMore")}
+        Load more
       </Button>
     </div>
   );

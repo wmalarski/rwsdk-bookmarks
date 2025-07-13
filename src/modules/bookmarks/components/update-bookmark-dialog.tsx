@@ -2,10 +2,7 @@ import { IconLoader } from "@intentui/icons";
 
 import { Button } from "@/components/button";
 
-import { useI18n } from "~/modules/common/contexts/i18n";
-import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
 import {
-  closeDialog,
   Dialog,
   DialogActions,
   DialogBox,
@@ -16,10 +13,7 @@ import {
 import { formContainerRecipe } from "~/ui/form-container/form-container.recipe";
 import { PencilIcon } from "~/ui/icons/pencil-icon";
 import { useBookmarksHistory } from "../contexts/bookmarks-history";
-import {
-  type BookmarkWithTagsModel,
-  updateBookmarkServerAction,
-} from "../server";
+import { type BookmarkWithTagsModel } from "../server";
 import { BookmarkFields } from "./bookmark-fields";
 
 type UpdateBookmarkDialogProps = {
@@ -29,20 +23,18 @@ type UpdateBookmarkDialogProps = {
 export const UpdateBookmarkDialog = ({
   bookmark,
 }: UpdateBookmarkDialogProps) => {
-  const { t } = useI18n();
-
   const dialogId = `update-dialog-${bookmark.id}`;
   const formId = `update-form-${bookmark.id}`;
 
-  const submission = useSubmission(
-    updateBookmarkServerAction,
-    ([form]) => form.get("bookmarkId") === String(bookmark.id),
-  );
+  // const submission = useSubmission(
+  //   updateBookmarkServerAction,
+  //   ([form]) => form.get("bookmarkId") === String(bookmark.id),
+  // );
 
-  const onSubmit = useActionOnSubmit({
-    action: updateBookmarkServerAction,
-    onSuccess: () => closeDialog(dialogId()),
-  });
+  // const onSubmit = useActionOnSubmit({
+  //   action: updateBookmarkServerAction,
+  //   onSuccess: () => closeDialog(dialogId()),
+  // });
 
   const initialData = () => {
     return {
@@ -66,11 +58,11 @@ export const UpdateBookmarkDialog = ({
         size="sm"
       >
         <PencilIcon className="size-4" />
-        {t("common.update")}
+        Update
       </DialogTrigger>
       <Dialog id={dialogId()}>
         <DialogBox>
-          <DialogTitle>{t("common.update")}</DialogTitle>
+          <DialogTitle>Update</DialogTitle>
           <form
             className={formContainerRecipe()}
             id={formId()}
@@ -81,7 +73,7 @@ export const UpdateBookmarkDialog = ({
               initialData={initialData()}
               pending={submission.pending}
               result={submission.result}
-              title={t("common.update")}
+              title="Update"
             />
           </form>
           <DialogActions>
@@ -93,7 +85,7 @@ export const UpdateBookmarkDialog = ({
               type="submit"
             >
               {submission.pending && <IconLoader />}
-              {t("common.save")}
+              Save
             </Button>
           </DialogActions>
         </DialogBox>

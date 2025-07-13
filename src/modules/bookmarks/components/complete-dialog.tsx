@@ -2,7 +2,6 @@ import { IconLoader } from "@intentui/icons";
 
 import { Button } from "@/components/button";
 
-import { useI18n } from "~/modules/common/contexts/i18n";
 import { useActionOnSubmit } from "~/modules/common/utils/use-action-on-submit";
 import {
   closeDialog,
@@ -26,15 +25,13 @@ type CompleteDialogProps = {
 };
 
 export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
-  const { t } = useI18n();
-
   const dialogId = `complete-dialog-${bookmark.id}`;
   const formId = `complete-form-${bookmark.id}`;
 
-  const submission = useSubmission(
-    completeBookmarkServerAction,
-    ([form]) => form.get("bookmarkId") === String(bookmark.id),
-  );
+  // const submission = useSubmission(
+  //   completeBookmarkServerAction,
+  //   ([form]) => form.get("bookmarkId") === String(bookmark.id),
+  // );
 
   const history = useBookmarksHistory();
 
@@ -58,11 +55,11 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
         size="sm"
       >
         <CheckIcon className="size-4" />
-        {t("bookmarks.complete.complete")}
+        Complete
       </DialogTrigger>
       <Dialog id={dialogId()}>
         <DialogBox>
-          <DialogTitle>{t("bookmarks.complete.complete")}</DialogTitle>
+          <DialogTitle>Complete</DialogTitle>
           <form id={formId()} onSubmit={onSubmit}>
             <input name="bookmarkId" type="hidden" value={bookmark.id} />
             <CompleteFields
@@ -80,7 +77,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
               type="submit"
             >
               {submission.pending && <IconLoader />}
-              {t("bookmarks.complete.complete")}
+              Complete
             </Button>
           </DialogActions>
         </DialogBox>

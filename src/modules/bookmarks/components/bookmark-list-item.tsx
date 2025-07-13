@@ -1,8 +1,8 @@
+import { IconChevronRight } from "@intentui/icons";
 import { type ComponentProps, type PropsWithChildren, useMemo } from "react";
 
 import { Link } from "@/components/link";
 
-import { useI18n } from "~/modules/common/contexts/i18n";
 import { createIsLink } from "~/modules/common/utils/create-is-link";
 import { createDateFormatter } from "~/modules/common/utils/formatters";
 import { paths } from "~/modules/common/utils/paths";
@@ -15,7 +15,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "~/ui/carousel/carousel";
-import { ChevronRightIcon } from "~/ui/icons/chevron-right-icon";
 import { useBookmarksHistory } from "../contexts/bookmarks-history";
 import type { BookmarkWithTagsModel } from "../server";
 import { CompleteDialog } from "./complete-dialog";
@@ -27,8 +26,6 @@ type BookmarkListItemProps = {
 };
 
 export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
-  const { t } = useI18n();
-
   const formatDate = createDateFormatter();
 
   const history = useBookmarksHistory();
@@ -47,25 +44,25 @@ export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
           className="grid w-full gap-2 pb-4"
           style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(0, 3fr)" }}
         >
-          <GridTitle>{t("bookmarks.item.title")}</GridTitle>
+          <GridTitle>Title</GridTitle>
           <GridText>{bookmark.title}</GridText>
-          <GridTitle>{t("bookmarks.item.text")}</GridTitle>
+          <GridTitle>Text</GridTitle>
           <GridLink bookmarkId={bookmark.id} href={bookmark.text} />
-          <GridTitle>{t("bookmarks.item.url")}</GridTitle>
+          <GridTitle>Url</GridTitle>
           <GridLink bookmarkId={bookmark.id} href={bookmark.url} />
-          <GridTitle>{t("bookmarks.item.createdAt")}</GridTitle>
+          <GridTitle>Created at</GridTitle>
           <GridText>{formatDate(bookmark.created_at)}</GridText>
-          <GridTitle>{t("bookmarks.item.done")}</GridTitle>
+          <GridTitle>Done</GridTitle>
           <GridText>{String(bookmark.done)}</GridText>
           {bookmark.done && (
             <>
-              <GridTitle>{t("bookmarks.item.doneAt")}</GridTitle>
+              <GridTitle>Done at</GridTitle>
               <GridText>
                 {bookmark.done_at && formatDate(bookmark.done_at)}
               </GridText>
-              <GridTitle>{t("bookmarks.item.rate")}</GridTitle>
+              <GridTitle>Rate</GridTitle>
               <GridText>{bookmark.rate}</GridText>
-              <GridTitle>{t("bookmarks.item.note")}</GridTitle>
+              <GridTitle>Note</GridTitle>
               <GridText>{bookmark.note}</GridText>
             </>
           )}
@@ -75,8 +72,8 @@ export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
           <CompleteDialog bookmark={bookmark} />
           <UpdateBookmarkDialog bookmark={bookmark} />
           <Link href={paths.bookmark(bookmark.id)} onClick={onDetailsClick}>
-            <ChevronRightIcon className="size-4" />
-            {t("bookmarks.item.details")}
+            <IconChevronRight className="size-4" />
+            Details
           </Link>
         </CardActions>
       </CardBody>
@@ -164,8 +161,6 @@ type BookmarkPreviewImageProps = {
 };
 
 const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
-  const { t } = useI18n();
-
   let el: HTMLDivElement | undefined;
   const useVisibilityObserver = createVisibilityObserver({ threshold: 0.1 });
   const visible = useVisibilityObserver(() => el);
@@ -176,7 +171,7 @@ const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
     <CarouselItem className="min-h-72" ref={el}>
       {shouldShow && (
         <img
-          alt={t("bookmarks.item.preview", { preview: title })}
+          alt={title}
           className="h-64 text-base-300"
           height={250}
           loading="lazy"
@@ -209,8 +204,6 @@ type BookmarkLinksProps = {
 };
 
 const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
-  const { t } = useI18n();
-
   const history = useBookmarksHistory();
 
   const onClick = () => {
@@ -232,7 +225,7 @@ const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
           {...commonProps}
           href={`https://www.youtube.com/results?${new URLSearchParams({ search_query: bookmark.title })}`}
         >
-          {t("bookmarks.item.youtube")}
+          Youtube
         </Link>
       </li>
       <li>
@@ -240,7 +233,7 @@ const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
           {...commonProps}
           href={`https://www.youtube.com/results?${new URLSearchParams({ q: bookmark.title })}`}
         >
-          {t("bookmarks.item.google")}
+          Google
         </Link>
       </li>
       <li>
@@ -248,7 +241,7 @@ const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
           {...commonProps}
           href={`https://open.spotify.com/search/${bookmark.title}`}
         >
-          {t("bookmarks.item.spotify")}
+          Spotify
         </Link>
       </li>
     </ul>

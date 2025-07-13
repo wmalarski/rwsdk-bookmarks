@@ -2,7 +2,6 @@ import { IconLoader } from "@intentui/icons";
 
 import { Button } from "@/components/button";
 
-import { useI18n } from "~/modules/common/contexts/i18n";
 import { formContainerRecipe } from "~/ui/form-container/form-container.recipe";
 import { PlusIcon } from "~/ui/icons/plus-icon";
 import { insertBookmarkServerAction } from "../server";
@@ -19,9 +18,7 @@ type InsertBookmarkFormProps = {
 export const InsertBookmarkForm = ({
   initialData,
 }: InsertBookmarkFormProps) => {
-  const { t } = useI18n();
-
-  const submission = useSubmission(insertBookmarkServerAction);
+  // const submission = useSubmission(insertBookmarkServerAction);
 
   const form = useBookmarksForm({
     onSubmit(data) {
@@ -40,7 +37,7 @@ export const InsertBookmarkForm = ({
         initialData={initialData}
         pending={submission.pending}
         result={submission.result}
-        title={t("bookmarks.share")}
+        title="Share"
       />
       <Button
         intent="primary"
@@ -50,7 +47,7 @@ export const InsertBookmarkForm = ({
       >
         {submission.pending && <IconLoader />}
         <PlusIcon className="size-4" />
-        {t("common.save")}
+        Save
       </Button>
     </form>
   );
