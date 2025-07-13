@@ -2,6 +2,7 @@ import { IconLoader, IconPlus } from "@intentui/icons";
 import type { ComponentProps } from "react";
 
 import { Button } from "@/components/button";
+import type { Tag } from "@/db";
 
 import {
   BookmarkFields,
@@ -11,10 +12,12 @@ import {
 
 type InsertBookmarkFormProps = {
   initialData?: BookmarkFieldsData;
+  tags: Tag[];
 };
 
 export const InsertBookmarkForm = ({
   initialData,
+  tags,
 }: InsertBookmarkFormProps) => {
   // const submission = useSubmission(insertBookmarkServerAction);
 
@@ -35,6 +38,7 @@ export const InsertBookmarkForm = ({
         initialData={initialData}
         pending={form.state.isSubmitting}
         // result={submission.result}
+        tags={tags}
         title="Share"
       />
       <Button

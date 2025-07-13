@@ -1,6 +1,6 @@
 import { db } from "@/db";
 
-type SelectBookmarksArgs = {
+export type SelectBookmarksArgs = {
   userId: string;
   page: number;
 };

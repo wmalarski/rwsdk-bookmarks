@@ -3,16 +3,19 @@ import type { ComponentProps } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
+import type { Tag } from "@/db";
 
 import type { BookmarkWithTags } from "../server/db";
 import { BookmarkFields, useBookmarksForm } from "./bookmark-fields";
 
 type UpdateBookmarkDialogProps = {
   bookmark: BookmarkWithTags;
+  tags: Tag[];
 };
 
 export const UpdateBookmarkDialog = ({
   bookmark,
+  tags,
 }: UpdateBookmarkDialogProps) => {
   const formId = `update-form-${bookmark.id}`;
 
@@ -65,6 +68,7 @@ export const UpdateBookmarkDialog = ({
                 // initialData={initialData()}
                 form={form}
                 pending={form.state.isSubmitting}
+                tags={tags}
                 // result={submission.result}
                 title="Update"
               />

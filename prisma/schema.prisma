@@ -89,7 +89,7 @@ model Bookmark {
   createdAt   DateTime?
   updatedAt   DateTime?
   done        Boolean
-  doneAt      Boolean?
+  doneAt      DateTime?
   note        String?
   preview     String?
   random      Decimal

@@ -6,6 +6,7 @@ import * as v from "valibot";
 import { Form, FormTitle } from "@/components/form";
 import { Note } from "@/components/note";
 import { TextField } from "@/components/text-field";
+import type { Tag } from "@/db";
 import { formatValidationErrors } from "@/lib/formatters";
 
 import { BookmarkTagsField } from "./bookmark-tags-field";
@@ -13,7 +14,7 @@ import { BookmarkTagsField } from "./bookmark-tags-field";
 const bookmarksFieldsSchema = () => {
   return v.object({
     preview: v.optional(v.string()),
-    tags: v.optional(v.array(v.number())),
+    tags: v.optional(v.array(v.string())),
     text: v.optional(v.string()),
     title: v.optional(v.string()),
     url: v.optional(v.string()),
@@ -46,6 +47,7 @@ type BookmarkFieldsProps = {
   pending?: boolean;
   result?: string;
   title: string;
+  tags: Tag[];
 };
 
 export const BookmarkFields = ({
@@ -54,6 +56,7 @@ export const BookmarkFields = ({
   initialData,
   pending,
   result,
+  tags,
 }: BookmarkFieldsProps) => {
   return (
     <Form>
@@ -123,7 +126,11 @@ export const BookmarkFields = ({
         )}
       </form.Field>
 
-      <BookmarkTagsField disabled={pending} initialTags={initialData?.tags} />
+      <BookmarkTagsField
+        disabled={pending}
+        initialTags={initialData?.tags}
+        tags={tags}
+      />
     </Form>
   );
 };

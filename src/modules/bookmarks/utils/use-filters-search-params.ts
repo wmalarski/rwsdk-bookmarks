@@ -41,10 +41,9 @@ export const createFiltersSearchParamsSchema = () => {
     random: createRandomSchema(),
     "tags[]": v.optional(
       v.union([
-        v.array(v.pipe(v.string(), v.transform(Number))),
+        v.array(v.string()),
         v.pipe(
           v.string(),
-          v.transform(Number),
           v.transform((value) => [value]),
         ),
       ]),

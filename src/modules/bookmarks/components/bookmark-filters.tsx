@@ -7,6 +7,7 @@ import { Label } from "@/components/field";
 import { Modal } from "@/components/modal";
 import { Radio, RadioGroup } from "@/components/radio";
 import { TextField } from "@/components/text-field";
+import type { Tag } from "@/db";
 
 import {
   type FiltersSearchParams,
@@ -16,9 +17,10 @@ import { BookmarkTagsField } from "./bookmark-tags-field";
 
 type BookmarkFiltersProps = {
   params: FiltersSearchParams;
+  tags: Tag[];
 };
 
-export const BookmarkFilters = ({ params }: BookmarkFiltersProps) => {
+export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
   const formId = useId();
 
   const setFiltersSearchParams = useSetFiltersSearchParams();
@@ -56,7 +58,7 @@ export const BookmarkFilters = ({ params }: BookmarkFiltersProps) => {
                   placeholder="Query"
                   value={params.query ?? ""}
                 />
-                <BookmarkTagsField initialTags={params["tags[]"]} />
+                <BookmarkTagsField initialTags={params["tags[]"]} tags={tags} />
               </form>
               <Modal.Footer>
                 <Modal.Close />

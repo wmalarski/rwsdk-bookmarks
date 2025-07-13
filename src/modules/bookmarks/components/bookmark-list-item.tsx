@@ -1,21 +1,25 @@
 import { IconChevronRight } from "@intentui/icons";
-import { type ComponentProps, type PropsWithChildren, useMemo } from "react";
+import {
+  type ComponentProps,
+  type PropsWithChildren,
+  useMemo,
+  useRef,
+} from "react";
 
-import { Link } from "@/components/link";
-
-import { createIsLink } from "~/modules/common/utils/create-is-link";
-import { createDateFormatter } from "~/modules/common/utils/formatters";
-import { paths } from "~/modules/common/utils/paths";
-import { Badge } from "~/ui/badge/badge";
-import { Card, CardActions, CardBody } from "~/ui/card/card";
+import { Badge } from "@/components/badge";
+import { Card } from "@/components/card";
 import {
   Carousel,
+  CarouselButton,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "~/ui/carousel/carousel";
-import { useBookmarksHistory } from "../contexts/bookmarks-history";
+} from "@/components/carousel";
+import { Link } from "@/components/link";
+import type { Tag } from "@/db";
+import { useDateFormatter } from "@/lib/formatters";
+import { getIsLink } from "@/lib/get-is-link";
+import { link } from "@/lib/links";
+
 import type { BookmarkWithTags } from "../server/db";
 import { CompleteDialog } from "./complete-dialog";
 import { DeleteBookmarkForm } from "./delete-bookmark-form";
@@ -23,20 +27,21 @@ import { UpdateBookmarkDialog } from "./update-bookmark-dialog";
 
 type BookmarkListItemProps = {
   bookmark: BookmarkWithTags;
+  tags: Tag[];
 };
 
-export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
-  const formatDate = createDateFormatter();
+export const BookmarkListItem = ({ bookmark, tags }: BookmarkListItemProps) => {
+  const formatDate = useDateFormatter();
 
-  const history = useBookmarksHistory();
+  // const history = useBookmarksHistory();
 
   const onDetailsClick = () => {
-    history().addToHistory(bookmark.id);
+    // history().addToHistory(bookmark.id);
   };
 
   return (
-    <Card className="w-full" size="sm" variant="bordered">
-      <CardBody>
+    <Card className="w-full">
+      <Card.Content>
         <BookmarkTagsList bookmark={bookmark} />
         <BookmarkPreview bookmark={bookmark} />
         {bookmark.title && <BookmarkLinks bookmark={bookmark} />}
@@ -50,15 +55,19 @@ export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
           <GridLink bookmarkId={bookmark.id} href={bookmark.text} />
           <GridTitle>Url</GridTitle>
           <GridLink bookmarkId={bookmark.id} href={bookmark.url} />
-          <GridTitle>Created at</GridTitle>
-          <GridText>{formatDate(bookmark.createdAt)}</GridText>
+          {bookmark.createdAt && (
+            <>
+              <GridTitle>Created at</GridTitle>
+              <GridText>{formatDate(bookmark.createdAt)}</GridText>
+            </>
+          )}
           <GridTitle>Done</GridTitle>
           <GridText>{String(bookmark.done)}</GridText>
           {bookmark.done && (
             <>
               <GridTitle>Done at</GridTitle>
               <GridText>
-                {bookmark.done_at && formatDate(bookmark.done_at)}
+                {bookmark.doneAt && formatDate(bookmark.doneAt)}
               </GridText>
               <GridTitle>Rate</GridTitle>
               <GridText>{bookmark.rate}</GridText>
@@ -67,16 +76,19 @@ export const BookmarkListItem = ({ bookmark }: BookmarkListItemProps) => {
             </>
           )}
         </div>
-        <CardActions>
-          <DeleteBookmarkForm bookmark={bookmark} />
-          <CompleteDialog bookmark={bookmark} />
-          <UpdateBookmarkDialog bookmark={bookmark} />
-          <Link href={paths.bookmark(bookmark.id)} onClick={onDetailsClick}>
-            <IconChevronRight className="size-4" />
-            Details
-          </Link>
-        </CardActions>
-      </CardBody>
+      </Card.Content>
+      <Card.Footer>
+        <DeleteBookmarkForm bookmark={bookmark} />
+        <CompleteDialog bookmark={bookmark} />
+        <UpdateBookmarkDialog bookmark={bookmark} tags={tags} />
+        <Link
+          href={link("/bookmarks/bookmark/:id", { id: bookmark.id })}
+          onClick={onDetailsClick}
+        >
+          <IconChevronRight className="size-4" />
+          Details
+        </Link>
+      </Card.Footer>
     </Card>
   );
 };
@@ -94,16 +106,16 @@ type GridLinkProps = {
   href: string | null;
 };
 
-const GridLink = ({ bookmarkId, href }: GridLinkProps) => {
-  const isLink = createIsLink(() => href);
+const GridLink = ({ bookmarkId: _bookmarkId, href }: GridLinkProps) => {
+  const isLink = href ? getIsLink(href) : false;
 
-  const history = useBookmarksHistory();
+  // const history = useBookmarksHistory();
 
   const onClick = () => {
-    history().addToHistory(bookmarkId);
+    // history().addToHistory(bookmarkId);
   };
 
-  if (isLink()) {
+  if (href && isLink) {
     return (
       <Link className="break-words" href={href} onClick={onClick}>
         {href}
@@ -132,7 +144,7 @@ const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
     return array ?? [];
   }, [bookmark.preview?.split]);
 
-  if (images().length <= 0) {
+  if (images.length <= 0) {
     return null;
   }
 
@@ -140,7 +152,7 @@ const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
     <div className="relative mx-auto my-4 w-64">
       <Carousel>
         <CarouselContent>
-          {images().map((image) => (
+          {images.map((image) => (
             <BookmarkPreviewImage
               image={image}
               key={image}
@@ -148,8 +160,8 @@ const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
             />
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselButton segment="next" />
+        <CarouselButton segment="previous" />
       </Carousel>
     </div>
   );
@@ -161,24 +173,22 @@ type BookmarkPreviewImageProps = {
 };
 
 const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
-  let el: HTMLDivElement | undefined;
-  const useVisibilityObserver = createVisibilityObserver({ threshold: 0.1 });
-  const visible = useVisibilityObserver(() => el);
-  const shouldShow = visible;
+  const ref = useRef<HTMLDivElement>(null);
+  // const useVisibilityObserver = createVisibilityObserver({ threshold: 0.1 });
+  // const visible = useVisibilityObserver(() => el);
+  // const shouldShow = visible;
   // const shouldShow = createMemo<boolean>((previous) => previous || visible());
 
   return (
-    <CarouselItem className="min-h-72" ref={el}>
-      {shouldShow && (
-        <img
-          alt={title}
-          className="h-64 text-base-300"
-          height={250}
-          loading="lazy"
-          src={image}
-          width={250}
-        />
-      )}
+    <CarouselItem className="min-h-72" ref={ref}>
+      <img
+        alt={title}
+        className="h-64 text-base-300"
+        height={250}
+        loading="lazy"
+        src={image}
+        width={250}
+      />
     </CarouselItem>
   );
 };
@@ -190,9 +200,9 @@ type BookmarkTagsListProps = {
 const BookmarkTagsList = ({ bookmark }: BookmarkTagsListProps) => {
   return (
     <ul className="flex flex-row flex-wrap gap-2">
-      {bookmark.bookmarks_tags.map((bookmarkTag) => (
+      {bookmark.BookmarkTag.map((bookmarkTag) => (
         <li key={bookmarkTag.id}>
-          <Badge color="accent">{bookmarkTag.tags.name}</Badge>
+          <Badge color="accent">{bookmarkTag.tagId}</Badge>
         </li>
       ))}
     </ul>
@@ -204,10 +214,10 @@ type BookmarkLinksProps = {
 };
 
 const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
-  const history = useBookmarksHistory();
+  // const history = useBookmarksHistory();
 
   const onClick = () => {
-    history().addToHistory(bookmark.id);
+    // history().addToHistory(bookmark.id);
   };
 
   const commonProps: Partial<ComponentProps<typeof Link>> = {
