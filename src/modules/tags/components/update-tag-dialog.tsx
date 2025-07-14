@@ -1,12 +1,13 @@
 "use client";
 
 import { IconPencilBox } from "@intentui/icons";
-import { type ComponentProps, useId } from "react";
+import { type ComponentProps, useId, useState } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 import type { Tag } from "@/db";
 
+import { updateTagAction } from "../server/functions";
 import { TagFields, useTagForm } from "./tag-fields";
 
 type UpdateTagDialogProps = {
@@ -14,23 +15,15 @@ type UpdateTagDialogProps = {
 };
 
 export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
-  // const dialogId = createMemo(() => `update-dialog-${tag.id}`);
   const formId = useId();
 
-  // const submission = useSubmission(
-  //   updateTagServerAction,
-  //   ([form]) => form.get("tagId") === String(tag.id),
-  // );
-
-  // const onSubmit = useActionOnSubmit({
-  //   action: updateTagServerAction,
-  //   onSuccess: () => closeDialog(dialogId()),
-  // });
+  const [isOpen, setIsOpen] = useState(false);
 
   const form = useTagForm({
     initialData: tag,
-    onSubmit: () => {
-      //
+    onSubmit: async ({ name }) => {
+      await updateTagAction({ name, tagId: tag.id });
+      setIsOpen(false);
     },
   });
 
@@ -40,42 +33,32 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
   };
 
   return (
-    <Modal>
+    <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="secondary" size="sm">
         <IconPencilBox className="size-4" />
         Update
       </Button>
       <Modal.Content>
-        {() => (
-          <>
-            <Modal.Header>Update</Modal.Header>
-            <Modal.Body>
-              <form id={formId} onSubmit={onSubmit}>
-                <input name="tagId" type="hidden" value={tag.id} />
-                <TagFields
-                  form={form}
-                  // title="Update"
-                  // pending={submission.pending}
-                  // result={
-                  //   submission.result?.success ? undefined : submission.result
-                  // }
-                />
-              </form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Modal.Close />
-              <Button
-                form={formId}
-                intent="primary"
-                isDisabled={form.state.isSubmitting}
-                isPending={form.state.isSubmitting}
-                type="submit"
-              >
-                Save
-              </Button>
-            </Modal.Footer>
-          </>
-        )}
+        <Modal.Header>Update</Modal.Header>
+        <Modal.Body>
+          <form id={formId} onSubmit={onSubmit}>
+            <TagFields form={form} />
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Modal.Close>Close</Modal.Close>
+          <form.Subscribe selector={(state) => [state.isSubmitting]}>
+            <Button
+              form={formId}
+              intent="primary"
+              isDisabled={form.state.isSubmitting}
+              isPending={form.state.isSubmitting}
+              type="submit"
+            >
+              Save
+            </Button>
+          </form.Subscribe>
+        </Modal.Footer>
       </Modal.Content>
     </Modal>
   );

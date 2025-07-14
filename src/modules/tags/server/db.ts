@@ -28,3 +28,18 @@ export const createTag = ({ userId, name }: CreateTagArgs) => {
     data: { createdAt: now, id, name, updatedAt: now, userId },
   });
 };
+
+type UpdateTagArgs = {
+  tagId: string;
+  userId: string;
+  name: string;
+};
+
+export const updateTag = ({ userId, name, tagId }: UpdateTagArgs) => {
+  const now = new Date();
+
+  return db.tag.update({
+    data: { name, updatedAt: now },
+    where: { id: tagId, userId },
+  });
+};

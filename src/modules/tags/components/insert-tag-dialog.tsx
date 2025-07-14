@@ -47,6 +47,7 @@ export const InsertTagDialog = () => {
             <Button
               form={formId}
               intent="primary"
+              isDisabled={form.state.isSubmitting}
               isPending={form.state.isSubmitting}
               type="submit"
             >
