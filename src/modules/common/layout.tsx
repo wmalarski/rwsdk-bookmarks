@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from "react";
+import type { RequestInfo } from "rwsdk/worker";
 
 import { Link } from "@/components/link";
 import { link } from "@/lib/links";
@@ -34,10 +35,14 @@ export const FormLayout = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const PageLayout = ({ children }: PropsWithChildren) => {
+type PageLayoutProps = PropsWithChildren<{
+  requestInfo: RequestInfo;
+}>;
+
+export const PageLayout = ({ children, requestInfo }: PageLayoutProps) => {
   return (
     <main className="mx-auto flex min-h-screen flex-col items-center bg-bg">
-      <TopNavbar />
+      <TopNavbar user={requestInfo.ctx.user} />
       {children}
     </main>
   );

@@ -12,9 +12,7 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
       <link href={styles} rel="stylesheet" />
     </head>
     <body>
-      <div className="dark" id="root">
-        {children}
-      </div>
+      <div id="root">{children}</div>
       <script>import("/src/client.tsx")</script>
     </body>
   </html>

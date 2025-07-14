@@ -1,5 +1,3 @@
-"use client";
-
 import { IconBookmark } from "@intentui/icons";
 
 import { Link } from "@/components/link";
@@ -14,14 +12,16 @@ import {
   NavbarStart,
   NavbarTrigger,
 } from "@/components/navbar";
+import type { User } from "@/db";
 import { link } from "@/lib/links";
 
 import { SignOutButton } from "../auth/components/sign-out-button";
-import { useUser } from "../auth/user-context";
 
-export const TopNavbar = () => {
-  const user = useUser();
+type TopNavbarProps = {
+  user: User | null;
+};
 
+export const TopNavbar = ({ user }: TopNavbarProps) => {
   return (
     <NavbarProvider>
       <Navbar>
