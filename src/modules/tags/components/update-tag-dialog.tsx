@@ -1,3 +1,5 @@
+"use client";
+
 import { IconPencilBox } from "@intentui/icons";
 import { type ComponentProps, useId } from "react";
 

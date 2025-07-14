@@ -6,6 +6,7 @@ import { type ComponentProps, useId, useState } from "react";
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 
+import { createTagAction } from "../server/functions";
 import { TagFields, useTagForm } from "./tag-fields";
 
 export const InsertTagDialog = () => {
@@ -13,17 +14,10 @@ export const InsertTagDialog = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  // const submission = useSubmission(insertTagServerAction);
-
-  // const onSubmit = useActionOnSubmit({
-  //   action: insertTagServerAction,
-  //   onSuccess: () => closeDialog(dialogId),
-  //   resetOnSuccess: true,
-  // });
-
   const form = useTagForm({
-    onSubmit: () => {
-      //
+    onSubmit: async ({ name }) => {
+      await createTagAction({ name });
+      setIsOpen(false);
     },
   });
 
@@ -49,9 +43,16 @@ export const InsertTagDialog = () => {
         </Modal.Body>
         <Modal.Footer>
           <Modal.Close>Close</Modal.Close>
-          <Button form={formId} intent="primary" type="submit">
-            Save
-          </Button>
+          <form.Subscribe selector={(state) => [state.isSubmitting]}>
+            <Button
+              form={formId}
+              intent="primary"
+              isPending={form.state.isSubmitting}
+              type="submit"
+            >
+              Save
+            </Button>
+          </form.Subscribe>
         </Modal.Footer>
       </Modal.Content>
     </Modal>

@@ -1,3 +1,5 @@
+"use client";
+
 import { IconTrash } from "@intentui/icons";
 
 import { AlertDialog } from "@/components/alert-dialog";

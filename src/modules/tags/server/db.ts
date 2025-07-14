@@ -14,3 +14,17 @@ export const selectTags = ({ userId, page }: SelectTagsArgs) => {
     where: { userId },
   });
 };
+
+type CreateTagArgs = {
+  userId: string;
+  name: string;
+};
+
+export const createTag = ({ userId, name }: CreateTagArgs) => {
+  const now = new Date();
+  const id = crypto.randomUUID();
+
+  return db.tag.create({
+    data: { createdAt: now, id, name, updatedAt: now, userId },
+  });
+};
