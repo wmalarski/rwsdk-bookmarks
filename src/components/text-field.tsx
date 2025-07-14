@@ -1,3 +1,5 @@
+"use client";
+
 import { IconEye, IconEyeClosed } from "@intentui/icons";
 import { useState } from "react";
 import type {
@@ -99,5 +101,5 @@ const TextField = ({
   );
 };
 
-export type { TextFieldProps };
 export { TextField };
+export type { TextFieldProps };

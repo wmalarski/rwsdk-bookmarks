@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import * as v from "valibot";
 
-import { Form, FormTitle } from "@/components/form";
+import { Form } from "@/components/form";
 import { Note } from "@/components/note";
 import { TextField } from "@/components/text-field";
 import { formatValidationErrors } from "@/lib/formatters";
@@ -34,14 +34,11 @@ export const useTagForm = ({ onSubmit, initialData }: UseTagFormArgs) => {
 type TagFieldsProps = {
   form: ReturnType<typeof useTagForm>;
   result?: string;
-  title: string;
 };
 
-export const TagFields = ({ form, result, title }: TagFieldsProps) => {
+export const TagFields = ({ form, result }: TagFieldsProps) => {
   return (
     <Form>
-      <FormTitle>{title}</FormTitle>
-
       {result && result.length > 0 ? (
         <Note intent="danger">{result}</Note>
       ) : null}
@@ -51,10 +48,11 @@ export const TagFields = ({ form, result, title }: TagFieldsProps) => {
           <TextField
             errorMessage={formatValidationErrors(field.state.meta.errors)}
             id={field.name}
+            label="Name"
             name={field.name}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
-            placeholder="Name"
+            placeholder="Enter name"
             type="text"
             value={field.state.value}
           />

@@ -1,6 +1,8 @@
+import { Heading } from "@/components/heading";
 import type { ProtectedRequestInfo } from "@/modules/auth/protected-app-context";
 import { UserProvider } from "@/modules/auth/user-context";
 
+import { InsertTagDialog } from "../components/insert-tag-dialog";
 import { TagsList } from "../components/tags-list";
 import { selectTags } from "../server/db";
 
@@ -12,8 +14,13 @@ export const TagsListRoute = async (request: ProtectedRequestInfo) => {
 
   return (
     <UserProvider user={request.ctx.user}>
-      <span>TagsListRoute</span>
-      <TagsList tags={tags} />
+      <div className="flex w-full max-w-xl flex-col gap-4 px-2 py-4">
+        <div className="flex items-center justify-between gap-2">
+          <Heading level={2}>Tags</Heading>
+          <InsertTagDialog />
+        </div>
+        <TagsList tags={tags} />
+      </div>
     </UserProvider>
   );
 };

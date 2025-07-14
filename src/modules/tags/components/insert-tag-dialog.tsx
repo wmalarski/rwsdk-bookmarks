@@ -1,5 +1,7 @@
+"use client";
+
 import { IconPlus } from "@intentui/icons";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useId, useState } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -7,7 +9,9 @@ import { Modal } from "@/components/modal";
 import { TagFields, useTagForm } from "./tag-fields";
 
 export const InsertTagDialog = () => {
-  const formId = "insert-form";
+  const formId = useId();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   // const submission = useSubmission(insertTagServerAction);
 
@@ -29,25 +33,26 @@ export const InsertTagDialog = () => {
   };
 
   return (
-    <Modal>
+    <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="primary" size="sm">
         <IconPlus className="size-4" />
         Add Tag
       </Button>
       <Modal.Content>
-        {() => (
-          <>
-            <form id={formId} onSubmit={onSubmit}>
-              <TagFields form={form} title="Add Tag" />
-            </form>
-            <Modal.Footer>
-              <Modal.Close />
-              <Button form={formId} intent="primary" type="submit">
-                Save
-              </Button>
-            </Modal.Footer>
-          </>
-        )}
+        <Modal.Header>
+          <Modal.Title>Add Tag</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form id={formId} onSubmit={onSubmit}>
+            <TagFields form={form} />
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Modal.Close>Close</Modal.Close>
+          <Button form={formId} intent="primary" type="submit">
+            Save
+          </Button>
+        </Modal.Footer>
       </Modal.Content>
     </Modal>
   );

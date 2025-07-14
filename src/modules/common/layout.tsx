@@ -1,8 +1,6 @@
-"use client";
-
 import type { PropsWithChildren } from "react";
-import { Link } from "react-aria-components";
 
+import { Link } from "@/components/link";
 import { link } from "@/lib/links";
 
 import { TopNavbar } from "./top-navbar";
@@ -38,7 +36,7 @@ export const FormLayout = ({ children }: PropsWithChildren) => {
 
 export const PageLayout = ({ children }: PropsWithChildren) => {
   return (
-    <main className="mx-auto flex flex-col items-center">
+    <main className="mx-auto flex min-h-screen flex-col items-center bg-bg">
       <TopNavbar />
       {children}
     </main>

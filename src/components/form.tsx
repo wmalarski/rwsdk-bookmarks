@@ -1,14 +1,11 @@
 import type { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
 
-interface FormProps extends ComponentProps<"form"> {
-  ref?: React.Ref<HTMLFormElement>;
-}
+type FormProps = ComponentProps<"div">;
 
-const Form = ({ className, ref, ...props }: FormProps) => {
+const Form = ({ className, ...props }: FormProps) => {
   return (
-    <form
-      ref={ref}
+    <div
       {...props}
       className={twMerge("flex w-full flex-col gap-4", className)}
     />

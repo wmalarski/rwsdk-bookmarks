@@ -160,7 +160,7 @@ const DialogFooter = ({ className, ...props }: DialogFooterProps) => {
   return (
     <div
       className={twMerge(
-        "isolate mt-auto flex flex-col-reverse justify-between gap-3 p-(--gutter) pt-[calc(var(--gutter)---spacing(3))] group-not-has-data-[slot=dialog-body]/dialog:pt-0 group-not-has-data-[slot=dialog-body]/popover:pt-0 sm:flex-row",
+        "isolate mt-auto flex flex-col-reverse justify-end gap-3 p-(--gutter) pt-[calc(var(--gutter)---spacing(3))] group-not-has-data-[slot=dialog-body]/dialog:pt-0 group-not-has-data-[slot=dialog-body]/popover:pt-0 sm:flex-row",
         className,
       )}
       data-slot="dialog-footer"
@@ -210,22 +210,22 @@ const DialogCloseIcon = ({
   ) : null;
 };
 
-export type {
-  DialogHeaderProps,
-  DialogTitleProps,
-  DialogBodyProps,
-  DialogFooterProps,
-  DialogDescriptionProps,
-  CloseButtonIndicatorProps,
-};
 export {
   Dialog,
+  DialogBody,
   DialogClose,
-  DialogTrigger,
+  DialogCloseIcon,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogBody,
-  DialogFooter,
-  DialogCloseIcon,
+  DialogTrigger,
+};
+export type {
+  CloseButtonIndicatorProps,
+  DialogBodyProps,
+  DialogDescriptionProps,
+  DialogFooterProps,
+  DialogHeaderProps,
+  DialogTitleProps,
 };

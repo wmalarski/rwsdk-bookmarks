@@ -1,5 +1,5 @@
 import { IconLoader, IconPencilBox } from "@intentui/icons";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useId } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -17,7 +17,7 @@ export const UpdateBookmarkDialog = ({
   bookmark,
   tags,
 }: UpdateBookmarkDialogProps) => {
-  const formId = `update-form-${bookmark.id}`;
+  const formId = useId();
 
   // const submission = useSubmission(
   //   updateBookmarkServerAction,

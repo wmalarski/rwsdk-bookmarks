@@ -1,5 +1,5 @@
 import { IconPencilBox } from "@intentui/icons";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useId } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -13,7 +13,7 @@ type UpdateTagDialogProps = {
 
 export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
   // const dialogId = createMemo(() => `update-dialog-${tag.id}`);
-  const formId = `update-form-${tag.id}`;
+  const formId = useId();
 
   // const submission = useSubmission(
   //   updateTagServerAction,
@@ -52,7 +52,7 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
                 <input name="tagId" type="hidden" value={tag.id} />
                 <TagFields
                   form={form}
-                  title="Update"
+                  // title="Update"
                   // pending={submission.pending}
                   // result={
                   //   submission.result?.success ? undefined : submission.result

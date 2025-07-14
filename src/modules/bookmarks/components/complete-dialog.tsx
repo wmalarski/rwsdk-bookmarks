@@ -1,5 +1,5 @@
 import { IconCheck } from "@intentui/icons";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useId } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -12,7 +12,7 @@ type CompleteDialogProps = {
 };
 
 export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
-  const formId = `complete-form-${bookmark.id}`;
+  const formId = useId();
 
   // const submission = useSubmission(
   //   completeBookmarkServerAction,
