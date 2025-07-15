@@ -1,3 +1,5 @@
+"use client";
+
 import { IconLoader, IconPlus } from "@intentui/icons";
 import type { ComponentProps } from "react";
 
