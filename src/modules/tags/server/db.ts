@@ -43,3 +43,14 @@ export const updateTag = ({ userId, name, tagId }: UpdateTagArgs) => {
     where: { id: tagId, userId },
   });
 };
+
+type DeleteTagArgs = {
+  tagId: string;
+  userId: string;
+};
+
+export const deleteTag = ({ userId, tagId }: DeleteTagArgs) => {
+  return db.tag.delete({
+    where: { id: tagId, userId },
+  });
+};

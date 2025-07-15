@@ -1,43 +1,54 @@
 "use client";
 
 import { IconTrash } from "@intentui/icons";
+import { useForm } from "@tanstack/react-form";
+import { useState } from "react";
 
 import { AlertDialog } from "@/components/alert-dialog";
 import { Button } from "@/components/button";
 import type { Tag } from "@/db";
+
+import { deleteTagAction } from "../server/functions";
 
 type DeleteTagFormProps = {
   tag: Tag;
 };
 
 export const DeleteTagForm = ({ tag }: DeleteTagFormProps) => {
-  // const submission = useSubmission(
-  //   deleteTagServerAction,
-  //   ([form]) => form.get("tagId") === String(props.tag.id),
-  // );
+  const [isOpen, setIsOpen] = useState(false);
 
-  // const onSubmit = useActionOnSubmit({
-  //   action: deleteTagServerAction,
-  //   onSuccess: () => closeDialog(dialogId()),
-  // });
+  const form = useForm({
+    onSubmit: async () => {
+      await deleteTagAction({ tagId: tag.id });
+      setIsOpen(false);
+    },
+  });
 
   const onSubmit = () => {
-    //
+    form.handleSubmit();
+  };
+
+  const onDeletePress = () => {
+    setIsOpen(true);
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <input name="tagId" type="hidden" value={tag.id} />
-      <Button intent="danger" size="sm">
-        <IconTrash className="size-4" />
+    <>
+      <Button intent="danger" onPress={onDeletePress}>
+        <IconTrash />
         Delete
       </Button>
-      <AlertDialog
-        confirm="Delete"
-        confirmIntent="danger"
-        pending={false}
-        title="Delete"
-      />
-    </form>
+      <form.Subscribe selector={(state) => [state.isSubmitting]}>
+        <AlertDialog
+          confirmIntent="danger"
+          confirmText="Delete"
+          isOpen={isOpen}
+          onConfirm={onSubmit}
+          onOpenChange={setIsOpen}
+          pending={form.state.isSubmitting}
+          title="Delete"
+        />
+      </form.Subscribe>
+    </>
   );
 };

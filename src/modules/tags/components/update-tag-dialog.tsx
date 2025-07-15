@@ -35,7 +35,7 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="secondary" size="sm">
-        <IconPencilBox className="size-4" />
+        <IconPencilBox />
         Update
       </Button>
       <Modal.Content>

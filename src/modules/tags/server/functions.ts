@@ -2,7 +2,7 @@
 
 import { requestInfo } from "rwsdk/worker";
 
-import { createTag, updateTag } from "./db";
+import { createTag, deleteTag, updateTag } from "./db";
 
 type CreateTagActionArgs = {
   name: string;
@@ -33,4 +33,19 @@ export const updateTagAction = async ({ name, tagId }: UpdateTagActionArgs) => {
   }
 
   await updateTag({ name, tagId, userId });
+};
+
+type DeleteTagActionArgs = {
+  tagId: string;
+};
+
+export const deleteTagAction = async ({ tagId }: DeleteTagActionArgs) => {
+  const { ctx } = requestInfo;
+  const userId = ctx.user?.id;
+
+  if (!userId) {
+    throw new Response(null, { status: 401 });
+  }
+
+  await deleteTag({ tagId, userId });
 };

@@ -1,5 +1,7 @@
+"use client";
+
 import { IconTrash } from "@intentui/icons";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useState } from "react";
 
 import { AlertDialog } from "@/components/alert-dialog";
 import { Button } from "@/components/button";
@@ -11,18 +13,14 @@ type DeleteBookmarkFormProps = {
 };
 
 export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
-  // const submission = useSubmission(
-  //   deleteBookmarkServerAction,
-  //   ([form]) => form.get("bookmarkId") === String(bookmark.id),
-  // );
-
-  // const onSubmit = useActionOnSubmit({
-  //   action: deleteBookmarkServerAction,
-  //   onSuccess: () => closeDialog(dialogId()),
-  // });
+  const [isOpen, setIsOpen] = useState(false);
 
   const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
     event.preventDefault();
+  };
+
+  const onConfirm = () => {
+    //
   };
 
   return (
@@ -33,11 +31,11 @@ export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
         Delete
       </Button>
       <AlertDialog
-        confirm="Delete"
         confirmIntent="danger"
-        // errorMessage={
-        //   submission.result?.success ? undefined : submission.result?.error
-        // }
+        confirmText="Delete"
+        isOpen={isOpen}
+        onConfirm={onConfirm}
+        onOpenChange={setIsOpen}
         pending={false}
         title="Delete"
       />

@@ -29,7 +29,7 @@ export const InsertTagDialog = () => {
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="primary" size="sm">
-        <IconPlus className="size-4" />
+        <IconPlus />
         Add Tag
       </Button>
       <Modal.Content>
