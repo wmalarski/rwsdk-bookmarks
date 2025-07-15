@@ -28,14 +28,15 @@ export const AlertDialog = ({
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <Modal.Content>
-        <Modal.Header>{title}</Modal.Header>
+        <Modal.Header>
+          <Modal.Title>{title}</Modal.Title>
 
-        {errorMessage ? <Note intent="danger">{errorMessage}</Note> : null}
+          {errorMessage ? <Note intent="danger">{errorMessage}</Note> : null}
 
-        {description ? (
-          <Modal.Description>{description}</Modal.Description>
-        ) : null}
-
+          {description ? (
+            <Modal.Description>{description}</Modal.Description>
+          ) : null}
+        </Modal.Header>
         <Modal.Footer>
           <Modal.Close>Close</Modal.Close>
           <Button

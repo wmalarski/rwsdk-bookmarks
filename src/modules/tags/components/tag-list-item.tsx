@@ -14,13 +14,13 @@ export const TagsListItem = ({ tag }: TagsListItemProps) => {
 
   return (
     <Card>
-      <Card.Content className="flex flex-col gap-2">
-        <div className="flex grow flex-col gap-2 pr-6">
-          <span className="text-lg">{tag.name}</span>
-          {tag.createdAt ? <span>{formatDate(tag.createdAt)}</span> : null}
-        </div>
-      </Card.Content>
-      <Card.Footer>
+      <Card.Header>
+        <Card.Title>{tag.name}</Card.Title>
+        {tag.createdAt ? (
+          <Card.Description>{formatDate(tag.createdAt)}</Card.Description>
+        ) : null}
+      </Card.Header>
+      <Card.Footer className="gap-2">
         <UpdateTagDialog tag={tag} />
         <DeleteTagForm tag={tag} />
       </Card.Footer>

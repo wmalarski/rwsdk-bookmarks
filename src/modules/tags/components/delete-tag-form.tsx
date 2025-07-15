@@ -42,6 +42,7 @@ export const DeleteTagForm = ({ tag }: DeleteTagFormProps) => {
         <AlertDialog
           confirmIntent="danger"
           confirmText="Delete"
+          description="Confirm delete tag."
           isOpen={isOpen}
           onConfirm={onSubmit}
           onOpenChange={setIsOpen}
