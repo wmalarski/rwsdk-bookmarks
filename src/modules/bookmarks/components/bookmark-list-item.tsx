@@ -83,7 +83,7 @@ export const BookmarkListItem = ({ bookmark, tags }: BookmarkListItemProps) => {
         <UpdateBookmarkDialog bookmark={bookmark} tags={tags} />
         <Link
           href={link("/bookmarks/bookmark/:id", { id: bookmark.id })}
-          onClick={onDetailsClick}
+          onPress={onDetailsClick}
         >
           <IconChevronRight className="size-4" />
           Details
@@ -111,13 +111,13 @@ const GridLink = ({ bookmarkId: _bookmarkId, href }: GridLinkProps) => {
 
   // const history = useBookmarksHistory();
 
-  const onClick = () => {
+  const onPress = () => {
     // history().addToHistory(bookmarkId);
   };
 
   if (href && isLink) {
     return (
-      <Link className="break-words" href={href} onClick={onClick}>
+      <Link className="break-words" href={href} onPress={onPress}>
         {href}
       </Link>
     );
@@ -216,13 +216,13 @@ type BookmarkLinksProps = {
 const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
   // const history = useBookmarksHistory();
 
-  const onClick = () => {
+  const onPress = () => {
     // history().addToHistory(bookmark.id);
   };
 
   const commonProps: Partial<ComponentProps<typeof Link>> = {
     // color: "secondary",
-    onClick,
+    onPress,
     rel: "noopener noreferrer",
     // size: "xs",
     target: "_blank",

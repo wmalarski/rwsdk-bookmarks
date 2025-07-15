@@ -21,7 +21,7 @@ export const SignOutButton = () => {
   };
 
   return (
-    <Button isDisabled={isPending} onClick={onSignOut}>
+    <Button isDisabled={isPending} onPress={onSignOut}>
       {isPending ? "Logging out..." : "Log Out"}
     </Button>
   );

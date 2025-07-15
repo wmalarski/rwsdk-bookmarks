@@ -42,7 +42,7 @@ export const AlertDialog = ({
             intent={confirmIntent}
             isDisabled={pending}
             isPending={pending}
-            onClick={onConfirm}
+            onPress={onConfirm}
             type="submit"
           >
             {confirmText}

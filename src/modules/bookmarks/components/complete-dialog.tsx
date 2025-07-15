@@ -26,7 +26,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
     },
   });
 
-  const onClick = () => {
+  const onPress = () => {
     // history().addToHistory(bookmark.id);
   };
 
@@ -43,7 +43,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
 
   return (
     <Modal>
-      <Button intent="primary" onClick={onClick} size="sm">
+      <Button intent="primary" onPress={onPress} size="sm">
         <IconCheck className="size-4" />
         Complete
       </Button>

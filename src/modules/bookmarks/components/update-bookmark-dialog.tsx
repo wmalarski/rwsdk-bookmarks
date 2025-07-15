@@ -44,7 +44,7 @@ export const UpdateBookmarkDialog = ({
 
   // const history = useBookmarksHistory();
 
-  const onClick = () => {
+  const onPress = () => {
     // history().addToHistory(bookmark.id);
   };
 
@@ -54,7 +54,7 @@ export const UpdateBookmarkDialog = ({
 
   return (
     <Modal>
-      <Button intent="secondary" onClick={onClick} size="sm">
+      <Button intent="secondary" onPress={onPress} size="sm">
         <IconPencilBox className="size-4" />
         Update
       </Button>
