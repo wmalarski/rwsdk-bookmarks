@@ -63,6 +63,7 @@
     "preview": "vite preview",
     "release": "rw-scripts ensure-deploy-env && npm run clean && prisma generate && RWSDK_DEPLOY=1 npm run build && wrangler deploy",
     "seed": "npm run worker:run ./src/scripts/seed.ts",
+    "seed-fetch": "npm run worker:run ./src/scripts/fetch-data.ts",
     "types": "tsc",
     "worker:run": "rw-scripts worker-run"
   },
