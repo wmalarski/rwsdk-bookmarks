@@ -67,3 +67,4 @@ coverage
 
 generated/
 db_dump.sql
+db_dump.json

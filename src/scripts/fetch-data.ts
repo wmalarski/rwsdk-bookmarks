@@ -1,12 +1,10 @@
 import fs from "node:fs/promises";
 
-// import { db } from "@/db";
-
 const parseDump = async () => {
   const file = await fs.readFile("db_dump.sql", { encoding: "utf8" });
   const lines = file.split("\n");
 
-  const startRegex = /^COPY [a-zA-Z]+\.([a-zA-Z]+)/g;
+  const startRegex = /^COPY [a-zA-Z]+\.([a-zA-Z_]+)/g;
   const endRegex = /^\\\.$/g;
 
   const detectedChanges = lines
@@ -40,82 +38,70 @@ const parseDump = async () => {
 
   const tags = tables.get("public.tags")?.map((entry) => {
     const [id, createdAt, name] = entry;
-    const date = new Date(createdAt).getTime();
-    return { createdAt: date, id, name };
+    return { createdAt: parseDate(createdAt), id, name };
   });
 
   const bookmarks = tables.get("public.bookmarks")?.map((entry) => {
     const [
       id,
-      artistId,
       createdAt,
-      sid,
-      title,
       _userId,
-      year,
-      release,
-      covers,
+      url,
+      text,
+      title,
+      done,
+      note,
+      rate,
+      preview,
+      doneAt,
     ] = entry;
 
     return {
-      _creationTime: new Date(createdAt).getTime(),
-      artistId,
-      covers: parseCovers(covers),
-      entry,
+      createdAt: parseDate(createdAt),
+      done: parseBoolean(done),
+      doneAt: parseDate(doneAt),
       id,
-      release: parseNull(release),
-      sid: parseNull(sid),
-      title,
-      year: parseNumberNull(year),
+      note: parseNull(note),
+      preview: parseNull(preview),
+      rate: parseNumberNull(rate),
+      text: parseString(text),
+      title: parseString(title),
+      url: parseString(url),
     };
   });
 
-  console.log("data", detectedChanges, ranges, bookmarks);
+  const bookmarksTags = tables.get("public.bookmarks_tags")?.map((entry) => {
+    const [_id, _createdAt, bookmarkId, tagId, _userId] = entry;
+    return { bookmarkId, tagId };
+  });
 
-  // await db.$executeRawUnsafe(`\
-  //   DELETE FROM User;
-  //   DELETE FROM sqlite_sequence;
-  // `);
+  const data = {
+    bookmarks,
+    bookmarksTags,
+    tags,
+  };
 
-  // await db.user.create({
-  //   data: {
-  //     createdAt: new Date(),
-  //     email: "mj@test.com",
-  //     emailVerified: false,
-  //     id: "1",
-  //     image: null,
-  //     name: "test",
-  //     updatedAt: new Date(),
-  //   },
-  console.log("🌱 Finished seeding", lines.length);
+  await fs.writeFile("db_dump.json", JSON.stringify(data, null, 2));
 };
 
 parseDump();
 
-const parseCovers = (covers?: string) => {
-  const parsed = parseNull(covers);
-
-  if (!parsed) {
-    return null;
-  }
-
-  const json = JSON.parse(parsed);
-  const { "250": s250, "500": s500, "1200": s1200, ...reduced } = json;
-
-  const result = {
-    ...reduced,
-    s250: s250?.slice(0, 12),
-    s500: s500?.slice(0, 12),
-    s1200: s1200?.slice(0, 12),
-  };
-
-  return result;
+const parseNull = (arg?: string) => {
+  return arg === "\\N" || arg?.length === 0 ? undefined : (arg ?? undefined);
 };
 
-const parseNull = (arg?: string) => {
-  return arg === "\\N" ? null : (arg ?? null);
+const parseBoolean = (arg?: string) => {
+  return arg === "f" ? undefined : true;
+};
+
+const parseString = (arg?: string) => {
+  return arg?.length === 0 ? undefined : arg;
 };
 
 const parseNumberNull = (arg?: string) => {
-  return arg === "\\N" ? null : (Number(arg) ?? null);
+  return arg === "\\N" ? undefined : (Number(arg) ?? undefined);
+};
+
+const parseDate = (arg?: string) => {
+  return arg === "\\N" || !arg ? undefined : new Date(arg).getTime();
 };
