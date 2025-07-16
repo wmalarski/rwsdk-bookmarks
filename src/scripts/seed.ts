@@ -1,24 +1,54 @@
 import { defineScript } from "rwsdk/worker";
 
-// import { db } from "@/db";
+import { db, setupDb } from "@/db";
 
-export default defineScript(async () => {
-  // await db.$executeRawUnsafe(`\
-  //   DELETE FROM User;
-  //   DELETE FROM sqlite_sequence;
-  // `);
+import seedData from "../../db_dump.json";
 
-  // await db.user.create({
-  //   data: {
-  //     createdAt: new Date(),
-  //     email: "mj@test.com",
-  //     emailVerified: false,
-  //     id: "1",
-  //     image: null,
-  //     name: "test",
-  //     updatedAt: new Date(),
-  //   },
-  // });
+export default defineScript(async ({ env }) => {
+  await setupDb(env);
+
+  await db.$executeRawUnsafe(`\
+    DELETE FROM bookmark;
+    DELETE FROM tag;
+    DELETE FROM bookmark_tag;
+  `);
+
+  // biome-ignore lint/suspicious/noExplicitAny: needed
+  const unsafeData = seedData as any;
+
+  const userId = "Js2DmrjCAswgQRpi4sHvZcHCi8BJbMs7";
+
+  await db.tag.createMany({
+    // biome-ignore lint/suspicious/noExplicitAny: needed
+    data: unsafeData.tags.map((entry: any) => ({
+      ...entry,
+      createdAt: new Date(entry.createdAt),
+      userId,
+    })),
+  });
+
+  await db.bookmark.createMany({
+    // biome-ignore lint/suspicious/noExplicitAny: needed
+    data: unsafeData.bookmarks.map((entry: any) => ({
+      ...entry,
+      createdAt: new Date(entry.createdAt),
+      done: !!entry.done,
+      doneAt: entry.doneAt ? new Date(entry.doneAt) : null,
+      random: Math.random(),
+      title: entry.title ?? "",
+      url: entry.url ?? "",
+      userId,
+    })),
+  });
+
+  await db.bookmarkTag.createMany({
+    // biome-ignore lint/suspicious/noExplicitAny: needed
+    data: unsafeData.bookmarksTags.map((entry: any) => ({
+      ...entry,
+      id: crypto.randomUUID(),
+      userId,
+    })),
+  });
 
   console.log("🌱 Finished seeding");
 });
