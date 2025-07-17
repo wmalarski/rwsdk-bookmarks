@@ -16,7 +16,13 @@ export default defineScript(async ({ env }) => {
   // biome-ignore lint/suspicious/noExplicitAny: needed
   const unsafeData = seedData as any;
 
-  const userId = "Js2DmrjCAswgQRpi4sHvZcHCi8BJbMs7";
+  const user = await db.user.findFirst();
+
+  if (!user) {
+    return;
+  }
+
+  const userId = user.id;
 
   await db.tag.createMany({
     // biome-ignore lint/suspicious/noExplicitAny: needed
