@@ -1,13 +1,30 @@
 import type { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
 
-type FormProps = ComponentProps<"div">;
+type FormProps = ComponentProps<"form"> & {
+  form: { handleSubmit: () => Promise<void> };
+};
 
-const Form = ({ className, ...props }: FormProps) => {
+const Form = ({
+  className,
+  form,
+  onSubmit: onSubmitProp,
+  ...props
+}: FormProps) => {
+  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
+    onSubmitProp?.(event);
+
+    if (!event.isDefaultPrevented()) {
+      event.preventDefault();
+      await form.handleSubmit();
+    }
+  };
+
   return (
-    <div
+    <form
       {...props}
       className={twMerge("flex w-full flex-col gap-4", className)}
+      onSubmit={onSubmit}
     />
   );
 };

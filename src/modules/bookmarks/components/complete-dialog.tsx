@@ -1,5 +1,5 @@
 import { IconCheck } from "@intentui/icons";
-import { type ComponentProps, useId } from "react";
+import { useId } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -22,6 +22,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
   // const history = useBookmarksHistory();
   const form = useCompleteForm({
     onSubmit() {
+      console.log("[bookmark]", bookmark);
       //
     },
   });
@@ -37,10 +38,6 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
   //   },
   // });
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-  };
-
   return (
     <Modal>
       <Button intent="primary" onPress={onPress} size="sm">
@@ -51,15 +48,13 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
         {() => (
           <>
             <Modal.Header>Complete</Modal.Header>
-            <form id={formId} onSubmit={onSubmit}>
-              <input name="bookmarkId" type="hidden" value={bookmark.id} />
-              <CompleteFields
-                form={form}
-                // initialData={bookmark}
-                // pending={form.state.isSubmitting}
-                // result={submission.result}
-              />
-            </form>
+            <CompleteFields
+              form={form}
+              formId={formId}
+              // initialData={bookmark}
+              // pending={form.state.isSubmitting}
+              // result={submission.result}
+            />
             <Modal.Footer>
               <Modal.Close />
               <Button

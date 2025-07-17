@@ -48,6 +48,7 @@ type BookmarkFieldsProps = {
   result?: string;
   title: string;
   tags: Tag[];
+  formId: string;
 };
 
 export const BookmarkFields = ({
@@ -57,9 +58,10 @@ export const BookmarkFields = ({
   pending,
   result,
   tags,
+  formId,
 }: BookmarkFieldsProps) => {
   return (
-    <Form>
+    <Form form={form} id={formId}>
       <FormTitle>{title}</FormTitle>
 
       {result && result.length > 0 ? (

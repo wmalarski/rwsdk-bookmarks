@@ -1,7 +1,7 @@
 "use client";
 
 import { IconPencilBox } from "@intentui/icons";
-import { type ComponentProps, useId, useState } from "react";
+import { useId, useState } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -27,11 +27,6 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
     },
   });
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-    form.handleSubmit();
-  };
-
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="secondary" size="sm">
@@ -41,9 +36,7 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
       <Modal.Content>
         <Modal.Header>Update</Modal.Header>
         <Modal.Body>
-          <form id={formId} onSubmit={onSubmit}>
-            <TagFields form={form} />
-          </form>
+          <TagFields form={form} formId={formId} />
         </Modal.Body>
         <Modal.Footer>
           <Modal.Close>Close</Modal.Close>

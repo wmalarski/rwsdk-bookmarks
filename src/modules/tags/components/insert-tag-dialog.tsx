@@ -1,7 +1,7 @@
 "use client";
 
 import { IconPlus } from "@intentui/icons";
-import { type ComponentProps, useId, useState } from "react";
+import { useId, useState } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -21,11 +21,6 @@ export const InsertTagDialog = () => {
     },
   });
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
-    event.preventDefault();
-    await form.handleSubmit();
-  };
-
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="primary" size="sm">
@@ -37,9 +32,7 @@ export const InsertTagDialog = () => {
           <Modal.Title>Add Tag</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form id={formId} onSubmit={onSubmit}>
-            <TagFields form={form} />
-          </form>
+          <TagFields form={form} formId={formId} />
         </Modal.Body>
         <Modal.Footer>
           <Modal.Close>Close</Modal.Close>

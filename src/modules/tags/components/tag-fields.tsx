@@ -34,15 +34,16 @@ export const useTagForm = ({ onSubmit, initialData }: UseTagFormArgs) => {
 };
 
 type TagFieldsProps = {
+  formId: string;
   form: ReturnType<typeof useTagForm>;
-  result?: string;
+  errorMessage?: string;
 };
 
-export const TagFields = ({ form, result }: TagFieldsProps) => {
+export const TagFields = ({ form, formId, errorMessage }: TagFieldsProps) => {
   return (
-    <Form>
-      {result && result.length > 0 ? (
-        <Note intent="danger">{result}</Note>
+    <Form form={form} id={formId}>
+      {errorMessage && errorMessage.length > 0 ? (
+        <Note intent="danger">{errorMessage}</Note>
       ) : null}
 
       <form.Field name="name">

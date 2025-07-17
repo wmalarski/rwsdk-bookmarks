@@ -48,15 +48,20 @@ export const useCompleteForm = ({
 };
 
 type CompleteFieldsProps = {
+  formId: string;
   form: ReturnType<typeof useCompleteForm>;
-  result?: string;
+  errorMessage?: string;
 };
 
-export const CompleteFields = ({ form, result }: CompleteFieldsProps) => {
+export const CompleteFields = ({
+  form,
+  formId,
+  errorMessage,
+}: CompleteFieldsProps) => {
   return (
-    <Form>
-      {result && result.length > 0 ? (
-        <Note intent="danger">{result}</Note>
+    <Form form={form} id={formId}>
+      {errorMessage && errorMessage.length > 0 ? (
+        <Note intent="danger">{errorMessage}</Note>
       ) : null}
 
       <form.Field name="done">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { type ComponentProps, useState } from "react";
+import { useState } from "react";
 import * as v from "valibot";
 
 import { Button } from "@/components/button";
@@ -40,14 +40,8 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    form.handleSubmit();
-  };
-
   return (
-    <Form onSubmit={onSubmit}>
+    <Form form={form}>
       <FormTitle>Login</FormTitle>
       {result.length > 0 ? <Note intent="danger">{result}</Note> : null}
       <form.Field name="email">
