@@ -18,7 +18,7 @@ import { link } from "@/lib/links";
 import { SignOutButton } from "../auth/components/sign-out-button";
 
 type TopNavbarProps = {
-  user: User | null;
+  user?: User | null;
 };
 
 export const TopNavbar = ({ user }: TopNavbarProps) => {

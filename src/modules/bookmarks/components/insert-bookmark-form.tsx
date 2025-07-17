@@ -1,7 +1,7 @@
 "use client";
 
 import { IconLoader, IconPlus } from "@intentui/icons";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useId } from "react";
 
 import { Button } from "@/components/button";
 import type { Tag } from "@/db";
@@ -21,6 +21,7 @@ export const InsertBookmarkForm = ({
   initialData,
   tags,
 }: InsertBookmarkFormProps) => {
+  const formId = useId();
   // const submission = useSubmission(insertBookmarkServerAction);
 
   const form = useBookmarksForm({
@@ -37,6 +38,7 @@ export const InsertBookmarkForm = ({
     <form method="post" onSubmit={onSubmit}>
       <BookmarkFields
         form={form}
+        formId={formId}
         initialData={initialData}
         pending={form.state.isSubmitting}
         // result={submission.result}
@@ -44,6 +46,7 @@ export const InsertBookmarkForm = ({
         title="Share"
       />
       <Button
+        form={formId}
         intent="primary"
         isDisabled={form.state.isSubmitting}
         size="sm"

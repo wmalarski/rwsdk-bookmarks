@@ -36,13 +36,13 @@ export const FormLayout = ({ children }: PropsWithChildren) => {
 };
 
 type PageLayoutProps = PropsWithChildren<{
-  requestInfo: RequestInfo;
+  requestInfo?: RequestInfo;
 }>;
 
 export const PageLayout = ({ children, requestInfo }: PageLayoutProps) => {
   return (
     <main className="mx-auto flex min-h-screen flex-col items-center bg-bg">
-      <TopNavbar user={requestInfo.ctx.user} />
+      <TopNavbar user={requestInfo?.ctx.user} />
       {children}
     </main>
   );

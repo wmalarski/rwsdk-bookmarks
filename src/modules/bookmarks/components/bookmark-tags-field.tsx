@@ -12,8 +12,6 @@ export const BookmarkTagsField = ({
   initialTags,
   tags,
 }: BookmarkTagsFieldProps) => {
-  // const tags = createAsync(() => selectTagsServerQuery({}));
-
   const initialTagIds = new Set(initialTags);
 
   return (
@@ -21,8 +19,8 @@ export const BookmarkTagsField = ({
       {tags.map((tag) => (
         <li key={tag.id}>
           <Checkbox
+            defaultSelected={initialTagIds.has(tag.id)}
             isDisabled={disabled}
-            isSelected={initialTagIds.has(tag.id)}
             name="tags[]"
             value={tag.id}
           >

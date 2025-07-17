@@ -1,5 +1,5 @@
 import { IconLoader, IconPencilBox } from "@intentui/icons";
-import { type ComponentProps, useId } from "react";
+import { useId } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
@@ -31,7 +31,7 @@ export const UpdateBookmarkDialog = ({
 
   const form = useBookmarksForm({
     onSubmit(_data) {
-      //
+      console.log("[bookmark]", bookmark);
     },
   });
 
@@ -48,10 +48,6 @@ export const UpdateBookmarkDialog = ({
     // history().addToHistory(bookmark.id);
   };
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-  };
-
   return (
     <Modal>
       <Button intent="secondary" onPress={onPress} size="sm">
@@ -62,17 +58,15 @@ export const UpdateBookmarkDialog = ({
         {() => (
           <>
             <Modal.Header>Update</Modal.Header>
-            <form id={formId} onSubmit={onSubmit}>
-              <input name="bookmarkId" type="hidden" value={bookmark.id} />
-              <BookmarkFields
-                // initialData={initialData()}
-                form={form}
-                pending={form.state.isSubmitting}
-                tags={tags}
-                // result={submission.result}
-                title="Update"
-              />
-            </form>
+            <BookmarkFields
+              form={form}
+              // initialData={initialData()}
+              formId={formId}
+              pending={form.state.isSubmitting}
+              tags={tags}
+              // result={submission.result}
+              title="Update"
+            />
             <Modal.Footer>
               <Modal.Close />
               <Button
