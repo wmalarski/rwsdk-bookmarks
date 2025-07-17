@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/db";
 
 export type SelectBookmarksArgs = {
@@ -17,3 +19,14 @@ export const selectBookmarks = ({ userId, page }: SelectBookmarksArgs) => {
 };
 
 export type BookmarkWithTags = Awaited<ReturnType<typeof selectBookmarks>>[0];
+
+type DeleteBookmarkArgs = {
+  bookmarkId: string;
+  userId: string;
+};
+
+export const deleteBookmark = ({ userId, bookmarkId }: DeleteBookmarkArgs) => {
+  return db.bookmark.delete({
+    where: { id: bookmarkId, userId },
+  });
+};
