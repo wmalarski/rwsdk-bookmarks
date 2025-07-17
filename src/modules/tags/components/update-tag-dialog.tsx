@@ -34,7 +34,9 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
         Update
       </Button>
       <Modal.Content>
-        <Modal.Header>Update</Modal.Header>
+        <Modal.Header>
+          <Modal.Title>Update</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <TagFields form={form} formId={formId} />
         </Modal.Body>

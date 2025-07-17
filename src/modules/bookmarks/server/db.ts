@@ -30,3 +30,24 @@ export const deleteBookmark = ({ userId, bookmarkId }: DeleteBookmarkArgs) => {
     where: { id: bookmarkId, userId },
   });
 };
+
+type CompleteBookmarkArgs = {
+  bookmarkId: string;
+  userId: string;
+  done: boolean;
+  note?: string;
+  rate?: number;
+};
+
+export const completeBookmark = ({
+  userId,
+  bookmarkId,
+  done,
+  note,
+  rate,
+}: CompleteBookmarkArgs) => {
+  return db.bookmark.update({
+    data: { done, doneAt: new Date(), note, rate },
+    where: { id: bookmarkId, userId },
+  });
+};

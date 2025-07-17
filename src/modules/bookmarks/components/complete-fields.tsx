@@ -12,7 +12,7 @@ import { formatValidationErrors } from "@/lib/formatters";
 
 const completeFieldsSchema = () => {
   return v.object({
-    done: v.optional(v.boolean()),
+    done: v.boolean(),
     note: v.optional(v.string()),
     rate: v.optional(v.number()),
   });

@@ -8,7 +8,7 @@ type CreateTagActionArgs = {
   name: string;
 };
 
-export const createTagAction = async ({ name }: CreateTagActionArgs) => {
+export const createTagAction = async (args: CreateTagActionArgs) => {
   const { ctx } = requestInfo;
   const userId = ctx.user?.id;
 
@@ -16,7 +16,7 @@ export const createTagAction = async ({ name }: CreateTagActionArgs) => {
     throw new Response(null, { status: 401 });
   }
 
-  await createTag({ name, userId });
+  await createTag({ ...args, userId });
 };
 
 type UpdateTagActionArgs = {
@@ -24,7 +24,7 @@ type UpdateTagActionArgs = {
   name: string;
 };
 
-export const updateTagAction = async ({ name, tagId }: UpdateTagActionArgs) => {
+export const updateTagAction = async (args: UpdateTagActionArgs) => {
   const { ctx } = requestInfo;
   const userId = ctx.user?.id;
 
@@ -32,14 +32,14 @@ export const updateTagAction = async ({ name, tagId }: UpdateTagActionArgs) => {
     throw new Response(null, { status: 401 });
   }
 
-  await updateTag({ name, tagId, userId });
+  await updateTag({ ...args, userId });
 };
 
 type DeleteTagActionArgs = {
   tagId: string;
 };
 
-export const deleteTagAction = async ({ tagId }: DeleteTagActionArgs) => {
+export const deleteTagAction = async (args: DeleteTagActionArgs) => {
   const { ctx } = requestInfo;
   const userId = ctx.user?.id;
 
@@ -47,5 +47,5 @@ export const deleteTagAction = async ({ tagId }: DeleteTagActionArgs) => {
     throw new Response(null, { status: 401 });
   }
 
-  await deleteTag({ tagId, userId });
+  await deleteTag({ ...args, userId });
 };

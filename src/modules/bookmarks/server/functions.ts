@@ -2,15 +2,13 @@
 
 import { requestInfo } from "rwsdk/worker";
 
-import { deleteBookmark } from "./db";
+import { completeBookmark, deleteBookmark } from "./db";
 
 type DeleteBookmarkActionArgs = {
   bookmarkId: string;
 };
 
-export const deleteBookmarkAction = async ({
-  bookmarkId,
-}: DeleteBookmarkActionArgs) => {
+export const deleteBookmarkAction = async (args: DeleteBookmarkActionArgs) => {
   const { ctx } = requestInfo;
   const userId = ctx.user?.id;
 
@@ -18,5 +16,25 @@ export const deleteBookmarkAction = async ({
     throw new Response(null, { status: 401 });
   }
 
-  await deleteBookmark({ bookmarkId, userId });
+  await deleteBookmark({ ...args, userId });
+};
+
+type CompleteBookmarkActionArgs = {
+  bookmarkId: string;
+  note?: string;
+  rate?: number;
+  done: boolean;
+};
+
+export const complateBookmarkAction = async (
+  args: CompleteBookmarkActionArgs,
+) => {
+  const { ctx } = requestInfo;
+  const userId = ctx.user?.id;
+
+  if (!userId) {
+    throw new Response(null, { status: 401 });
+  }
+
+  await completeBookmark({ userId, ...args });
 };

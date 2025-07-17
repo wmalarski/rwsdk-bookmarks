@@ -18,7 +18,7 @@ export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm({
-    onSubmit: async () => {
+    async onSubmit() {
       await deleteBookmarkAction({ bookmarkId: bookmark.id });
       setIsOpen(false);
     },
