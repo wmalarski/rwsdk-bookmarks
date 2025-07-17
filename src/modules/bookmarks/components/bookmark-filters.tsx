@@ -28,7 +28,7 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
   return (
     <Modal>
       <Button intent="secondary" size="sm">
-        <IconFilter className="size-4" />
+        <IconFilter />
         Filters
       </Button>
       <Modal.Content>

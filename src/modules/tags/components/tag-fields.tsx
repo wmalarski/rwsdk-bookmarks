@@ -24,7 +24,7 @@ type UseTagFormArgs = {
 export const useTagForm = ({ onSubmit, initialData }: UseTagFormArgs) => {
   return useForm({
     defaultValues: { name: "", ...initialData } as TagFieldsData,
-    onSubmit: async ({ value }) => {
+    async onSubmit({ value }) {
       onSubmit(value);
     },
     validators: {

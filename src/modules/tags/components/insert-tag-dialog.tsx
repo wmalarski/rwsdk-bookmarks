@@ -15,7 +15,7 @@ export const InsertTagDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useTagForm({
-    onSubmit: async ({ name }) => {
+    async onSubmit({ name }) {
       await createTagAction({ name });
       setIsOpen(false);
     },

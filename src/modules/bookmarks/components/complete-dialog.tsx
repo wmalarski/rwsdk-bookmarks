@@ -35,7 +35,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="primary" onPress={onPress} size="sm">
-        <IconCheck className="size-4" />
+        <IconCheck />
         Complete
       </Button>
       <Modal.Content>

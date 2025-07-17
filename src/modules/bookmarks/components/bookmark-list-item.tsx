@@ -85,7 +85,7 @@ export const BookmarkListItem = ({ bookmark, tags }: BookmarkListItemProps) => {
           href={link("/bookmarks/bookmark/:id", { id: bookmark.id })}
           onPress={onDetailsClick}
         >
-          <IconChevronRight className="size-4" />
+          <IconChevronRight />
           Details
         </Link>
       </Card.Footer>

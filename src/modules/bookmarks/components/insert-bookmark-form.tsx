@@ -53,7 +53,7 @@ export const InsertBookmarkForm = ({
         type="submit"
       >
         {form.state.isSubmitting && <IconLoader />}
-        <IconPlus className="size-4" />
+        <IconPlus />
         Save
       </Button>
     </form>

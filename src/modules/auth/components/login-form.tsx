@@ -27,7 +27,7 @@ export const LoginForm = () => {
       email: "",
       password: "",
     },
-    onSubmit: async ({ value }) => {
+    async onSubmit({ value }) {
       await authClient.signIn.email(value, {
         onError: (ctx) => setResult(`Error: ${ctx.error.message}`),
         onSuccess: () => {

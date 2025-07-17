@@ -51,7 +51,7 @@ export const UpdateBookmarkDialog = ({
   return (
     <Modal>
       <Button intent="secondary" onPress={onPress} size="sm">
-        <IconPencilBox className="size-4" />
+        <IconPencilBox />
         Update
       </Button>
       <Modal.Content>

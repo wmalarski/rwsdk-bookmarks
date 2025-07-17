@@ -18,7 +18,7 @@ export const DeleteTagForm = ({ tag }: DeleteTagFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm({
-    onSubmit: async () => {
+    async onSubmit() {
       await deleteTagAction({ tagId: tag.id });
       setIsOpen(false);
     },

@@ -29,7 +29,7 @@ export const SignUpForm = () => {
       name: "",
       password: "",
     },
-    onSubmit: async ({ value }) => {
+    async onSubmit({ value }) {
       await authClient.signUp.email(value, {
         onError: (ctx) => {
           setResult(`Error: ${ctx.error.message}`);

@@ -21,7 +21,7 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
 
   const form = useTagForm({
     initialData: tag,
-    onSubmit: async ({ name }) => {
+    async onSubmit({ name }) {
       await updateTagAction({ name, tagId: tag.id });
       setIsOpen(false);
     },

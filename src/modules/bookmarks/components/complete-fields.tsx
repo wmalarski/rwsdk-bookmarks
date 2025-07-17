@@ -38,7 +38,7 @@ export const useCompleteForm = ({
       rate: 5,
       ...initialData,
     } as CompleteFieldsData,
-    onSubmit: async ({ value }) => {
+    async onSubmit({ value }) {
       onSubmit(value);
     },
     validators: {

@@ -32,7 +32,7 @@ type UseBookmarksFormArgs = {
 export const useBookmarksForm = ({ onSubmit }: UseBookmarksFormArgs) => {
   return useForm({
     defaultValues: {} as BookmarkFieldsData,
-    onSubmit: async ({ value }) => {
+    async onSubmit({ value }) {
       onSubmit(value);
     },
     validators: {
