@@ -1,6 +1,6 @@
 import type { RequestInfo } from "rwsdk/worker";
 
-import { Link } from "@/components/link";
+import { LinkButton } from "@/components/link-button";
 import { link } from "@/lib/links";
 import { SignOutButton } from "@/modules/auth/components/sign-out-button";
 
@@ -13,8 +13,13 @@ export const Home = ({ ctx }: RequestInfo) => {
           : "You are not logged in"}
       </p>
       {ctx.user?.email ? <SignOutButton /> : null}
-      <Link href={link("/user/login")}>Login</Link>
-      <Link href={link("/bookmarks")}>Bookmarks</Link>
+      <LinkButton href={link("/user/login")} intent="primary">
+        Login
+      </LinkButton>
+      <LinkButton href={link("/bookmarks")} intent="secondary">
+        Bookmarks
+      </LinkButton>
+      <LinkButton href={link("/tags")}>Tags</LinkButton>
     </div>
   );
 };
