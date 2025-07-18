@@ -92,7 +92,6 @@ model Bookmark {
   doneAt      DateTime?
   note        String?
   preview     String?
-  random      Decimal
   rate        Int?
   text        String?
   title       String

@@ -40,7 +40,6 @@ export default defineScript(async ({ env }) => {
       createdAt: new Date(entry.createdAt),
       done: !!entry.done,
       doneAt: entry.doneAt ? new Date(entry.doneAt) : null,
-      random: Math.random(),
       title: entry.title ?? "",
       url: entry.url ?? "",
       userId,

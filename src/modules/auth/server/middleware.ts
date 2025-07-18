@@ -19,17 +19,21 @@ export const userMiddleware =
       console.error("Session error:", error);
       ctx.user = null;
     }
+
+    console.log("[userMiddleware]", ctx.user);
   };
 
 export const protectedUserMiddleware =
   (): RouteMiddleware =>
   async ({ ctx }) => {
+    console.log("[protectedUserMiddleware]", ctx.user);
     if (!ctx.user) {
       return redirectToLoginResponse();
     }
   };
 
 export const redirectToLoginResponse = () => {
+  console.log("[redirectToLoginResponse]");
   return new Response(null, {
     headers: { Location: link("/user/login") },
     status: 302,
