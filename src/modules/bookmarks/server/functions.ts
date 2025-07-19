@@ -21,6 +21,18 @@ export const selectBookmarks = ({ page, userId }: SelectBookmarksArgs) => {
   });
 };
 
+export type SelectBookmarkArgs = {
+  userId: string;
+  bookmarkId: string;
+};
+
+export const selectBookmark = ({ bookmarkId, userId }: SelectBookmarkArgs) => {
+  return db.bookmark.findFirst({
+    include: { BookmarkTag: true },
+    where: { id: bookmarkId, userId },
+  });
+};
+
 export type BookmarkWithTags = Awaited<ReturnType<typeof selectBookmarks>>[0];
 
 export type DeleteBookmarkArgs = {

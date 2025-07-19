@@ -7,7 +7,9 @@ import { TagsList } from "../components/tags-list";
 import { selectTags } from "../server/functions";
 
 export const TagsListRoute = async ({ ctx }: ProtectedRequestInfo) => {
-  const tags = await selectTags({ page: 0, userId: ctx.user.id });
+  const userId = ctx.user.id;
+
+  const tags = await selectTags({ page: 0, userId });
 
   return (
     <UserProvider user={ctx.user}>

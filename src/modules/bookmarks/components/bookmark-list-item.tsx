@@ -1,3 +1,5 @@
+"use client";
+
 import { IconChevronRight } from "@intentui/icons";
 import { type ComponentProps, useMemo, useRef } from "react";
 
@@ -25,7 +27,7 @@ import { UpdateBookmarkDialog } from "./update-bookmark-dialog";
 type BookmarkListItemProps = {
   bookmark: BookmarkWithTags;
   tags: Tag[];
-  tagsMap: Map<string, Tag>;
+  tagsMap?: Map<string, Tag>;
 };
 
 export const BookmarkListItem = ({
@@ -34,6 +36,10 @@ export const BookmarkListItem = ({
   tagsMap,
 }: BookmarkListItemProps) => {
   // const history = useBookmarksHistory();
+
+  const requiredTagsMap = useMemo(() => {
+    return tagsMap ?? new Map(tags.map((tag) => [tag.id, tag]));
+  }, [tags, tagsMap]);
 
   const onDetailsClick = () => {
     // history().addToHistory(bookmark.id);
@@ -46,7 +52,7 @@ export const BookmarkListItem = ({
         {bookmark.text && <Card.Description>{bookmark.text}</Card.Description>}
       </Card.Header>
       <Card.Content>
-        <BookmarkTagsList bookmark={bookmark} tagsMap={tagsMap} />
+        <BookmarkTagsList bookmark={bookmark} tagsMap={requiredTagsMap} />
         <BookmarkPreview bookmark={bookmark} />
         {bookmark.title && <BookmarkLinks bookmark={bookmark} />}
         <BookmarkDescription bookmark={bookmark} />
