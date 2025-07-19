@@ -1,53 +1,57 @@
 "use client";
 
-import { IconLoader, IconPlus } from "@intentui/icons";
-import { type ComponentProps, useId } from "react";
+import { IconPlus } from "@intentui/icons";
+import { useId } from "react";
 
 import { Button } from "@/components/button";
+import { Card } from "@/components/card";
 import type { Tag } from "@/db";
+import { link } from "@/lib/links";
 
-import {
-  BookmarkFields,
-  type BookmarkFieldsData,
-  useBookmarksForm,
-} from "./bookmark-fields";
+import { insertBookmark } from "../server/functions";
+import { BookmarkFields, useBookmarksForm } from "./bookmark-fields";
 
 type InsertBookmarkFormProps = {
-  initialData?: BookmarkFieldsData;
   tags: Tag[];
 };
 
-export const InsertBookmarkForm = ({
-  initialData,
-  tags,
-}: InsertBookmarkFormProps) => {
+export const InsertBookmarkForm = ({ tags }: InsertBookmarkFormProps) => {
   const formId = useId();
-  // const submission = useSubmission(insertBookmarkServerAction);
 
   const form = useBookmarksForm({
-    onSubmit(_data) {
-      //
+    async onSubmit(data) {
+      const bookmark = await insertBookmark(data);
+      window.location.href = link("/bookmarks/bookmark/:id", {
+        id: bookmark.id,
+      });
     },
   });
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-  };
-
   return (
-    <form method="post" onSubmit={onSubmit}>
-      <BookmarkFields form={form} formId={formId} tags={tags} />
-      <Button
-        form={formId}
-        intent="primary"
-        isDisabled={form.state.isSubmitting}
-        size="sm"
-        type="submit"
-      >
-        {form.state.isSubmitting && <IconLoader />}
-        <IconPlus />
-        Save
-      </Button>
-    </form>
+    <Card className="m-4 w-full max-w-2xl">
+      <Card.Header>
+        <Card.Title>Add bookmark</Card.Title>
+        <Card.Description>Save bookmark to database</Card.Description>
+      </Card.Header>
+      <Card.Content>
+        <BookmarkFields form={form} formId={formId} tags={tags} />
+      </Card.Content>
+      <Card.Footer className="justify-end">
+        <form.Subscribe
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
+        >
+          <Button
+            form={formId}
+            intent="primary"
+            isDisabled={!form.state.canSubmit}
+            isPending={form.state.isSubmitting}
+            type="submit"
+          >
+            <IconPlus />
+            Save
+          </Button>
+        </form.Subscribe>
+      </Card.Footer>
+    </Card>
   );
 };

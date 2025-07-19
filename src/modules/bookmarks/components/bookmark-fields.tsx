@@ -16,7 +16,7 @@ const bookmarksFieldsSchema = () => {
     preview: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     text: v.optional(v.string()),
-    title: v.optional(v.string()),
+    title: v.string(),
     url: v.optional(v.string()),
   });
 };
@@ -35,7 +35,7 @@ export const useBookmarksForm = ({
   onSubmit,
 }: UseBookmarksFormArgs) => {
   return useForm({
-    defaultValues: { ...initialData },
+    defaultValues: { title: "", ...initialData },
     async onSubmit({ value }) {
       onSubmit(value);
     },
@@ -59,7 +59,7 @@ export const BookmarkFields = ({
   formId,
 }: BookmarkFieldsProps) => {
   return (
-    <Form form={form} id={formId}>
+    <Form className="w-full" form={form} id={formId}>
       {errorMessage && errorMessage.length > 0 ? (
         <Note intent="danger">{errorMessage}</Note>
       ) : null}
@@ -69,10 +69,10 @@ export const BookmarkFields = ({
           <TextField
             errorMessage={formatValidationErrors(field.state.meta.errors)}
             id={field.name}
+            label="Title"
             name={field.name}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
-            placeholder="Title"
             type="text"
             value={field.state.value}
           />
@@ -84,10 +84,10 @@ export const BookmarkFields = ({
           <TextField
             errorMessage={formatValidationErrors(field.state.meta.errors)}
             id={field.name}
+            label="Text"
             name={field.name}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
-            placeholder="Text"
             type="text"
             value={field.state.value}
           />
@@ -99,10 +99,10 @@ export const BookmarkFields = ({
           <TextField
             errorMessage={formatValidationErrors(field.state.meta.errors)}
             id={field.name}
+            label="Url"
             name={field.name}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
-            placeholder="Url"
             type="url"
             value={field.state.value}
           />
@@ -114,10 +114,10 @@ export const BookmarkFields = ({
           <TextField
             errorMessage={formatValidationErrors(field.state.meta.errors)}
             id={field.name}
+            label="Preview"
             name={field.name}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
-            placeholder="Url"
             type="text"
             value={field.state.value}
           />

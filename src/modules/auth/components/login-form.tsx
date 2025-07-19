@@ -49,10 +49,10 @@ export const LoginForm = () => {
           <TextField
             errorMessage={formatValidationErrors(field.state.meta.errors)}
             id={field.name}
+            label="Email"
             name={field.name}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
-            placeholder="Email"
             type="email"
             value={field.state.value}
           />
@@ -63,10 +63,10 @@ export const LoginForm = () => {
           <TextField
             errorMessage={formatValidationErrors(field.state.meta.errors)}
             id={field.name}
+            label="Password"
             name={field.name}
             onBlur={field.handleBlur}
             onChange={field.handleChange}
-            placeholder="Password"
             type="password"
             value={field.state.value}
           />

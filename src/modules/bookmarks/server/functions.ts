@@ -135,3 +135,48 @@ export const updateBookmark = async ({
     where: { id: bookmarkId, userId },
   });
 };
+
+export type InsertBookmarkArgs = {
+  preview?: string;
+  text?: string;
+  url?: string;
+  title: string;
+  tags?: string[];
+};
+
+export const insertBookmark = async ({
+  preview,
+  text,
+  url,
+  title,
+  tags,
+}: InsertBookmarkArgs) => {
+  const userId = getUserId(requestInfo);
+  const date = new Date();
+
+  return db.bookmark.create({
+    data: {
+      BookmarkTag: {
+        createMany: {
+          data:
+            tags?.map((tagId) => ({
+              createdAt: date,
+              id: crypto.randomUUID(),
+              tagId,
+              updatedAt: date,
+              userId,
+            })) ?? [],
+        },
+      },
+      createdAt: date,
+      done: false,
+      id: crypto.randomUUID(),
+      preview,
+      text,
+      title,
+      updatedAt: date,
+      url: url ?? "",
+      userId: userId,
+    },
+  });
+};

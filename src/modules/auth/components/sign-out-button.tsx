@@ -2,6 +2,7 @@
 import { useTransition } from "react";
 
 import { Button } from "@/components/button";
+import { link } from "@/lib/links";
 
 import { authClient } from "../auth-client";
 
@@ -13,7 +14,7 @@ export const SignOutButton = () => {
       authClient.signOut({
         fetchOptions: {
           onSuccess: () => {
-            window.location.href = "/user/login";
+            window.location.href = link("/user/login");
           },
         },
       });
