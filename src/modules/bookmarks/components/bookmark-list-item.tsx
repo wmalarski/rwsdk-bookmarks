@@ -189,9 +189,9 @@ const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
               title={bookmark.title}
             />
           ))}
+          <CarouselButton segment="next" />
+          <CarouselButton segment="previous" />
         </CarouselContent>
-        <CarouselButton segment="next" />
-        <CarouselButton segment="previous" />
       </Carousel>
     </div>
   );
