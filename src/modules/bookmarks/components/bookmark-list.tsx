@@ -4,12 +4,13 @@ import { type PropsWithChildren, useMemo, useState } from "react";
 
 import { Button } from "@/components/button";
 import { Skeleton } from "@/components/skeleton";
-import type { Tag } from "@/db";
+import type { Tag, User } from "@/db";
 
 import type {
   BookmarkWithTags,
   SelectBookmarksArgs,
 } from "../server/functions";
+import { BookmarksHistoryProvider } from "../utils/bookmarks-history";
 import type { FiltersSearchParams } from "../utils/use-filters-search-params";
 import { BookmarkFilters } from "./bookmark-filters";
 import { BookmarkListItem } from "./bookmark-list-item";
@@ -18,7 +19,7 @@ type BookmarkListProps = {
   queryArgs: SelectBookmarksArgs;
   filterSearchParams: FiltersSearchParams;
   initialBookmarks: BookmarkWithTags[];
-  // count: number;
+  user: User;
   tags: Tag[];
 };
 
@@ -27,6 +28,7 @@ export const BookmarkList = ({
   initialBookmarks,
   queryArgs,
   tags,
+  user,
 }: BookmarkListProps) => {
   const [offsets, setOffsets] = useState<number[]>(
     () => filterSearchParams && [],
@@ -44,25 +46,27 @@ export const BookmarkList = ({
   }, [tags]);
 
   return (
-    <div className="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
-      <div className="flex w-full justify-between gap-2">
-        <h2 className="text-xl">Bookmarks</h2>
-        <BookmarkFilters params={filterSearchParams} tags={tags} />
+    <BookmarksHistoryProvider userId={user.id}>
+      <div className="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
+        <div className="flex w-full justify-between gap-2">
+          <h2 className="text-xl">Bookmarks</h2>
+          <BookmarkFilters params={filterSearchParams} tags={tags} />
+        </div>
+        <BookmarkListContainer>
+          <BookmarkListPart
+            bookmarks={initialBookmarks}
+            tags={tags}
+            tagsMap={tagsMap}
+          />
+          {offsets.map((offset) => (
+            <BookmarkLazy key={offset} offset={offset} queryArgs={queryArgs} />
+          ))}
+        </BookmarkListContainer>
+        <Button intent="secondary" onPress={onLoadMoreClick} size="sm">
+          Load more
+        </Button>
       </div>
-      <BookmarkListContainer>
-        <BookmarkListPart
-          bookmarks={initialBookmarks}
-          tags={tags}
-          tagsMap={tagsMap}
-        />
-        {offsets.map((offset) => (
-          <BookmarkLazy key={offset} offset={offset} queryArgs={queryArgs} />
-        ))}
-      </BookmarkListContainer>
-      <Button intent="secondary" onPress={onLoadMoreClick} size="sm">
-        Load more
-      </Button>
-    </div>
+    </BookmarksHistoryProvider>
   );
 };
 

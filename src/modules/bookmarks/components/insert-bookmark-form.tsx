@@ -36,15 +36,7 @@ export const InsertBookmarkForm = ({
 
   return (
     <form method="post" onSubmit={onSubmit}>
-      <BookmarkFields
-        form={form}
-        formId={formId}
-        initialData={initialData}
-        pending={form.state.isSubmitting}
-        // result={submission.result}
-        tags={tags}
-        title="Share"
-      />
+      <BookmarkFields form={form} formId={formId} tags={tags} />
       <Button
         form={formId}
         intent="primary"

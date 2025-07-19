@@ -7,6 +7,7 @@ import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 
 import { type BookmarkWithTags, completeBookmark } from "../server/functions";
+import { useBookmarksHistory } from "../utils/bookmarks-history";
 import { CompleteFields, useCompleteForm } from "./complete-fields";
 
 type CompleteDialogProps = {
@@ -18,7 +19,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
 
   const formId = useId();
 
-  // const history = useBookmarksHistory();
+  const history = useBookmarksHistory();
 
   const form = useCompleteForm({
     async onSubmit(data) {
@@ -28,7 +29,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
   });
 
   const onPress = () => {
-    // history().addToHistory(bookmark.id);
+    history.addToHistory(bookmark.id);
   };
 
   return (

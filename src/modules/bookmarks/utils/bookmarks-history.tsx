@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   type PropsWithChildren,
@@ -8,8 +10,6 @@ import {
   useState,
 } from "react";
 import * as v from "valibot";
-
-import { useProtectedUser } from "@/modules/auth/user-context";
 
 const getBookmarksStorageKey = (userId: string) => {
   return `bookmarks-${userId}`;
@@ -39,9 +39,15 @@ const getHistoryFromStorage = (userId: string) => {
   return parsed.success ? parsed.output : [];
 };
 
-const BookmarksHistoryProviderInner = ({ children }: PropsWithChildren) => {
-  const user = useProtectedUser();
-  const [ids, setIds] = useState(() => getHistoryFromStorage(user.id));
+type BookmarksHistoryProviderProps = PropsWithChildren<{
+  userId: string;
+}>;
+
+const BookmarksHistoryProviderInner = ({
+  children,
+  userId,
+}: BookmarksHistoryProviderProps) => {
+  const [ids, setIds] = useState(() => getHistoryFromStorage(userId));
 
   const addToHistory = useCallback((id: string) => {
     setIds((state) => {
@@ -71,7 +77,10 @@ const BookmarksHistoryProviderInner = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const BookmarksHistoryProvider = ({ children }: PropsWithChildren) => {
+export const BookmarksHistoryProvider = ({
+  children,
+  userId,
+}: BookmarksHistoryProviderProps) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -79,7 +88,7 @@ export const BookmarksHistoryProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (
-    <BookmarksHistoryProviderInner key={String(isMounted)}>
+    <BookmarksHistoryProviderInner key={String(isMounted)} userId={userId}>
       {children}
     </BookmarksHistoryProviderInner>
   );

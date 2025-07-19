@@ -1,7 +1,7 @@
 import type { ProtectedRequestInfo } from "@/modules/auth/protected-app-context";
 import { selectTags } from "@/modules/tags/server/functions";
 
-import { BookmarkListItem } from "../components/bookmark-list-item";
+import { BookmarkDetails } from "../components/bookmark-details";
 import { selectBookmark } from "../server/functions";
 
 export const BookmarkDetailsRoute = async ({
@@ -19,9 +19,5 @@ export const BookmarkDetailsRoute = async ({
     return new Response("Bookmark not found", { status: 404 });
   }
 
-  return (
-    <div className="p-4">
-      <BookmarkListItem bookmark={bookmark} tags={tags} />
-    </div>
-  );
+  return <BookmarkDetails bookmark={bookmark} tags={tags} user={ctx.user} />;
 };

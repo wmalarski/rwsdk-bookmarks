@@ -20,6 +20,7 @@ import { getIsLink } from "@/lib/get-is-link";
 import { link } from "@/lib/links";
 
 import type { BookmarkWithTags } from "../server/functions";
+import { useBookmarksHistory } from "../utils/bookmarks-history";
 import { CompleteDialog } from "./complete-dialog";
 import { DeleteBookmarkForm } from "./delete-bookmark-form";
 import { UpdateBookmarkDialog } from "./update-bookmark-dialog";
@@ -27,7 +28,7 @@ import { UpdateBookmarkDialog } from "./update-bookmark-dialog";
 type BookmarkListItemProps = {
   bookmark: BookmarkWithTags;
   tags: Tag[];
-  tagsMap?: Map<string, Tag>;
+  tagsMap: Map<string, Tag>;
 };
 
 export const BookmarkListItem = ({
@@ -35,14 +36,10 @@ export const BookmarkListItem = ({
   tags,
   tagsMap,
 }: BookmarkListItemProps) => {
-  // const history = useBookmarksHistory();
-
-  const requiredTagsMap = useMemo(() => {
-    return tagsMap ?? new Map(tags.map((tag) => [tag.id, tag]));
-  }, [tags, tagsMap]);
+  const history = useBookmarksHistory();
 
   const onDetailsClick = () => {
-    // history().addToHistory(bookmark.id);
+    history.addToHistory(bookmark.id);
   };
 
   return (
@@ -52,7 +49,7 @@ export const BookmarkListItem = ({
         {bookmark.text && <Card.Description>{bookmark.text}</Card.Description>}
       </Card.Header>
       <Card.Content>
-        <BookmarkTagsList bookmark={bookmark} tagsMap={requiredTagsMap} />
+        <BookmarkTagsList bookmark={bookmark} tagsMap={tagsMap} />
         <BookmarkPreview bookmark={bookmark} />
         {bookmark.title && <BookmarkLinks bookmark={bookmark} />}
         <BookmarkDescription bookmark={bookmark} />
@@ -131,13 +128,13 @@ type GridLinkProps = {
   href: string | null;
 };
 
-const GridLink = ({ bookmarkId: _bookmarkId, href }: GridLinkProps) => {
+const GridLink = ({ bookmarkId, href }: GridLinkProps) => {
   const isLink = href ? getIsLink(href) : false;
 
-  // const history = useBookmarksHistory();
+  const history = useBookmarksHistory();
 
   const onPress = () => {
-    // history().addToHistory(bookmarkId);
+    history.addToHistory(bookmarkId);
   };
 
   if (href && isLink) {
@@ -241,10 +238,10 @@ type BookmarkLinksProps = {
 };
 
 const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
-  // const history = useBookmarksHistory();
+  const history = useBookmarksHistory();
 
   const onPress = () => {
-    // history().addToHistory(bookmark.id);
+    history.addToHistory(bookmark.id);
   };
 
   const commonProps: Partial<ComponentProps<typeof LinkButton>> = {

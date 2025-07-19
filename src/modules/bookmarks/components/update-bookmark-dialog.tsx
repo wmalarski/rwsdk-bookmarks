@@ -8,6 +8,7 @@ import { Modal } from "@/components/modal";
 import type { Tag } from "@/db";
 
 import { type BookmarkWithTags, updateBookmark } from "../server/functions";
+import { useBookmarksHistory } from "../utils/bookmarks-history";
 import { BookmarkFields, useBookmarksForm } from "./bookmark-fields";
 
 type UpdateBookmarkDialogProps = {
@@ -36,10 +37,10 @@ export const UpdateBookmarkDialog = ({
     },
   });
 
-  // const history = useBookmarksHistory();
+  const history = useBookmarksHistory();
 
   const onPress = () => {
-    // history().addToHistory(bookmark.id);
+    history.addToHistory(bookmark.id);
   };
 
   return (

@@ -18,6 +18,7 @@ export const BookmarkListRoute = async ({ ctx }: ProtectedRequestInfo) => {
       initialBookmarks={bookmarks}
       queryArgs={{ page: 0, userId }}
       tags={tags}
+      user={ctx.user}
     />
   );
 };
