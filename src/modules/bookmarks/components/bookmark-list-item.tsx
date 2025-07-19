@@ -162,13 +162,16 @@ const BookmarkPreview = ({ bookmark }: BookmarkPreviewProps) => {
     const array = bookmark.preview
       ?.split(";")
       .filter((image) => image.length > 0);
-    const smallImages = array?.filter((path) => path.endsWith("-250.jpg"));
+
+    const uniqueArray = [...new Set(array)];
+
+    const smallImages = uniqueArray.filter((path) => path.endsWith("-250.jpg"));
 
     if (smallImages && smallImages.length > 0) {
       return smallImages;
     }
 
-    return array ?? [];
+    return uniqueArray;
   }, [bookmark.preview?.split]);
 
   if (images.length <= 0) {
@@ -201,10 +204,6 @@ type BookmarkPreviewImageProps = {
 
 const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  // const useVisibilityObserver = createVisibilityObserver({ threshold: 0.1 });
-  // const visible = useVisibilityObserver(() => el);
-  // const shouldShow = visible;
-  // const shouldShow = createMemo<boolean>((previous) => previous || visible());
 
   return (
     <CarouselItem className="min-h-72" ref={ref}>
