@@ -25,11 +25,14 @@ import { UpdateBookmarkDialog } from "./update-bookmark-dialog";
 type BookmarkListItemProps = {
   bookmark: BookmarkWithTags;
   tags: Tag[];
+  tagsMap: Map<string, Tag>;
 };
 
-export const BookmarkListItem = ({ bookmark, tags }: BookmarkListItemProps) => {
-  const formatDate = useDateFormatter();
-
+export const BookmarkListItem = ({
+  bookmark,
+  tags,
+  tagsMap,
+}: BookmarkListItemProps) => {
   // const history = useBookmarksHistory();
 
   const onDetailsClick = () => {
@@ -43,7 +46,7 @@ export const BookmarkListItem = ({ bookmark, tags }: BookmarkListItemProps) => {
         {bookmark.text && <Card.Description>{bookmark.text}</Card.Description>}
       </Card.Header>
       <Card.Content>
-        <BookmarkTagsList bookmark={bookmark} />
+        <BookmarkTagsList bookmark={bookmark} tagsMap={tagsMap} />
         <BookmarkPreview bookmark={bookmark} />
         {bookmark.title && <BookmarkLinks bookmark={bookmark} />}
         <BookmarkDescription bookmark={bookmark} />
@@ -213,14 +216,15 @@ const BookmarkPreviewImage = ({ image, title }: BookmarkPreviewImageProps) => {
 
 type BookmarkTagsListProps = {
   bookmark: BookmarkWithTags;
+  tagsMap: Map<string, Tag>;
 };
 
-const BookmarkTagsList = ({ bookmark }: BookmarkTagsListProps) => {
+const BookmarkTagsList = ({ bookmark, tagsMap }: BookmarkTagsListProps) => {
   return (
     <ul className="flex flex-row flex-wrap gap-2">
       {bookmark.BookmarkTag.map((bookmarkTag) => (
         <li key={bookmarkTag.id}>
-          <Badge color="accent">{bookmarkTag.tagId}</Badge>
+          <Badge color="accent">{tagsMap.get(bookmarkTag.tagId)?.name}</Badge>
         </li>
       ))}
     </ul>

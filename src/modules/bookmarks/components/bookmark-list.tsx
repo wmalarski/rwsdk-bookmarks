@@ -1,6 +1,6 @@
 "use client";
 
-import { type PropsWithChildren, useState } from "react";
+import { type PropsWithChildren, useMemo, useState } from "react";
 
 import { Button } from "@/components/button";
 import { Skeleton } from "@/components/skeleton";
@@ -39,6 +39,10 @@ export const BookmarkList = ({
     });
   };
 
+  const tagsMap = useMemo(() => {
+    return new Map(tags.map((tag) => [tag.id, tag]));
+  }, [tags]);
+
   return (
     <div className="flex w-full max-w-xl flex-col gap-2 px-2 py-4">
       <div className="flex w-full justify-between gap-2">
@@ -46,7 +50,11 @@ export const BookmarkList = ({
         <BookmarkFilters params={filterSearchParams} tags={tags} />
       </div>
       <BookmarkListContainer>
-        <BookmarkListPart bookmarks={initialBookmarks} tags={tags} />
+        <BookmarkListPart
+          bookmarks={initialBookmarks}
+          tags={tags}
+          tagsMap={tagsMap}
+        />
         {offsets.map((offset) => (
           <BookmarkLazy key={offset} offset={offset} queryArgs={queryArgs} />
         ))}
@@ -82,17 +90,19 @@ const BookmarkLazy = ({
 type BookmarkListPartProps = {
   bookmarks: BookmarkWithTags[];
   tags: Tag[];
+  tagsMap: Map<string, Tag>;
 };
 
 export const BookmarkListPart = ({
   bookmarks,
   tags,
+  tagsMap,
 }: BookmarkListPartProps) => {
   return (
     <>
       {bookmarks.map((bookmark) => (
         <li key={bookmark.id}>
-          <BookmarkListItem bookmark={bookmark} tags={tags} />
+          <BookmarkListItem bookmark={bookmark} tags={tags} tagsMap={tagsMap} />
         </li>
       ))}
     </>

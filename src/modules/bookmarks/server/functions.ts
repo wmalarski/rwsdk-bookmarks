@@ -62,19 +62,64 @@ export type UpdateBookmarkArgs = {
   preview?: string;
   text?: string;
   url?: string;
+  tags?: string[];
 };
 
-export const updateBookmark = ({
+export const updateBookmark = async ({
   bookmarkId,
   preview,
   text,
   url,
+  tags,
 }: UpdateBookmarkArgs) => {
   const userId = getUserId(requestInfo);
   const date = new Date();
 
+  const bookmark = await db.bookmark.findFirst({
+    include: { BookmarkTag: true },
+    where: { id: bookmarkId, userId },
+  });
+
+  if (!bookmark) {
+    throw new Response("Invalid bookmarkId", { status: 404 });
+  }
+
+  const currentTags = new Map(
+    bookmark.BookmarkTag.map((tag) => [tag.tagId, tag]),
+  );
+  const tagsToAdd: string[] = [];
+
+  tags?.forEach((tagId) => {
+    if (currentTags.has(tagId)) {
+      currentTags.delete(tagId);
+      return;
+    }
+    tagsToAdd.push(tagId);
+  });
+
   return db.bookmark.update({
-    data: { preview, text, updatedAt: date, url },
+    data: {
+      BookmarkTag: {
+        createMany: {
+          data: tagsToAdd.map((tagId) => ({
+            createdAt: date,
+            id: crypto.randomUUID(),
+            tagId,
+            updatedAt: date,
+            userId,
+          })),
+        },
+        deleteMany: {
+          tagId: {
+            in: [...currentTags.keys()],
+          },
+        },
+      },
+      preview,
+      text,
+      updatedAt: date,
+      url,
+    },
     where: { id: bookmarkId, userId },
   });
 };
