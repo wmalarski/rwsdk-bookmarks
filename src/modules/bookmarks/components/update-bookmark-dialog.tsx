@@ -1,4 +1,6 @@
-import { IconLoader, IconPencilBox } from "@intentui/icons";
+"use client";
+
+import { IconPencilBox } from "@intentui/icons";
 import { useId } from "react";
 
 import { Button } from "@/components/button";
@@ -30,6 +32,12 @@ export const UpdateBookmarkDialog = ({
   // });
 
   const form = useBookmarksForm({
+    initialData: {
+      ...bookmark,
+      preview: bookmark.preview ?? undefined,
+      tags: bookmark.BookmarkTag.map((tag) => tag.id),
+      text: bookmark.text ?? undefined,
+    },
     onSubmit(_data) {
       console.log("[bookmark]", bookmark);
     },
@@ -50,37 +58,31 @@ export const UpdateBookmarkDialog = ({
 
   return (
     <Modal>
-      <Button intent="secondary" onPress={onPress} size="sm">
+      <Button intent="secondary" onPress={onPress}>
         <IconPencilBox />
         Update
       </Button>
       <Modal.Content>
-        {() => (
-          <>
-            <Modal.Header>Update</Modal.Header>
-            <BookmarkFields
-              form={form}
-              // initialData={initialData()}
-              formId={formId}
-              pending={form.state.isSubmitting}
-              tags={tags}
-              // result={submission.result}
-              title="Update"
-            />
-            <Modal.Footer>
-              <Modal.Close />
-              <Button
-                form={formId}
-                intent="primary"
-                isDisabled={form.state.isSubmitting}
-                type="submit"
-              >
-                {form.state.isSubmitting && <IconLoader />}
-                Save
-              </Button>
-            </Modal.Footer>
-          </>
-        )}
+        <Modal.Header>
+          <Modal.Title>Update</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <BookmarkFields form={form} formId={formId} tags={tags} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Modal.Close>Close</Modal.Close>
+          <form.Subscribe selector={(state) => [state.isSubmitting]}>
+            <Button
+              form={formId}
+              intent="primary"
+              isDisabled={form.state.isSubmitting}
+              isPending={form.state.isSubmitting}
+              type="submit"
+            >
+              Save
+            </Button>
+          </form.Subscribe>
+        </Modal.Footer>
       </Modal.Content>
     </Modal>
   );

@@ -23,8 +23,6 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
     async onSubmit(data) {
       await complateBookmarkAction({ bookmarkId: bookmark.id, ...data });
       setIsOpen(false);
-      console.log("[bookmark]", bookmark);
-      //
     },
   });
 
@@ -34,7 +32,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
 
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
-      <Button intent="primary" onPress={onPress} size="sm">
+      <Button intent="primary" onPress={onPress}>
         <IconCheck />
         Complete
       </Button>

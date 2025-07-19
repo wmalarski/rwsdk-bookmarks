@@ -2,26 +2,40 @@ import { Checkbox } from "@/components/checkbox";
 import type { Tag } from "@/db";
 
 type BookmarkTagsFieldProps = {
-  initialTags?: string[];
+  selectedTags?: string[];
   disabled?: boolean;
   tags: Tag[];
+  onChange: (tags: string[]) => void;
 };
 
 export const BookmarkTagsField = ({
   disabled,
-  initialTags,
+  selectedTags,
   tags,
+  onChange,
 }: BookmarkTagsFieldProps) => {
-  const initialTagIds = new Set(initialTags);
+  const selectedTagsSet = new Set(selectedTags);
+
+  const onChangeFactory = (tag: Tag) => (isSelected: boolean) => {
+    const updatedTags = new Set(selectedTagsSet);
+
+    if (isSelected) {
+      updatedTags.add(tag.id);
+    } else {
+      updatedTags.delete(tag.id);
+    }
+
+    onChange([...updatedTags]);
+  };
 
   return (
     <ul className="flex flex-col gap-2 pt-4">
       {tags.map((tag) => (
         <li key={tag.id}>
           <Checkbox
-            defaultSelected={initialTagIds.has(tag.id)}
             isDisabled={disabled}
-            name="tags[]"
+            isSelected={selectedTagsSet.has(tag.id)}
+            onChange={onChangeFactory(tag)}
             value={tag.id}
           >
             {tag.name}

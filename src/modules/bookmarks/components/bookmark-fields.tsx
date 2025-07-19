@@ -3,7 +3,7 @@
 import { useForm } from "@tanstack/react-form";
 import * as v from "valibot";
 
-import { Form, FormTitle } from "@/components/form";
+import { Form } from "@/components/form";
 import { Note } from "@/components/note";
 import { TextField } from "@/components/text-field";
 import type { Tag } from "@/db";
@@ -26,12 +26,16 @@ export type BookmarkFieldsData = v.InferOutput<
 >;
 
 type UseBookmarksFormArgs = {
+  initialData?: BookmarkFieldsData;
   onSubmit: (data: BookmarkFieldsData) => void;
 };
 
-export const useBookmarksForm = ({ onSubmit }: UseBookmarksFormArgs) => {
+export const useBookmarksForm = ({
+  initialData,
+  onSubmit,
+}: UseBookmarksFormArgs) => {
   return useForm({
-    defaultValues: {} as BookmarkFieldsData,
+    defaultValues: { ...initialData },
     async onSubmit({ value }) {
       onSubmit(value);
     },
@@ -43,29 +47,21 @@ export const useBookmarksForm = ({ onSubmit }: UseBookmarksFormArgs) => {
 
 type BookmarkFieldsProps = {
   form: ReturnType<typeof useBookmarksForm>;
-  initialData?: BookmarkFieldsData;
-  pending?: boolean;
-  result?: string;
-  title: string;
+  errorMessage?: string;
   tags: Tag[];
   formId: string;
 };
 
 export const BookmarkFields = ({
   form,
-  title,
-  initialData,
-  pending,
-  result,
+  errorMessage,
   tags,
   formId,
 }: BookmarkFieldsProps) => {
   return (
     <Form form={form} id={formId}>
-      <FormTitle>{title}</FormTitle>
-
-      {result && result.length > 0 ? (
-        <Note intent="danger">{result}</Note>
+      {errorMessage && errorMessage.length > 0 ? (
+        <Note intent="danger">{errorMessage}</Note>
       ) : null}
 
       <form.Field name="title">
@@ -128,11 +124,16 @@ export const BookmarkFields = ({
         )}
       </form.Field>
 
-      <BookmarkTagsField
-        disabled={pending}
-        initialTags={initialData?.tags}
-        tags={tags}
-      />
+      <form.Field name="tags">
+        {(field) => (
+          <BookmarkTagsField
+            disabled={field.form.state.isSubmitting}
+            onChange={field.handleChange}
+            selectedTags={field.state.value}
+            tags={tags}
+          />
+        )}
+      </form.Field>
     </Form>
   );
 };

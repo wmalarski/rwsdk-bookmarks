@@ -58,7 +58,11 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
                   placeholder="Query"
                   value={params.query ?? ""}
                 />
-                <BookmarkTagsField initialTags={params["tags[]"]} tags={tags} />
+                <BookmarkTagsField
+                  onChange={() => void 0}
+                  selectedTags={params["tags[]"]}
+                  tags={tags}
+                />
               </form>
               <Modal.Footer>
                 <Modal.Close />
