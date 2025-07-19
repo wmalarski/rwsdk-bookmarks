@@ -2,40 +2,79 @@
 
 import { requestInfo } from "rwsdk/worker";
 
+import { db } from "@/db";
 import { getUserId } from "@/modules/auth/server/get-user-id";
 
-import { completeBookmark, deleteBookmark, selectBookmarks } from "./db";
-
-type SelectBookmarksActionArgs = {
+export type SelectBookmarksArgs = {
+  userId: string;
   page: number;
 };
 
-export const selectBookmarksAction = async (
-  args: SelectBookmarksActionArgs,
-) => {
-  const userId = getUserId(requestInfo);
-  return selectBookmarks({ ...args, userId });
+const SELECT_BOOKMARKS_PAGE_SIZE = 10;
+
+export const selectBookmarks = ({ page, userId }: SelectBookmarksArgs) => {
+  return db.bookmark.findMany({
+    include: { BookmarkTag: true },
+    skip: SELECT_BOOKMARKS_PAGE_SIZE * page,
+    take: SELECT_BOOKMARKS_PAGE_SIZE,
+    where: { userId },
+  });
 };
 
-type DeleteBookmarkActionArgs = {
+export type BookmarkWithTags = Awaited<ReturnType<typeof selectBookmarks>>[0];
+
+export type DeleteBookmarkArgs = {
   bookmarkId: string;
 };
 
-export const deleteBookmarkAction = async (args: DeleteBookmarkActionArgs) => {
+export const deleteBookmark = ({ bookmarkId }: DeleteBookmarkArgs) => {
   const userId = getUserId(requestInfo);
-  await deleteBookmark({ ...args, userId });
+
+  return db.bookmark.delete({
+    where: { id: bookmarkId, userId },
+  });
 };
 
-type CompleteBookmarkActionArgs = {
+export type CompleteBookmarkArgs = {
   bookmarkId: string;
+  done: boolean;
   note?: string;
   rate?: number;
-  done: boolean;
 };
 
-export const complateBookmarkAction = async (
-  args: CompleteBookmarkActionArgs,
-) => {
+export const completeBookmark = ({
+  bookmarkId,
+  done,
+  note,
+  rate,
+}: CompleteBookmarkArgs) => {
   const userId = getUserId(requestInfo);
-  await completeBookmark({ userId, ...args });
+  const date = new Date();
+
+  return db.bookmark.update({
+    data: { done, doneAt: date, note, rate, updatedAt: date },
+    where: { id: bookmarkId, userId },
+  });
+};
+
+export type UpdateBookmarkArgs = {
+  bookmarkId: string;
+  preview?: string;
+  text?: string;
+  url?: string;
+};
+
+export const updateBookmark = ({
+  bookmarkId,
+  preview,
+  text,
+  url,
+}: UpdateBookmarkArgs) => {
+  const userId = getUserId(requestInfo);
+  const date = new Date();
+
+  return db.bookmark.update({
+    data: { preview, text, updatedAt: date, url },
+    where: { id: bookmarkId, userId },
+  });
 };

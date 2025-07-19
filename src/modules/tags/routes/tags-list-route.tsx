@@ -4,13 +4,10 @@ import { UserProvider } from "@/modules/auth/user-context";
 
 import { InsertTagDialog } from "../components/insert-tag-dialog";
 import { TagsList } from "../components/tags-list";
-import { selectTags } from "../server/db";
+import { selectTags } from "../server/functions";
 
 export const TagsListRoute = async ({ ctx }: ProtectedRequestInfo) => {
-  const tags = await selectTags({
-    page: 0,
-    userId: ctx.user.id,
-  });
+  const tags = await selectTags({ page: 0, userId: ctx.user.id });
 
   return (
     <UserProvider user={ctx.user}>

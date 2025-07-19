@@ -6,7 +6,7 @@ import { useId, useState } from "react";
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 
-import { createTagAction } from "../server/functions";
+import { createTag } from "../server/functions";
 import { TagFields, useTagForm } from "./tag-fields";
 
 export const InsertTagDialog = () => {
@@ -16,7 +16,7 @@ export const InsertTagDialog = () => {
 
   const form = useTagForm({
     async onSubmit({ name }) {
-      await createTagAction({ name });
+      await createTag({ name });
       setIsOpen(false);
     },
   });

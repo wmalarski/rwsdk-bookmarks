@@ -7,7 +7,7 @@ import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 import type { Tag } from "@/db";
 
-import { updateTagAction } from "../server/functions";
+import { updateTag } from "../server/functions";
 import { TagFields, useTagForm } from "./tag-fields";
 
 type UpdateTagDialogProps = {
@@ -22,7 +22,7 @@ export const UpdateTagDialog = ({ tag }: UpdateTagDialogProps) => {
   const form = useTagForm({
     initialData: tag,
     async onSubmit({ name }) {
-      await updateTagAction({ name, tagId: tag.id });
+      await updateTag({ name, tagId: tag.id });
       setIsOpen(false);
     },
   });

@@ -7,8 +7,7 @@ import { useState } from "react";
 import { AlertDialog } from "@/components/alert-dialog";
 import { Button } from "@/components/button";
 
-import type { BookmarkWithTags } from "../server/db";
-import { deleteBookmarkAction } from "../server/functions";
+import { type BookmarkWithTags, deleteBookmark } from "../server/functions";
 
 type DeleteBookmarkFormProps = {
   bookmark: BookmarkWithTags;
@@ -19,7 +18,7 @@ export const DeleteBookmarkForm = ({ bookmark }: DeleteBookmarkFormProps) => {
 
   const form = useForm({
     async onSubmit() {
-      await deleteBookmarkAction({ bookmarkId: bookmark.id });
+      await deleteBookmark({ bookmarkId: bookmark.id });
       setIsOpen(false);
     },
   });

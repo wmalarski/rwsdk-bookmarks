@@ -1,5 +1,5 @@
 import type { ProtectedRequestInfo } from "@/modules/auth/protected-app-context";
-import { selectTags } from "@/modules/tags/server/db";
+import { selectTags } from "@/modules/tags/server/functions";
 
 import { InsertBookmarkForm } from "../components/insert-bookmark-form";
 

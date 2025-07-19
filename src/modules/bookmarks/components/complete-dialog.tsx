@@ -4,8 +4,7 @@ import { useId, useState } from "react";
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 
-import type { BookmarkWithTags } from "../server/db";
-import { complateBookmarkAction } from "../server/functions";
+import { type BookmarkWithTags, completeBookmark } from "../server/functions";
 import { CompleteFields, useCompleteForm } from "./complete-fields";
 
 type CompleteDialogProps = {
@@ -21,7 +20,7 @@ export const CompleteDialog = ({ bookmark }: CompleteDialogProps) => {
 
   const form = useCompleteForm({
     async onSubmit(data) {
-      await complateBookmarkAction({ bookmarkId: bookmark.id, ...data });
+      await completeBookmark({ bookmarkId: bookmark.id, ...data });
       setIsOpen(false);
     },
   });

@@ -6,7 +6,10 @@ import { Button } from "@/components/button";
 import { Skeleton } from "@/components/skeleton";
 import type { Tag } from "@/db";
 
-import type { BookmarkWithTags, SelectBookmarksArgs } from "../server/db";
+import type {
+  BookmarkWithTags,
+  SelectBookmarksArgs,
+} from "../server/functions";
 import type { FiltersSearchParams } from "../utils/use-filters-search-params";
 import { BookmarkFilters } from "./bookmark-filters";
 import { BookmarkListItem } from "./bookmark-list-item";

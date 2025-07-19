@@ -20,7 +20,7 @@ import { useDateFormatter } from "@/lib/formatters";
 import { getIsLink } from "@/lib/get-is-link";
 import { link } from "@/lib/links";
 
-import type { BookmarkWithTags } from "../server/db";
+import type { BookmarkWithTags } from "../server/functions";
 import { CompleteDialog } from "./complete-dialog";
 import { DeleteBookmarkForm } from "./delete-bookmark-form";
 import { UpdateBookmarkDialog } from "./update-bookmark-dialog";

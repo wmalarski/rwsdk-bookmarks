@@ -8,7 +8,7 @@ import { AlertDialog } from "@/components/alert-dialog";
 import { Button } from "@/components/button";
 import type { Tag } from "@/db";
 
-import { deleteTagAction } from "../server/functions";
+import { deleteTag } from "../server/functions";
 
 type DeleteTagFormProps = {
   tag: Tag;
@@ -19,7 +19,7 @@ export const DeleteTagForm = ({ tag }: DeleteTagFormProps) => {
 
   const form = useForm({
     async onSubmit() {
-      await deleteTagAction({ tagId: tag.id });
+      await deleteTag({ tagId: tag.id });
       setIsOpen(false);
     },
   });

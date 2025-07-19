@@ -1,13 +1,13 @@
 "use client";
 
 import { IconPencilBox } from "@intentui/icons";
-import { useId } from "react";
+import { useId, useState } from "react";
 
 import { Button } from "@/components/button";
 import { Modal } from "@/components/modal";
 import type { Tag } from "@/db";
 
-import type { BookmarkWithTags } from "../server/db";
+import { type BookmarkWithTags, updateBookmark } from "../server/functions";
 import { BookmarkFields, useBookmarksForm } from "./bookmark-fields";
 
 type UpdateBookmarkDialogProps = {
@@ -19,17 +19,9 @@ export const UpdateBookmarkDialog = ({
   bookmark,
   tags,
 }: UpdateBookmarkDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const formId = useId();
-
-  // const submission = useSubmission(
-  //   updateBookmarkServerAction,
-  //   ([form]) => form.get("bookmarkId") === String(bookmark.id),
-  // );
-
-  // const onSubmit = useActionOnSubmit({
-  //   action: updateBookmarkServerAction,
-  //   onSuccess: () => closeDialog(dialogId()),
-  // });
 
   const form = useBookmarksForm({
     initialData: {
@@ -38,17 +30,11 @@ export const UpdateBookmarkDialog = ({
       tags: bookmark.BookmarkTag.map((tag) => tag.id),
       text: bookmark.text ?? undefined,
     },
-    onSubmit(_data) {
-      console.log("[bookmark]", bookmark);
+    async onSubmit(data) {
+      await updateBookmark({ bookmarkId: bookmark.id, ...data });
+      setIsOpen(false);
     },
   });
-
-  // const initialData = () => {
-  //   return {
-  //     ...bookmark,
-  //     // tags: bookmark.bookmarks_tags.map((bookmarkTag) => bookmarkTag.tags.id),
-  //   };
-  // };
 
   // const history = useBookmarksHistory();
 
@@ -57,7 +43,7 @@ export const UpdateBookmarkDialog = ({
   };
 
   return (
-    <Modal>
+    <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button intent="secondary" onPress={onPress}>
         <IconPencilBox />
         Update

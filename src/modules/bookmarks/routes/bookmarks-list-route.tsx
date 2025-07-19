@@ -1,8 +1,8 @@
 import type { ProtectedRequestInfo } from "@/modules/auth/protected-app-context";
-import { selectTags } from "@/modules/tags/server/db";
+import { selectTags } from "@/modules/tags/server/functions";
 
 import { BookmarkList } from "../components/bookmark-list";
-import { selectBookmarks } from "../server/db";
+import { selectBookmarks } from "../server/functions";
 
 export const BookmarkListRoute = async ({ ctx }: ProtectedRequestInfo) => {
   const [bookmarks, tags] = await Promise.all([
