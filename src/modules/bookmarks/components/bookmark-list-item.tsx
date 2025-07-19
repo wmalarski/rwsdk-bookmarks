@@ -1,10 +1,5 @@
 import { IconChevronRight } from "@intentui/icons";
-import {
-  type ComponentProps,
-  type PropsWithChildren,
-  useMemo,
-  useRef,
-} from "react";
+import { type ComponentProps, useMemo, useRef } from "react";
 
 import { Badge } from "@/components/badge";
 import { Card } from "@/components/card";
@@ -14,7 +9,9 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/carousel";
+import { DescriptionList } from "@/components/description-list";
 import { Link } from "@/components/link";
+import { LinkButton } from "@/components/link-button";
 import type { Tag } from "@/db";
 import { useDateFormatter } from "@/lib/formatters";
 import { getIsLink } from "@/lib/get-is-link";
@@ -41,64 +38,83 @@ export const BookmarkListItem = ({ bookmark, tags }: BookmarkListItemProps) => {
 
   return (
     <Card className="w-full">
+      <Card.Header>
+        <Card.Title>{bookmark.title}</Card.Title>
+        {bookmark.text && <Card.Description>{bookmark.text}</Card.Description>}
+      </Card.Header>
       <Card.Content>
         <BookmarkTagsList bookmark={bookmark} />
         <BookmarkPreview bookmark={bookmark} />
         {bookmark.title && <BookmarkLinks bookmark={bookmark} />}
-        <div
-          className="grid w-full gap-2 pb-4"
-          style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(0, 3fr)" }}
-        >
-          <GridTitle>Title</GridTitle>
-          <GridText>{bookmark.title}</GridText>
-          <GridTitle>Text</GridTitle>
-          <GridLink bookmarkId={bookmark.id} href={bookmark.text} />
-          <GridTitle>Url</GridTitle>
-          <GridLink bookmarkId={bookmark.id} href={bookmark.url} />
-          {bookmark.createdAt && (
-            <>
-              <GridTitle>Created at</GridTitle>
-              <GridText>{formatDate(bookmark.createdAt)}</GridText>
-            </>
-          )}
-          <GridTitle>Done</GridTitle>
-          <GridText>{String(bookmark.done)}</GridText>
-          {bookmark.done && (
-            <>
-              <GridTitle>Done at</GridTitle>
-              <GridText>
-                {bookmark.doneAt && formatDate(bookmark.doneAt)}
-              </GridText>
-              <GridTitle>Rate</GridTitle>
-              <GridText>{bookmark.rate}</GridText>
-              <GridTitle>Note</GridTitle>
-              <GridText>{bookmark.note}</GridText>
-            </>
-          )}
-        </div>
+        <BookmarkDescription bookmark={bookmark} />
       </Card.Content>
-      <Card.Footer>
+      <Card.Footer className="flex-wrap justify-end gap-2">
         <DeleteBookmarkForm bookmark={bookmark} />
         <CompleteDialog bookmark={bookmark} />
         <UpdateBookmarkDialog bookmark={bookmark} tags={tags} />
-        <Link
+        <LinkButton
           href={link("/bookmarks/bookmark/:id", { id: bookmark.id })}
           onPress={onDetailsClick}
         >
           <IconChevronRight />
           Details
-        </Link>
+        </LinkButton>
       </Card.Footer>
     </Card>
   );
 };
 
-const GridTitle = ({ children }: PropsWithChildren) => {
-  return <span className="font-semibold text-sm">{children}</span>;
+type BookmarkDescriptionProps = {
+  bookmark: BookmarkWithTags;
 };
 
-const GridText = ({ children }: PropsWithChildren) => {
-  return <span className="break-words">{children}</span>;
+const BookmarkDescription = ({ bookmark }: BookmarkDescriptionProps) => {
+  const formatDate = useDateFormatter();
+
+  return (
+    <DescriptionList>
+      {bookmark.text && (
+        <>
+          <DescriptionList.Term>Text</DescriptionList.Term>
+          <GridLink bookmarkId={bookmark.id} href={bookmark.text} />
+        </>
+      )}
+      {bookmark.url && (
+        <>
+          <DescriptionList.Term>Url</DescriptionList.Term>
+          <GridLink bookmarkId={bookmark.id} href={bookmark.url} />
+        </>
+      )}
+      {bookmark.createdAt && (
+        <>
+          <DescriptionList.Term>Created at</DescriptionList.Term>
+          <DescriptionList.Details>
+            {formatDate(bookmark.createdAt)}
+          </DescriptionList.Details>
+        </>
+      )}
+      {bookmark.done && (
+        <>
+          <DescriptionList.Term>Done at</DescriptionList.Term>
+          <DescriptionList.Details>
+            {bookmark.doneAt && formatDate(bookmark.doneAt)}
+          </DescriptionList.Details>
+          {bookmark.rate && (
+            <>
+              <DescriptionList.Term>Rate</DescriptionList.Term>
+              <DescriptionList.Details>{bookmark.rate}</DescriptionList.Details>
+            </>
+          )}
+          {bookmark.note && (
+            <>
+              <DescriptionList.Term>Note</DescriptionList.Term>
+              <DescriptionList.Details>{bookmark.note}</DescriptionList.Details>
+            </>
+          )}
+        </>
+      )}
+    </DescriptionList>
+  );
 };
 
 type GridLinkProps = {
@@ -117,13 +133,15 @@ const GridLink = ({ bookmarkId: _bookmarkId, href }: GridLinkProps) => {
 
   if (href && isLink) {
     return (
-      <Link className="break-words" href={href} onPress={onPress}>
-        {href}
-      </Link>
+      <DescriptionList.Details>
+        <Link href={href} onPress={onPress}>
+          {href}
+        </Link>
+      </DescriptionList.Details>
     );
   }
 
-  return <GridText>{href}</GridText>;
+  return <DescriptionList.Details>{href}</DescriptionList.Details>;
 };
 
 type BookmarkPreviewProps = {
@@ -220,39 +238,38 @@ const BookmarkLinks = ({ bookmark }: BookmarkLinksProps) => {
     // history().addToHistory(bookmark.id);
   };
 
-  const commonProps: Partial<ComponentProps<typeof Link>> = {
-    // color: "secondary",
+  const commonProps: Partial<ComponentProps<typeof LinkButton>> = {
+    intent: "outline",
     onPress,
     rel: "noopener noreferrer",
-    // size: "xs",
     target: "_blank",
   };
 
   return (
     <ul className="flex flex-row flex-wrap gap-2">
       <li>
-        <Link
+        <LinkButton
           {...commonProps}
           href={`https://www.youtube.com/results?${new URLSearchParams({ search_query: bookmark.title })}`}
         >
           Youtube
-        </Link>
+        </LinkButton>
       </li>
       <li>
-        <Link
+        <LinkButton
           {...commonProps}
           href={`https://www.youtube.com/results?${new URLSearchParams({ q: bookmark.title })}`}
         >
           Google
-        </Link>
+        </LinkButton>
       </li>
       <li>
-        <Link
+        <LinkButton
           {...commonProps}
           href={`https://open.spotify.com/search/${bookmark.title}`}
         >
           Spotify
-        </Link>
+        </LinkButton>
       </li>
     </ul>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { IconCheck } from "@intentui/icons";
 import { useId, useState } from "react";
 
