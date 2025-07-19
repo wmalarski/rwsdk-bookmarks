@@ -2,6 +2,8 @@
 
 import { requestInfo } from "rwsdk/worker";
 
+import { getUserId } from "@/modules/auth/server/get-user-id";
+
 import { createTag, deleteTag, updateTag } from "./db";
 
 type CreateTagActionArgs = {
@@ -9,13 +11,7 @@ type CreateTagActionArgs = {
 };
 
 export const createTagAction = async (args: CreateTagActionArgs) => {
-  const { ctx } = requestInfo;
-  const userId = ctx.user?.id;
-
-  if (!userId) {
-    throw new Response(null, { status: 401 });
-  }
-
+  const userId = getUserId(requestInfo);
   await createTag({ ...args, userId });
 };
 
@@ -25,13 +21,7 @@ type UpdateTagActionArgs = {
 };
 
 export const updateTagAction = async (args: UpdateTagActionArgs) => {
-  const { ctx } = requestInfo;
-  const userId = ctx.user?.id;
-
-  if (!userId) {
-    throw new Response(null, { status: 401 });
-  }
-
+  const userId = getUserId(requestInfo);
   await updateTag({ ...args, userId });
 };
 
@@ -40,12 +30,6 @@ type DeleteTagActionArgs = {
 };
 
 export const deleteTagAction = async (args: DeleteTagActionArgs) => {
-  const { ctx } = requestInfo;
-  const userId = ctx.user?.id;
-
-  if (!userId) {
-    throw new Response(null, { status: 401 });
-  }
-
+  const userId = getUserId(requestInfo);
   await deleteTag({ ...args, userId });
 };

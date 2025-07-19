@@ -2,20 +2,27 @@
 
 import { requestInfo } from "rwsdk/worker";
 
-import { completeBookmark, deleteBookmark } from "./db";
+import { getUserId } from "@/modules/auth/server/get-user-id";
+
+import { completeBookmark, deleteBookmark, selectBookmarks } from "./db";
+
+type SelectBookmarksActionArgs = {
+  page: number;
+};
+
+export const selectBookmarksAction = async (
+  args: SelectBookmarksActionArgs,
+) => {
+  const userId = getUserId(requestInfo);
+  return selectBookmarks({ ...args, userId });
+};
 
 type DeleteBookmarkActionArgs = {
   bookmarkId: string;
 };
 
 export const deleteBookmarkAction = async (args: DeleteBookmarkActionArgs) => {
-  const { ctx } = requestInfo;
-  const userId = ctx.user?.id;
-
-  if (!userId) {
-    throw new Response(null, { status: 401 });
-  }
-
+  const userId = getUserId(requestInfo);
   await deleteBookmark({ ...args, userId });
 };
 
@@ -29,12 +36,6 @@ type CompleteBookmarkActionArgs = {
 export const complateBookmarkAction = async (
   args: CompleteBookmarkActionArgs,
 ) => {
-  const { ctx } = requestInfo;
-  const userId = ctx.user?.id;
-
-  if (!userId) {
-    throw new Response(null, { status: 401 });
-  }
-
+  const userId = getUserId(requestInfo);
   await completeBookmark({ userId, ...args });
 };

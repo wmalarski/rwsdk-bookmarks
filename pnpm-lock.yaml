@@ -61,8 +61,8 @@ importers:
         specifier: 2.1.2
         version: 2.1.2
       '@cloudflare/vite-plugin':
-        specifier: 1.9.6
-        version: 1.9.6(rollup@4.44.1)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(workerd@1.20250712.0)(wrangler@4.25.0(@cloudflare/workers-types@4.20250719.0))
+        specifier: 1.9.4
+        version: 1.9.4(rollup@4.44.1)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(workerd@1.20250712.0)(wrangler@4.25.0(@cloudflare/workers-types@4.20250719.0))
       '@cloudflare/workers-types':
         specifier: ^4.20250719.0
         version: 4.20250719.0
@@ -313,11 +313,11 @@ packages:
       vite: ^6.1.0
       wrangler: ^3.101.0 || ^4.0.0
 
-  '@cloudflare/vite-plugin@1.9.6':
-    resolution: {integrity: sha512-8sUMJVHD3VY8J4HwovoKN87DP9zfV/jxhY7oAYZJO1MuiWJ0vZE614vyT3tMElRwu6d64yx5NTUwRGzWXarYPg==}
+  '@cloudflare/vite-plugin@1.9.4':
+    resolution: {integrity: sha512-i1sMePamMZs/eR5ennHNICEFEtXWDCbt8j+mSE0EQuMFt0YrqqU9WSCZzUvISyYebnnLfnHZQpq3Y8y4uPz4RQ==}
     peerDependencies:
       vite: ^6.1.0 || ^7.0.0
-      wrangler: ^4.25.0
+      wrangler: 4.24.3
 
   '@cloudflare/workerd-darwin-64@1.20250617.0':
     resolution: {integrity: sha512-toG8JUKVLIks4oOJLe9FeuixE84pDpMZ32ip7mCpE7JaFc5BqGFvevk0YC/db3T71AQlialjRwioH3jS/dzItA==}
@@ -3605,13 +3605,13 @@ snapshots:
       - utf-8-validate
       - workerd
 
-  '@cloudflare/vite-plugin@1.9.6(rollup@4.44.1)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(workerd@1.20250712.0)(wrangler@4.25.0(@cloudflare/workers-types@4.20250719.0))':
+  '@cloudflare/vite-plugin@1.9.4(rollup@4.44.1)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(workerd@1.20250712.0)(wrangler@4.25.0(@cloudflare/workers-types@4.20250719.0))':
     dependencies:
       '@cloudflare/unenv-preset': 2.3.3(unenv@2.0.0-rc.17)(workerd@1.20250712.0)
       '@mjackson/node-fetch-server': 0.6.1
       '@rollup/plugin-replace': 6.0.2(rollup@4.44.1)
       get-port: 7.1.0
-      miniflare: 4.20250712.0
+      miniflare: 4.20250709.0
       picocolors: 1.1.1
       tinyglobby: 0.2.14
       unenv: 2.0.0-rc.17
@@ -6626,7 +6626,7 @@ snapshots:
       kysely-do: 0.0.1-rc.1(kysely@0.28.2)
       lodash: 4.17.21
       magic-string: 0.30.17
-      miniflare: 4.20250709.0
+      miniflare: 4.20250712.0
       picocolors: 1.1.1
       proper-lockfile: 4.1.2
       puppeteer-core: 22.15.0

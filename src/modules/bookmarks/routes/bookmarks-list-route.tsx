@@ -11,14 +11,11 @@ export const BookmarkListRoute = async ({ ctx }: ProtectedRequestInfo) => {
   ]);
 
   return (
-    <>
-      <BookmarkList
-        filterSearchParams={{ done: "all", random: "off", "tags[]": [] }}
-        initialBookmarks={bookmarks}
-        queryArgs={{ page: 0, userId: ctx.user.id }}
-        tags={tags}
-      />
-      <pre>{JSON.stringify({ bookmarks, user: ctx.user }, null, 2)}</pre>
-    </>
+    <BookmarkList
+      filterSearchParams={{ done: "all", random: "off", "tags[]": [] }}
+      initialBookmarks={bookmarks}
+      queryArgs={{ page: 0, userId: ctx.user.id }}
+      tags={tags}
+    />
   );
 };
