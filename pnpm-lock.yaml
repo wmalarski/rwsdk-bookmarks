@@ -24,8 +24,8 @@ importers:
         specifier: ^1.14.1
         version: 1.14.1(react-dom@19.2.0-canary-39cad7af-20250411(react@19.2.0-canary-39cad7af-20250411))(react@19.2.0-canary-39cad7af-20250411)
       better-auth:
-        specifier: ^1.2.12
-        version: 1.2.12
+        specifier: ^1.3.2
+        version: 1.3.2(react-dom@19.2.0-canary-39cad7af-20250411(react@19.2.0-canary-39cad7af-20250411))(react@19.2.0-canary-39cad7af-20250411)
       decode-formdata:
         specifier: ^0.9.0
         version: 0.9.0
@@ -36,8 +36,8 @@ importers:
         specifier: ^1.10.1
         version: 1.10.1(react-dom@19.2.0-canary-39cad7af-20250411(react@19.2.0-canary-39cad7af-20250411))(react@19.2.0-canary-39cad7af-20250411)
       rwsdk:
-        specifier: 0.1.20
-        version: 0.1.20(rollup@4.44.1)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(webpack@5.99.9)(workerd@1.20250712.0)
+        specifier: 0.1.22
+        version: 0.1.22(rollup@4.44.1)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(webpack@5.99.9)(workerd@1.20250712.0)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
@@ -2064,11 +2064,19 @@ packages:
     resolution: {integrity: sha512-4Bcg1P8xhUuqcii/S0Z9wiHIrQVPMermM1any+MX5GeGD7faD3/msQUDGLol9wOcz4/jbg/WJnGqoJF6LiBdtg==}
     engines: {node: '>=10.0.0'}
 
-  better-auth@1.2.12:
-    resolution: {integrity: sha512-YicCyjQ+lxb7YnnaCewrVOjj3nPVa0xcfrOJK7k5MLMX9Mt9UnJ8GYaVQNHOHLyVxl92qc3C758X1ihqAUzm4w==}
+  better-auth@1.3.2:
+    resolution: {integrity: sha512-510kOtFBTdp4z51hWtTEqk9yqSinXzyg7PkDFnXYMq1K0KvdXRY1A9t9J998i0CSf/tJA0wNoN3S8exkOgBvTw==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
-  better-call@1.0.10:
-    resolution: {integrity: sha512-ubPRilqIp4pQlR/pRzOEN2Ccf0sFFY4S6TlmEJG2HcRFZWsksrAcnSeqqoJ/dJ/pIdJy+ieL6fLfJSCNiQmagA==}
+  better-call@1.0.12:
+    resolution: {integrity: sha512-ssq5OfB9Ungv2M1WVrRnMBomB0qz1VKuhkY2WxjHaLtlsHoSe9EPolj1xf7xf8LY9o3vfk3Rx6rCWI4oVHeBRg==}
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -2503,8 +2511,8 @@ packages:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
     hasBin: true
 
-  jose@6.0.11:
-    resolution: {integrity: sha512-QxG7EaliDARm1O1S8BGakqncGT9s25bKL1WSf6/oa17Tkqwi8D2ZNglqCF+DsYF88/rV66Q/Q2mFAy697E1DUg==}
+  jose@5.10.0:
+    resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -2919,8 +2927,8 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
-  rwsdk@0.1.20:
-    resolution: {integrity: sha512-PfYGWmXcWkMTkv1gcg5AMnM1SANQGvAMfx7jmZqtzlS65g8KP5mBFcAjC3bhSpgEbUaCFTrj6hHO2YEUp9o1PA==}
+  rwsdk@0.1.22:
+    resolution: {integrity: sha512-sB/9OS3hWyOZgon2PwCcgEZNWcOkyx42RzPoFYF/Q1i+/UQrytPCnlL03cX/hpbq4CBbLDt8kT+tE6OHYxpkZA==}
     hasBin: true
     peerDependencies:
       vite: ^6.2.6
@@ -3375,6 +3383,9 @@ packages:
 
   zod@3.25.67:
     resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
+
+  zod@4.0.5:
+    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
 
 snapshots:
 
@@ -5628,7 +5639,7 @@ snapshots:
 
   basic-ftp@5.0.5: {}
 
-  better-auth@1.2.12:
+  better-auth@1.3.2(react-dom@19.2.0-canary-39cad7af-20250411(react@19.2.0-canary-39cad7af-20250411))(react@19.2.0-canary-39cad7af-20250411):
     dependencies:
       '@better-auth/utils': 0.2.5
       '@better-fetch/fetch': 1.1.18
@@ -5636,14 +5647,17 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@simplewebauthn/browser': 13.1.0
       '@simplewebauthn/server': 13.1.1
-      better-call: 1.0.10
+      better-call: 1.0.12
       defu: 6.1.4
-      jose: 6.0.11
+      jose: 5.10.0
       kysely: 0.28.2
       nanostores: 0.11.4
-      zod: 3.25.67
+      zod: 4.0.5
+    optionalDependencies:
+      react: 19.2.0-canary-39cad7af-20250411
+      react-dom: 19.2.0-canary-39cad7af-20250411(react@19.2.0-canary-39cad7af-20250411)
 
-  better-call@1.0.10:
+  better-call@1.0.12:
     dependencies:
       '@better-fetch/fetch': 1.1.18
       rou3: 0.5.1
@@ -6100,7 +6114,7 @@ snapshots:
 
   jiti@2.4.2: {}
 
-  jose@6.0.11: {}
+  jose@5.10.0: {}
 
   js-tokens@4.0.0: {}
 
@@ -6602,7 +6616,7 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
-  rwsdk@0.1.20(rollup@4.44.1)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(webpack@5.99.9)(workerd@1.20250712.0):
+  rwsdk@0.1.22(rollup@4.44.1)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(webpack@5.99.9)(workerd@1.20250712.0):
     dependencies:
       '@ast-grep/napi': 0.38.6
       '@cloudflare/vite-plugin': 1.7.4(rollup@4.44.1)(vite@6.3.5(@types/node@24.0.15)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1))(workerd@1.20250712.0)(wrangler@4.25.0(@cloudflare/workers-types@4.20250719.0))
@@ -7110,3 +7124,5 @@ snapshots:
   zod@3.23.8: {}
 
   zod@3.25.67: {}
+
+  zod@4.0.5: {}
