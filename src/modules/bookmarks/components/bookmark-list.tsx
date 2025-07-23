@@ -10,14 +10,14 @@ import type {
   BookmarkWithTags,
   SelectBookmarksArgs,
 } from "../server/functions";
+import type { BookmarkFiltersSearchParams } from "../utils/bookmarks-filters-search-params";
 import { BookmarksHistoryProvider } from "../utils/bookmarks-history";
-import type { FiltersSearchParams } from "../utils/use-filters-search-params";
 import { BookmarkFilters } from "./bookmark-filters";
 import { BookmarkListItem } from "./bookmark-list-item";
 
 type BookmarkListProps = {
   queryArgs: SelectBookmarksArgs;
-  filterSearchParams: FiltersSearchParams;
+  filterSearchParams: BookmarkFiltersSearchParams;
   initialBookmarks: BookmarkWithTags[];
   user: User;
   tags: Tag[];
@@ -30,9 +30,7 @@ export const BookmarkList = ({
   tags,
   user,
 }: BookmarkListProps) => {
-  const [offsets, setOffsets] = useState<number[]>(
-    () => filterSearchParams && [],
-  );
+  const [offsets, setOffsets] = useState<number[]>([]);
 
   const onLoadMoreClick = () => {
     setOffsets((current) => {

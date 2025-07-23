@@ -1,7 +1,6 @@
 import { IconFilter } from "@intentui/icons";
 import { useForm } from "@tanstack/react-form";
 import { type ComponentProps, useId, useState } from "react";
-import * as v from "valibot";
 
 import { Button } from "@/components/button";
 import { Checkbox } from "@/components/checkbox";
@@ -10,31 +9,19 @@ import { Modal } from "@/components/modal";
 import { Radio, RadioGroup } from "@/components/radio";
 import { TextField } from "@/components/text-field";
 import type { Tag } from "@/db";
+import { formatValidationErrors } from "@/lib/formatters";
 
 import {
-  type FiltersSearchParams,
-  useSetFiltersSearchParams,
-} from "../utils/use-filters-search-params";
+  applyBookmarksFilters,
+  type BookmarkDoneFilter,
+  type BookmarkFiltersFormData,
+  type BookmarkFiltersSearchParams,
+  createBookmarkFiltersFormSchema,
+} from "../utils/bookmarks-filters-search-params";
 import { BookmarkTagsField } from "./bookmark-tags-field";
 
-const bookmarksFiltersSchema = () => {
-  return v.object({
-    done: v.union([
-      v.literal("all"),
-      v.literal("completed"),
-      v.literal("uncompleted"),
-    ]),
-    query: v.optional(v.string()),
-    tags: v.optional(v.array(v.string())),
-  });
-};
-
-export type BookmarkFiltersData = v.InferOutput<
-  ReturnType<typeof bookmarksFiltersSchema>
->;
-
 type BookmarkFiltersProps = {
-  params: FiltersSearchParams;
+  params: BookmarkFiltersSearchParams;
   tags: Tag[];
 };
 
@@ -44,24 +31,19 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
   const formId = useId();
 
   const form = useForm({
-    defaultValues: {},
+    defaultValues: params as BookmarkFiltersFormData,
     async onSubmit({ value }) {
-      // onSubmit(value);
+      setIsOpen(false);
+      applyBookmarksFilters(value);
     },
     validators: {
-      onChange: bookmarksFiltersSchema(),
+      onChange: createBookmarkFiltersFormSchema(),
     },
   });
 
-  const setFiltersSearchParams = useSetFiltersSearchParams();
-
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
     event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    setFiltersSearchParams(formData);
-
-    setIsOpen(false);
+    await form.handleSubmit();
   };
 
   return (
@@ -76,23 +58,55 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
         </Modal.Header>
         <Modal.Body>
           <form id={formId} onSubmit={onSubmit}>
-            <Checkbox isSelected={params.random === "on"} name="random">
-              Random
-            </Checkbox>
-            <DoneFilter done={params.done} />
-            <TextField
-              className="w-full"
-              id="query"
-              label="Query"
-              name="query"
-              placeholder="Query"
-              value={params.query ?? ""}
-            />
-            <BookmarkTagsField
-              onChange={() => void 0}
-              selectedTags={params["tags[]"]}
-              tags={tags}
-            />
+            <form.Field name="random">
+              {(field) => (
+                <Checkbox
+                  id={field.name}
+                  isSelected={field.state.value === "on"}
+                  label="Randon"
+                  name="random"
+                  onBlur={field.handleBlur}
+                  onChange={(isSelected) =>
+                    field.handleChange(isSelected ? "on" : "off")
+                  }
+                />
+              )}
+            </form.Field>
+            <form.Field name="done">
+              {(field) => (
+                <DoneFilter
+                  done={params.done}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={field.handleChange}
+                />
+              )}
+            </form.Field>
+            <form.Field name="query">
+              {(field) => (
+                <TextField
+                  errorMessage={formatValidationErrors(field.state.meta.errors)}
+                  id={field.name}
+                  label="Query"
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={field.handleChange}
+                  placeholder="Query"
+                  type="text"
+                  value={field.state.value}
+                />
+              )}
+            </form.Field>
+            <form.Field name="tags">
+              {(field) => (
+                <BookmarkTagsField
+                  disabled={field.form.state.isSubmitting}
+                  onChange={field.handleChange}
+                  selectedTags={field.state.value}
+                  tags={tags}
+                />
+              )}
+            </form.Field>
           </form>
         </Modal.Body>
         <Modal.Footer>
@@ -107,20 +121,23 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
 };
 
 type DoneFilterProps = {
-  done: FiltersSearchParams["done"];
+  name: string;
+  done: BookmarkDoneFilter;
+  onBlur: () => void;
+  onChange: (value: BookmarkDoneFilter) => void;
 };
 
-const DoneFilter = ({ done }: DoneFilterProps) => {
-  const options: FiltersSearchParams["done"][] = [
-    "all",
-    "completed",
-    "uncompleted",
-  ];
+const DoneFilter = ({ name, done, onBlur, onChange }: DoneFilterProps) => {
+  const options: BookmarkDoneFilter[] = ["all", "completed", "uncompleted"];
+
+  const onRadioChange = (value: string) => {
+    onChange(value as BookmarkDoneFilter);
+  };
 
   return (
-    <RadioGroup name="done" value={done}>
+    <RadioGroup name={name} onChange={onRadioChange} value={done}>
       {options.map((option) => (
-        <Radio key={option} value={option}>
+        <Radio key={option} onBlur={onBlur} value={option}>
           <Label>{option}</Label>
         </Radio>
       ))}
