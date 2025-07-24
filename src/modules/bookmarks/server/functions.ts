@@ -35,7 +35,8 @@ export const selectBookmarks = ({
     include: { BookmarkTag: true },
     skip: SELECT_BOOKMARKS_PAGE_SIZE * page,
     take: SELECT_BOOKMARKS_PAGE_SIZE,
-    where: { AND: { OR: [{ title: { contains: query } }], userId } },
+    // where: { AND: { OR: [{ title: { contains: query } }], userId } },
+    where: { title: { contains: query } },
   });
 };
 

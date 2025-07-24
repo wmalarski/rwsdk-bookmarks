@@ -18,6 +18,8 @@ export const BookmarkListRoute = async ({
     selectTags({ page: 0, userId }),
   ]);
 
+  console.log("[bookmarks]", bookmarks);
+
   return (
     <BookmarkList
       filterSearchParams={params}
