@@ -63,7 +63,7 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
                 <Checkbox
                   id={field.name}
                   isSelected={field.state.value === "on"}
-                  label="Randon"
+                  label="Random"
                   name="random"
                   onBlur={field.handleBlur}
                   onChange={(isSelected) =>
@@ -75,7 +75,7 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
             <form.Field name="done">
               {(field) => (
                 <DoneFilter
-                  done={params.done}
+                  done={field.state.value ?? "uncompleted"}
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={field.handleChange}
@@ -110,7 +110,7 @@ export const BookmarkFilters = ({ params, tags }: BookmarkFiltersProps) => {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Modal.Close />
+          <Modal.Close>Close</Modal.Close>
           <Button form={formId} intent="primary" type="submit">
             Save
           </Button>

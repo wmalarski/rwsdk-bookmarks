@@ -14,7 +14,7 @@ export const BookmarkListRoute = async ({
   const params = parseFiltersSearchParams(url.searchParams);
 
   const [bookmarks, tags] = await Promise.all([
-    selectBookmarks({ page: 0, userId }),
+    selectBookmarks({ page: 0, userId, ...params }),
     selectTags({ page: 0, userId }),
   ]);
 
@@ -22,7 +22,7 @@ export const BookmarkListRoute = async ({
     <BookmarkList
       filterSearchParams={params}
       initialBookmarks={bookmarks}
-      queryArgs={{ page: 0, userId }}
+      queryArgs={{ page: 0, userId, ...params }}
       tags={tags}
       user={ctx.user}
     />

@@ -56,6 +56,8 @@ export type BookmarkFiltersSearchParams = v.InferOutput<
 
 export type BookmarkDoneFilter = BookmarkFiltersSearchParams["done"];
 
+export type BookmarkRandomFilter = BookmarkFiltersSearchParams["random"];
+
 export const parseFiltersSearchParams = (params: URLSearchParams) => {
   const schema = createBookmarkFiltersSearchParamsSchema();
   const data = Object.fromEntries(params.entries());

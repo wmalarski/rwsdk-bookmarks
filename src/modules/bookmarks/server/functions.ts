@@ -5,19 +5,37 @@ import { requestInfo } from "rwsdk/worker";
 import { db } from "@/db";
 import { getUserId } from "@/modules/auth/server/get-user-id";
 
+import type {
+  BookmarkDoneFilter,
+  BookmarkRandomFilter,
+} from "../utils/bookmarks-filters-search-params";
+
 export type SelectBookmarksArgs = {
   userId: string;
   page: number;
+  done: BookmarkDoneFilter;
+  tags: string[];
+  random: BookmarkRandomFilter;
+  query?: string;
 };
 
 const SELECT_BOOKMARKS_PAGE_SIZE = 10;
 
-export const selectBookmarks = ({ page, userId }: SelectBookmarksArgs) => {
+export const selectBookmarks = ({
+  page,
+  userId,
+  done,
+  random,
+  tags,
+  query,
+}: SelectBookmarksArgs) => {
+  console.log("[selectBookmarks]", { done, page, query, random, tags, userId });
+
   return db.bookmark.findMany({
     include: { BookmarkTag: true },
     skip: SELECT_BOOKMARKS_PAGE_SIZE * page,
     take: SELECT_BOOKMARKS_PAGE_SIZE,
-    where: { userId },
+    where: { AND: { OR: [{ title: { contains: query } }], userId } },
   });
 };
 
