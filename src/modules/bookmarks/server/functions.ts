@@ -21,7 +21,7 @@ export type SelectBookmarksArgs = {
 
 const SELECT_BOOKMARKS_PAGE_SIZE = 10;
 
-export const selectBookmarks = ({
+export const selectBookmarks = async ({
   page,
   userId,
   done,
@@ -31,13 +31,27 @@ export const selectBookmarks = ({
 }: SelectBookmarksArgs) => {
   console.log("[selectBookmarks]", { done, page, query, random, tags, userId });
 
-  return db.bookmark.findMany({
+  const result = await db.bookmark.findMany({
     include: { BookmarkTag: true },
     skip: SELECT_BOOKMARKS_PAGE_SIZE * page,
     take: SELECT_BOOKMARKS_PAGE_SIZE,
     // where: { AND: { OR: [{ title: { contains: query } }], userId } },
     where: { title: { contains: query } },
   });
+
+  console.log("[selectBookmarks]", { lenght: result.length });
+
+  return result;
+};
+
+export type BookmarkWithTags = Awaited<ReturnType<typeof selectBookmarks>>[0];
+
+export const selectMoreBookmarks = (
+  args: Omit<SelectBookmarksArgs, "userId">,
+) => {
+  const userId = getUserId(requestInfo);
+
+  return selectBookmarks({ ...args, userId });
 };
 
 export type SelectBookmarkArgs = {
@@ -51,8 +65,6 @@ export const selectBookmark = ({ bookmarkId, userId }: SelectBookmarkArgs) => {
     where: { id: bookmarkId, userId },
   });
 };
-
-export type BookmarkWithTags = Awaited<ReturnType<typeof selectBookmarks>>[0];
 
 export type DeleteBookmarkArgs = {
   bookmarkId: string;

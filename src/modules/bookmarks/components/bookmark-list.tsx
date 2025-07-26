@@ -6,14 +6,20 @@ import { Button } from "@/components/button";
 import { Skeleton } from "@/components/skeleton";
 import type { Tag, User } from "@/db";
 
-import type {
-  BookmarkWithTags,
-  SelectBookmarksArgs,
+import {
+  type BookmarkWithTags,
+  type SelectBookmarksArgs,
+  selectMoreBookmarks,
 } from "../server/functions";
 import type { BookmarkFiltersSearchParams } from "../utils/bookmarks-filters-search-params";
 import { BookmarksHistoryProvider } from "../utils/bookmarks-history";
 import { BookmarkFilters } from "./bookmark-filters";
 import { BookmarkListItem } from "./bookmark-list-item";
+
+type BookmarkListPage = {
+  page: number;
+  items: BookmarkWithTags[];
+};
 
 type BookmarkListProps = {
   queryArgs: SelectBookmarksArgs;
@@ -30,14 +36,22 @@ export const BookmarkList = ({
   tags,
   user,
 }: BookmarkListProps) => {
-  const [offsets, setOffsets] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pages, setPages] = useState<BookmarkListPage[]>([]);
 
-  const onLoadMoreClick = () => {
-    setOffsets((current) => {
-      const lastOffset = current[current.length - 1] ?? 0;
-      return [...current, lastOffset + 1];
-    });
+  const onLoadMoreClick = async () => {
+    setIsLoading(true);
+
+    try {
+      const page = pages.length;
+      const items = await selectMoreBookmarks({ ...queryArgs, page });
+      setPages((current) => [...current, { items, page }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  console.log("[BookmarkList]", pages);
 
   const tagsMap = useMemo(() => {
     return new Map(tags.map((tag) => [tag.id, tag]));
@@ -56,37 +70,29 @@ export const BookmarkList = ({
             tags={tags}
             tagsMap={tagsMap}
           />
-          {offsets.map((offset) => (
-            <BookmarkLazy key={offset} offset={offset} queryArgs={queryArgs} />
+          {pages.map((page) => (
+            <BookmarkListPart
+              bookmarks={page.items}
+              key={page.page}
+              tags={tags}
+              tagsMap={tagsMap}
+            />
           ))}
+          {isLoading ? <BookmarkListPlaceholder /> : null}
         </BookmarkListContainer>
-        <Button intent="secondary" onPress={onLoadMoreClick} size="sm">
+        <Button
+          intent="secondary"
+          isDisabled={isLoading}
+          isPending={isLoading}
+          onPress={onLoadMoreClick}
+          size="sm"
+          type="button"
+        >
           Load more
         </Button>
       </div>
     </BookmarksHistoryProvider>
   );
-};
-
-type BookmarkLazyProps = {
-  queryArgs: SelectBookmarksArgs;
-  offset: number;
-};
-
-const BookmarkLazy = ({
-  offset: _offset,
-  queryArgs: _queryArgs,
-}: BookmarkLazyProps) => {
-  // const bookmarks = createAsync(() =>
-  //   selectBookmarksServerQuery({ offset: offset, ...queryArgs }),
-  // );
-
-  return null;
-  // <Suspense fallback={<BookmarkListLoadingPlaceholder />}>
-  //   <RpcShow result={bookmarks()}>
-  //     {(bookmarks) => <BookmarkListPart bookmarks={bookmarks().data ?? []} />}
-  //   </RpcShow>
-  // </Suspense>
 };
 
 type BookmarkListPartProps = {
@@ -124,12 +130,11 @@ export const BookmarkListPlaceholder = () => {
 };
 
 const BookmarkListLoadingPlaceholder = () => {
-  const list = Array.from({ length: 3 });
+  const list = Array.from({ length: 3 }, (_value, index) => index);
 
   return (
     <>
-      {list.map((_, index) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: this is correct
+      {list.map((index) => (
         <li key={index}>
           <Skeleton className="h-48 w-full" />
         </li>
